@@ -1,0 +1,6 @@
+= sp_resource
+
+Describe your project here
+
+:include:sp_resource.rdoc
+
