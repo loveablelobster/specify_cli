@@ -1,0 +1,18 @@
+# Create a copy of this file with your settings to
+#   /usr/local/etc/sp_view_loader/db.yml
+# you can leave the password blank and will be prompted for it
+
+---
+SPSPEC:
+  host: localhost
+  port: 3306
+#  db_admin:
+#    name: testdbadmin
+#    password: adminpass
+  db_user:
+    name: specmaster
+    password: masterpass
+  sp_user: specuser
+
+#UniqueDBName:
+#  host: host_name_for_the_db

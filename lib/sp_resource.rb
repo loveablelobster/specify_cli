@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'sp_resource/version.rb'
 
 # Add requires for other files you add to your project here, so
