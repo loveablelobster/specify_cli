@@ -1,0 +1,37 @@
+example_id                              | status | run_time        |
+--------------------------------------- | ------ | --------------- |
+./spec/app_resource_data_spec.rb[1:1:1] | passed | 0.00371 seconds |
+./spec/app_resource_data_spec.rb[1:1:2] | passed | 0.00327 seconds |
+./spec/app_resource_data_spec.rb[1:1:3] | passed | 0.00885 seconds |
+./spec/collection_spec.rb[1:1]          | passed | 0.00156 seconds |
+./spec/collection_spec.rb[1:2]          | passed | 0.0028 seconds  |
+./spec/database_spec.rb[1:1]            | passed | 0.00082 seconds |
+./spec/database_spec.rb[1:2]            | passed | 0.00199 seconds |
+./spec/database_spec.rb[1:3]            | passed | 0.00084 seconds |
+./spec/database_spec.rb[1:4]            | passed | 0.00108 seconds |
+./spec/discipline_spec.rb[1:1]          | passed | 0.00209 seconds |
+./spec/discipline_spec.rb[1:2]          | passed | 0.00441 seconds |
+./spec/session_spec.rb[1:1]             | passed | 0.00123 seconds |
+./spec/session_spec.rb[1:2]             | passed | 0.0026 seconds  |
+./spec/session_spec.rb[1:3]             | passed | 0.00572 seconds |
+./spec/user_spec.rb[1:1:1]              | passed | 0.003 seconds   |
+./spec/user_spec.rb[1:1:2]              | passed | 0.00244 seconds |
+./spec/user_spec.rb[1:1:3]              | passed | 0.00615 seconds |
+./spec/user_spec.rb[1:1:4]              | passed | 0.00246 seconds |
+./spec/user_spec.rb[1:1:5]              | passed | 0.00246 seconds |
+./spec/user_spec.rb[1:1:6]              | passed | 0.0023 seconds  |
+./spec/user_spec.rb[1:1:7]              | passed | 0.00243 seconds |
+./spec/user_spec.rb[1:2:1]              | passed | 0.00064 seconds |
+./spec/user_spec.rb[1:2:2]              | passed | 0.00273 seconds |
+./spec/user_spec.rb[1:2:3]              | passed | 0.0028 seconds  |
+./spec/user_spec.rb[1:2:4]              | passed | 0.00272 seconds |
+./spec/user_spec.rb[1:3]                | passed | 0.00412 seconds |
+./spec/user_spec.rb[1:4]                | passed | 0.00381 seconds |
+./spec/user_spec.rb[1:5]                | passed | 0.00282 seconds |
+./spec/view_set_object_spec.rb[1:1:1]   | passed | 0.00714 seconds |
+./spec/view_set_object_spec.rb[1:1:2]   | passed | 0.00349 seconds |
+./spec/view_set_object_spec.rb[1:1:3]   | passed | 0.00391 seconds |
+./spec/view_set_object_spec.rb[1:1:4]   | passed | 0.0043 seconds  |
+./spec/view_set_object_spec.rb[1:1:5]   | passed | 0.00536 seconds |
+./spec/view_set_object_spec.rb[1:1:6]   | passed | 0.00806 seconds |
+./spec/view_set_object_spec.rb[1:1:7]   | passed | 0.00362 seconds |
