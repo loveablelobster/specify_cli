@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Tests for the
-module SPResource
+module SpResource
   RSpec.describe ViewLoader do
     def config
       Pathname.new(Dir.pwd).join('spec', 'support', 'db.yml')

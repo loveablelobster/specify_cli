@@ -2,7 +2,7 @@
 
 require 'observer'
 
-module SPResource
+module SpResource
   module Specify
     #
     class Session
@@ -13,7 +13,7 @@ module SPResource
       def initialize(database, user, collection)
         @database = database
         add_observer(@database)
-        @user = SPResource::Specify::Model::User.first(Name: user)
+        @user = SpResource::Specify::Model::User.first(Name: user)
         @collection = Specify::Model::Collection.first(CollectionName: collection)
         @active = false
       end

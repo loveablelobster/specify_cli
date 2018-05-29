@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Tests for the
-module SPResource
+module SpResource
   RSpec.describe UserType do
     let :collection do
       Specify::Model::Collection.first CollectionName: 'Test Collection'

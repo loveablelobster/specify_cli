@@ -3,7 +3,7 @@
 require_relative 'specify/database'
 require_relative 'specify/session'
 
-module SPResource
+module SpResource
   module Specify
     module LoginError
       INCONSISTENT_LOGIN = 'User is already logged in to a different collection'

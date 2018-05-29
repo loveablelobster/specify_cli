@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module SPResource
+module SpResource
   module Specify
     module Model
       #
@@ -9,7 +9,7 @@ module SPResource
         many_to_one :collection, key: :CollectionID, graph_join_type: :left
         many_to_one :user, key: :SpecifyUserID
         one_to_one :view_set_object,
-                   class: 'SPResource::Specify::Model::ViewSetObject',
+                   class: 'SpResource::Specify::Model::ViewSetObject',
                    key: :SpAppResourceDirID
       end
     end

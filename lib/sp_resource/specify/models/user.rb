@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module SPResource
+module SpResource
   module Specify
     module Model
       # A class that represents a Specify user.

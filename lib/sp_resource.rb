@@ -20,7 +20,7 @@ require_relative 'sp_resource/view_loader'
 CONFIG = Pathname.new('/usr/local/etc/sp_view_loader/db.yml')
 
 # A module that provides functionaliy to manage Specify app resources.
-module SPResource
+module SpResource
   module FileError
     VIEWS_FILE = 'Files must be .views.xml files'
   end

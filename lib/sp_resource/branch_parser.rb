@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module SPResource
+module SpResource
   #
   class BranchParser
     def initialize(name)

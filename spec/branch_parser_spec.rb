@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Tests for the
-module SPResource
+module SpResource
   RSpec.describe BranchParser do
     context 'when creating instances from branch names' do
       let(:collection_level) { 'SPSPEC/TestCollection/collection' }

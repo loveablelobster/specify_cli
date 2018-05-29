@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
-module SPResource
+module SpResource
   module Specify
     module Model
       #
       class ViewSetObject < Sequel::Model(:spviewsetobj)
         one_to_one :app_resource_dir,
-                   class: 'SPResource::Specify::Model::AppResourceDir',
+                   class: 'SpResource::Specify::Model::AppResourceDir',
                    key: :SpAppResourceDirID
         one_to_one :app_resource_data,
-                   class: 'SPResource::Specify::Model::AppResourceData',
+                   class: 'SpResource::Specify::Model::AppResourceData',
                    key: :SpViewSetObjID
 
         def before_save

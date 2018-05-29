@@ -10,7 +10,7 @@ require_relative 'models/institution'
 require_relative 'models/user'
 require_relative 'models/view_set_object'
 
-module SPResource
+module SpResource
   module Specify
     # A module that contains Sequel::Model classes for the Spceify schema.
     module Model

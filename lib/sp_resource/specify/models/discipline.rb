@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-module SPResource
+module SpResource
   module Specify
     module Model
       #
       class Discipline < Sequel::Model(:discipline)
         many_to_one :division, key: :DivisionID
         one_to_many :app_resourcedirs,
-                    class: 'SPResource::Specify::Model::AppResourceDir',
+                    class: 'SpResource::Specify::Model::AppResourceDir',
                     key: :DisciplineID
 
         def before_save

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module SPResource
+module SpResource
   # A module that provides logic to work with a Specify database.
   module Specify
     # A class that represents a Specify database.

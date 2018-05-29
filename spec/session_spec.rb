@@ -3,7 +3,7 @@
 # DB = Sequel.connect('mysql2://specmaster:masterpass@localhost:3306/SPSPEC')
 # require_relative '../lib/target_model'
 
-module SPResource
+module SpResource
   module Specify
     RSpec.describe Session do
       let :session do
@@ -11,7 +11,7 @@ module SPResource
       end
 
       it 'returns the user name' do
-        expect(session.user).to be_a SPResource::Specify::Model::User
+        expect(session.user).to be_a SpResource::Specify::Model::User
       end
 
       it 'opens a session' do

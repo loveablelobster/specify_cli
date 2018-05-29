@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 #
-module SPResource
+module SpResource
   #
   class UserType
     def initialize(name)

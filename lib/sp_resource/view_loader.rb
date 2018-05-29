@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module SPResource
+module SpResource
   # A class that can upload a ViewSetObject
   class ViewLoader
     attr_reader :target
