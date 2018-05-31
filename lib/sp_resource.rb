@@ -8,16 +8,13 @@ require 'pathname'
 require 'psych'
 require 'sequel'
 
+CONFIG = Pathname.new('/usr/local/etc/sp_resource/db.yml')
+
 require_relative 'sp_resource/branch_parser'
+require_relative 'sp_resource/cli'
 require_relative 'sp_resource/specify'
 require_relative 'sp_resource/user_type'
 require_relative 'sp_resource/view_loader'
-
-
-# Add requires for other files you add to your project here, so
-# you just need to require this one file in your bin file
-
-CONFIG = Pathname.new('/usr/local/etc/sp_view_loader/db.yml')
 
 # A module that provides functionaliy to manage Specify app resources.
 module SpResource

@@ -11,24 +11,79 @@ end
 
 include GLI::App
 
-program_desc 'Describe your application here'
+program_desc 'Manage Specify application resources from the command line'
 
 version SpResource::VERSION
 
 subcommand_option_handling :normal
 arguments :strict
 
-desc 'Describe some switch here'
-switch [:s,:switch]
+# desc 'Describe some switch here'
+# switch [:s,:switch]
+#
+# desc 'Describe some flag here'
+# default_value 'the default'
+# arg_name 'The name of the argument'
+# flag [:f,:flagname]
 
-desc 'Describe some flag here'
-default_value 'the default'
-arg_name 'The name of the argument'
-flag [:f,:flagname]
-
-desc 'Describe config here'
-arg_name 'Describe arguments to config here'
+desc 'Adds a configuration file in /usr/local/etc/sp_resource/db.yml'
+arg_name '[database]'
 command :config do |c|
+  c.desc 'Overwrite an existing config file'
+  c.switch :o
+  c.desc 'Create an empty template'
+  c.switch :t
+
+  c.desc 'Copy an existing db.yml file to /usr/local/etc/sp_resource'
+  c.flag :file
+  c.action do |global_options,options,args|
+    puts "-o - #{options[:o].inspect}"
+    puts "-t - #{options[:t].inspect}"
+    puts "args - #{args.inspect}"
+
+    config = load_config
+
+    if options[:file]
+      exit 1 if config && !options[:o]
+      config = Psych.load_file(options[:file])
+      save_config(config)
+      puts 'file installed as /usr/local/etc/sp_resource/db.yml'
+      exit 0
+    end
+
+    if args.empty?
+      p config
+    else
+      args.each do |db|
+        p config[db]
+      end
+    end
+
+#     config ||= {}
+#     print 'database name: '
+#     db = gets.chomp
+#     config[db] = {}
+#     print 'hostname: '
+#     config[db]['host'] = gets.chomp
+#     print 'port: '
+#     config[db]['port'] = gets.chomp.to_i
+#     config[db]['db_user'] = {}
+#     print 'mysql user name: '
+#     config[db]['db_user']['name'] = gets.chomp
+#     print 'password: '
+#     config[db]['db_user']['password'] = STDIN.noecho(&:gets).chomp
+#     puts
+#     print 'specify database user: '
+#     config[db]['sp_user'] = gets.chomp
+
+
+
+  end
+end
+
+desc 'Describe viewset here'
+arg_name 'Describe arguments to viewset here'
+command :viewset do |c|
   c.desc 'Describe a switch to config'
   c.switch :s
 
@@ -36,21 +91,8 @@ command :config do |c|
   c.default_value 'default'
   c.flag :f
   c.action do |global_options,options,args|
-
-    # Your command logic here
-     
-    # If you have any errors, just raise them
-    # raise "that command made no sense"
-
-    puts "config command ran"
-  end
-end
-
-desc 'Describe viewset here'
-arg_name 'Describe arguments to viewset here'
-command :viewset do |c|
-  c.action do |global_options,options,args|
     puts "viewset command ran"
+    puts "args - #{args.inspect}"
   end
 end
 
