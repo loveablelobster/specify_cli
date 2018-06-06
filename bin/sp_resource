@@ -27,6 +27,9 @@ arguments :strict
 # flag [:f,:flagname]
 
 desc 'Adds a configuration file in /usr/local/etc/sp_resource/db.yml'
+long_desc "
+The configuration file db.yml stores information about the databases
+"
 arg_name '[database]'
 command :config do |c|
   c.desc 'Overwrite an existing config file'
@@ -52,32 +55,23 @@ command :config do |c|
     end
 
     if args.empty?
-      p config
+      # create a config file for a single Specify instance, ask for the db name
+      print 'database name'
+      db = Readline.readline(': ', true)
+      if config[db]
+        puts "configuration for #{db} exists"
+        print "overwrite? (Yes/No)"
+        choice = Readline.readline(': ', true)
+        /^(no?)|(y(es)?)$/i.match choice do |m|
+          puts 'exiting' if m[1]
+          puts configure(config, db) if m[2]
+        end
+      end
     else
       args.each do |db|
         p config[db]
       end
     end
-
-#     config ||= {}
-#     print 'database name: '
-#     db = gets.chomp
-#     config[db] = {}
-#     print 'hostname: '
-#     config[db]['host'] = gets.chomp
-#     print 'port: '
-#     config[db]['port'] = gets.chomp.to_i
-#     config[db]['db_user'] = {}
-#     print 'mysql user name: '
-#     config[db]['db_user']['name'] = gets.chomp
-#     print 'password: '
-#     config[db]['db_user']['password'] = STDIN.noecho(&:gets).chomp
-#     puts
-#     print 'specify database user: '
-#     config[db]['sp_user'] = gets.chomp
-
-
-
   end
 end
 

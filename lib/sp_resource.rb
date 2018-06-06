@@ -2,13 +2,16 @@
 
 require 'sp_resource/version.rb'
 
+require 'fileutils'
 require 'io/console'
 require 'mysql2'
 require 'pathname'
 require 'psych'
+require 'readline'
 require 'sequel'
 
 CONFIG = Pathname.new('/usr/local/etc/sp_resource/db.yml')
+CONFIG_DIR = Pathname.new('/usr/local/etc/sp_resource')
 
 require_relative 'sp_resource/branch_parser'
 require_relative 'sp_resource/cli'
