@@ -58,18 +58,10 @@ command :config do |c|
       # create a config file for a single Specify instance, ask for the db name
       print 'database name'
       db = Readline.readline(': ', true)
-      if config[db]
-        puts "configuration for #{db} exists"
-        print "overwrite? (Yes/No)"
-        choice = Readline.readline(': ', true)
-        /^(no?)|(y(es)?)$/i.match choice do |m|
-          puts 'exiting' if m[1]
-          puts configure(config, db) if m[2]
-        end
-      end
+      configure config, db
     else
       args.each do |db|
-        p config[db]
+        configure config, db
       end
     end
   end
