@@ -10,7 +10,6 @@ require 'psych'
 require 'readline'
 require 'sequel'
 
-CONFIG = File.expand_path(Pathname.new('~/.sp_resource.yml'))
 
 require_relative 'sp_resource/branch_parser'
 require_relative 'sp_resource/cli'
@@ -20,6 +19,8 @@ require_relative 'sp_resource/view_loader'
 
 # A module that provides functionaliy to manage Specify app resources.
 module SpResource
+  CONFIG = File.expand_path(Pathname.new('~/.sp_resource.yml'))
+
   module FileError
     VIEWS_FILE = 'Files must be .views.xml files'
   end
