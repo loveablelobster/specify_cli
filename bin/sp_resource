@@ -26,7 +26,7 @@ arguments :strict
 # arg_name 'The name of the argument'
 # flag [:f,:flagname]
 
-desc 'Adds a configuration file in /usr/local/etc/sp_resource/db.yml'
+desc 'Adds a configuration file as ~/.sp_resource.yml'
 long_desc "
 The configuration file db.yml stores information about the databases
 "
@@ -34,23 +34,27 @@ arg_name '[database]'
 command :config do |c|
   c.desc 'Overwrite an existing config file'
   c.switch :o
-  c.desc 'Create an empty template'
-  c.switch :t
 
-  c.desc 'Copy an existing db.yml file to /usr/local/etc/sp_resource'
+  c.desc 'Create an empty template'
+  c.flag :template
+
+  c.desc 'Copy an existing configuration file to~/.sp_resource.yml'
   c.flag :file
   c.action do |global_options,options,args|
-    puts "-o - #{options[:o].inspect}"
-    puts "-t - #{options[:t].inspect}"
-    puts "args - #{args.inspect}"
+
+    puts "--template - #{options[:template].inspect}"
 
     config = load_config
 
     if options[:file]
-      exit 1 if config && !options[:o]
+      if config && !options[:o]
+        puts "file #{CONFIG} exists"
+        puts 'use the -o option (overwrite) if you want to overwrite it'
+        exit 1
+      end
       config = Psych.load_file(options[:file])
       save_config(config)
-      puts 'file installed as /usr/local/etc/sp_resource/db.yml'
+      puts 'file installed as ~/.sp_resource.yml'
       exit 0
     end
 

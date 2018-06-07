@@ -10,8 +10,7 @@ require 'psych'
 require 'readline'
 require 'sequel'
 
-CONFIG = Pathname.new('/usr/local/etc/sp_resource/db.yml')
-CONFIG_DIR = Pathname.new('/usr/local/etc/sp_resource')
+CONFIG = File.expand_path(Pathname.new('~/.sp_resource.yml'))
 
 require_relative 'sp_resource/branch_parser'
 require_relative 'sp_resource/cli'

@@ -10,7 +10,13 @@ sp_resource.rb(1) -- Manage Specify application resources from the command line
 
 ## FILES
 
-`/usr/local/etc/sp_resource/db.yml` is used ...
+`~/.sp_resource.yml` is used ...
+
+## COMMANDS
+
+* `config` `[-o]` `[-t]` `[database...]`
+  create a `~/.sp_resource.yml` configuration file
+* `viewset`
 
 ## OPTIONS
 

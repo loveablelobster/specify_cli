@@ -3,10 +3,11 @@
 # first arg of *items must be db
 def ask(config, keys)
   setting = config.dig(*keys)
-  history = keys.last != 'password'
-  message = setting ? " (current: #{setting}, leave blank to keep)" : ''
+  confidential = keys.last == 'password'
+  current = confidential ? '********' : setting
+  message = setting ? " (current: #{current}, leave blank to keep)" : ''
   print "#{keys[1..-1].join(' ')}#{message}"
-  user_input = Readline.readline ': ', history
+  user_input = Readline.readline ': ', !confidential
   setting = user_input unless user_input.empty?
   raise ArgumentError, "#{keys[1..-1].join(' ')} required" unless setting
   setting
@@ -16,12 +17,18 @@ def config?
   File.exist?(CONFIG)
 end
 
+def config_template(database = 'database_name', config = {})
+  db = { 'host' => nil, 'port' => nil,
+         'db_user' => { 'name' => nil, 'password' => nil },
+         'sp_user' => nil }
+  config[database] = db
+end
+
 def configure(config, database)
   if config[database]
     overwrite? database
   else
-    config[database] = { 'host' => nil, 'port' => nil,
-                         'db_user' => {}, 'sp_user' => nil }
+    config_template database, config
   end
   puts configure! config, database
 end
@@ -44,7 +51,6 @@ def load_config
 end
 
 def save_config(yaml)
-  FileUtils.mkdir_p CONFIG_DIR unless File.directory? CONFIG_DIR
   File.open(CONFIG, 'w') do |file|
     file.write(Psych.dump(yaml))
   end
