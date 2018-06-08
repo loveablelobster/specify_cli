@@ -2,6 +2,7 @@
 
 require 'sp_resource/version.rb'
 
+require 'English'
 require 'fileutils'
 require 'io/console'
 require 'mysql2'

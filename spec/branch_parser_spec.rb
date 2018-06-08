@@ -41,5 +41,11 @@ module SpResource
                       level: { user: 'specuser' }
       end
     end
+
+    context 'when fetching the git branch' do
+    	it 'ghjfx' do
+        p described_class.current_branch
+    	end
+    end
   end
 end
