@@ -17,9 +17,13 @@ module SpResource
     end
 
     def self.current_branch
-      b_name = `git rev-parse --abbrev-ref HEAD`
-      return nil if b_name.start_with?('fatal:')
-      new(b_name.chomp)
+      stdout_str, stderr_str, status = Open3.capture3(GIT_CURRENT_BRANCH)
+      unless status.exitstatus == 0 #if b_name.start_with?('fatal:')
+        STDERR.puts "There was an error running #{GIT_CURRENT_BRANCH}"
+        STDERR.puts stderr_str
+        exit 1
+      end
+      new(stdout_str.chomp)
     end
 
     def to_h
