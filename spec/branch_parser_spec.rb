@@ -45,14 +45,14 @@ module SpResource
     context 'when fetching the git branch' do
       before :all do
         b_name = 'SPSPEC/TestCollection/user/specuser'
+      	@origin = `#{GIT_CURRENT_BRANCH}`.chomp
+      	break if b_name == @origin
       	branch = `git branch --list #{b_name}`.chomp
-      	/(\*) (#{b_name})/.match(branch) do |m|
-      	  break if m[1] # current branch
-      	  system("git checkout #{b_name}")
-      	  unless $? == 0
-      	    puts "Error checking out #{m[2]}
-      	          there are probably uncommited changes on #{branch}"
-      	  end
+      	`git branch #{b_name}` if branch.empty?
+      	system("git checkout #{b_name}")
+      	unless $? == 0
+      	  puts "Error checking out #{m[2]}
+      	        there are probably uncommited changes on #{@origin}"
       	end
       end
 
@@ -61,6 +61,11 @@ module SpResource
     	end
 
     	it 'exits with an error message if the branch name is not parsable'
+
+    	after :all do
+    	  p @origin
+    	  system("git checkout #{@origin}")
+    	end
     end
   end
 end
