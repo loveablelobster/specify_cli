@@ -43,9 +43,25 @@ module SpResource
     end
 
     context 'when fetching the git branch' do
-    	it 'ghjfx' do
+      before :all do
+        b_name = 'SPSPEC/TestCollection/user/specuser'
+      	branch = `git branch --list #{b_name}`.chomp
+      	/((\*)|( ) )(.+)/.match(branch) do |m|
+      	  p m[1]
+      	  break if m[1]
+      	  system("git checkout #{b_name}") unless m[2] == b_name
+      	  unless $? == 0
+      	    puts "Error checking out #{b_name}
+      	          there are probably uncommited changes on #{m[2]}"
+      	  end
+      	end
+      end
+
+    	it 'parses a name from the current branch' do
         p described_class.current_branch
     	end
+
+    	it 'exits with an error message if the branch name is not parsable'
     end
   end
 end
