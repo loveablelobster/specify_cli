@@ -45,14 +45,19 @@ module SpResource
     context 'when fetching the git branch' do
       before :all do
         b_name = 'SPSPEC/TestCollection/user/specuser'
+      	current = `#{GIT_CURRENT_BRANCH}`
+      	break if b_name == current
+      	puts 'wrong branch'
       	branch = `git branch --list #{b_name}`.chomp
-      	/(\*) (#{b_name})/.match(branch) do |m|
-      	  break if m[1] # current branch
-      	  system("git checkout #{b_name}")
-      	  unless $? == 0
-      	    puts "Error checking out #{m[2]}
-      	          there are probably uncommited changes on #{branch}"
-      	  end
+      	puts current
+      	/((\*)|()) (#{b_name})/.match(branch) do |m|
+      	  p m
+#       	  break if m[1] # current branch
+#       	  system("git checkout #{b_name}")
+#       	  unless $? == 0
+#       	    puts "Error checking out #{m[2]}
+#       	          there are probably uncommited changes on #{branch}"
+#       	  end
       	end
       end
 
