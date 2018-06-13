@@ -2,6 +2,7 @@
 
 require 'pry'
 
+require_relative 'helpers'
 require_relative '../lib/sp_resource'
 
 SPSPEC = SpResource::Specify::Database.new('SPSPEC',
@@ -104,6 +105,8 @@ RSpec.configure do |config|
   # test failures related to randomization by passing the same `--seed` value
   # as the one that triggered the failure.
   Kernel.srand config.seed
+
+  config.include Helpers
 
   config.warnings = false
 

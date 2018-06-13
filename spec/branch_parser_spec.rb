@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+TEST_BRANCH = 'SPSPEC/TestCollection/user/specuser'
 
 # Tests for the
 module SpResource
@@ -44,16 +45,9 @@ module SpResource
 
     context 'when fetching the git branch' do
       before :all do
-        b_name = 'SPSPEC/TestCollection/user/specuser'
       	@origin = `#{GIT_CURRENT_BRANCH}`.chomp
-      	break if b_name == @origin
-      	branch = `git branch --list #{b_name}`.chomp
-      	`git branch #{b_name}` if branch.empty?
-      	system("git checkout #{b_name}")
-      	unless $? == 0
-      	  puts "Error checking out #{m[2]}
-      	        there are probably uncommited changes on #{@origin}"
-      	end
+      	break if TEST_BRANCH == @origin
+        set_branch
       end
 
     	it 'parses a name from the current branch' do
