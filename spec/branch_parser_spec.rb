@@ -51,13 +51,18 @@ module SpResource
       end
 
     	it 'parses a name from the current branch' do
-        p described_class.current_branch
+        expect(described_class.current_branch)
+          .to have_attributes database: 'SPSPEC',
+                              collection: 'Test Collection',
+                              level: { user: 'specuser' }
     	end
 
-    	it 'exits with an error message if the branch name is not parsable'
+    	it 'exits with an error message if the branch name is not parsable' do
+    		expect { described_class.new('master') }
+    		  .to raise_error ArgumentError, BRANCH_ERROR + 'master'
+    	end
 
     	after :all do
-    	  p @origin
     	  system("git checkout #{@origin}")
     	end
     end

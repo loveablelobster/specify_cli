@@ -22,6 +22,8 @@ module SpResource
   CONFIG = File.expand_path(Pathname.new('~/.sp_resource.yml'))
   GIT_CURRENT_BRANCH = 'git rev-parse --abbrev-ref HEAD'
 
+  BRANCH_ERROR = 'Branch name not parsable: '
+
   module FileError
     VIEWS_FILE = 'Files must be .views.xml files'
   end

@@ -1,10 +1,14 @@
 # frozen_string_literal: true
 
 module SpResource
-  #
+  # A class that parses target information (_database_, _collection_, _level_)
+  # from a string that follows the convention <tt>Database/Collection/level</tt>
+  # this can be the name of a git branch.
   class BranchParser
+    attr_reader :database, :collection, :level
     def initialize(name)
       @database, collection, level, user = *name.split('/')
+      raise ArgumentError, BRANCH_ERROR + name unless collection && level
       @collection = normalize_name collection
       @level = case level
                when 'collection', 'discipline'
@@ -16,9 +20,10 @@ module SpResource
                end
     end
 
+    # Creates a new instance of BranchParser from the current HEAD.
     def self.current_branch
       stdout_str, stderr_str, status = Open3.capture3(GIT_CURRENT_BRANCH)
-      unless status.exitstatus == 0 #if b_name.start_with?('fatal:')
+      unless status.exitstatus.zero?
         STDERR.puts "There was an error running #{GIT_CURRENT_BRANCH}"
         STDERR.puts stderr_str
         exit 1
@@ -26,6 +31,7 @@ module SpResource
       new(stdout_str.chomp)
     end
 
+    # Returns the BranchParser object's attributes as a hash.
     def to_h
       { database: @database, collection: @collection, level: @level }
     end
