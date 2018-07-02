@@ -13,7 +13,7 @@ include GLI::App
 
 program_desc 'Manage Specify application resources from the command line'
 
-version SpResource::VERSION
+version Specify::VERSION
 
 subcommand_option_handling :normal
 arguments :strict
@@ -44,7 +44,7 @@ command [:config, :c] do |c|
 
     puts "--template - #{options[:template].inspect}"
 
-    config = SpResource::CLI.load_config
+    config = Specify::CLI.load_config
 
     if options[:file]
       if config && !options[:force]
@@ -53,7 +53,7 @@ command [:config, :c] do |c|
         exit 1
       end
       config = Psych.load_file(options[:file])
-      SpResource::CLI.save_config(config)
+      Specify::CLI.save_config(config)
       puts 'file installed as ~/.specify.rc'
       exit 0
     end
@@ -62,10 +62,10 @@ command [:config, :c] do |c|
       # create a config file for a single Specify instance, ask for the db name
       print 'database name'
       db = Readline.readline(': ', true)
-      SpResource::CLI.configure config, db
+      Specify::CLI.configure config, db
     else
       args.each do |db|
-        SpResource::CLI.configure config, db
+        Specify::CLI.configure config, db
       end
     end
   end

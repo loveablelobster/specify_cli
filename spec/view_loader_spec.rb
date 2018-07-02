@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Tests for the
-module SpResource
+module Specify
   RSpec.describe ViewLoader do
     def config
       Pathname.new(Dir.pwd).join('spec', 'support', 'db.yml')
@@ -29,11 +29,11 @@ module SpResource
 
     context 'when creating instances from branch names' do
       it 'creates an instance for the discipline level' do
-        expect(collection_level.target).to be_a Specify::Model::Collection
+        expect(collection_level.target).to be_a Model::Collection
       end
 
       it 'creates an instance for the collection level' do
-        expect(discipline_level.target).to be_a Specify::Model::Discipline
+        expect(discipline_level.target).to be_a Model::Discipline
       end
 
       it 'creates an instance for the user type level' do
@@ -41,7 +41,7 @@ module SpResource
       end
 
       it 'creates an instance for the user level' do
-        expect(user_level.target).to be_a Specify::Model::User
+        expect(user_level.target).to be_a Model::User
       end
     end
 

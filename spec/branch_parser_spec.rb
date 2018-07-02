@@ -2,7 +2,7 @@
 TEST_BRANCH = 'SPSPEC/TestCollection/user/specuser'
 
 # Tests for the
-module SpResource
+module Specify
   RSpec.describe BranchParser do
     context 'when creating instances from branch names' do
       let(:collection_level) { 'SPSPEC/TestCollection/collection' }

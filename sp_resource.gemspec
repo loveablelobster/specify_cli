@@ -2,7 +2,7 @@
 require File.join([File.dirname(__FILE__),'lib','sp_resource','version.rb'])
 spec = Gem::Specification.new do |s| 
   s.name = 'sp_resource'
-  s.version = SpResource::VERSION
+  s.version = Specify::VERSION
   s.author = 'Your Name Here'
   s.email = 'your@email.address.com'
   s.homepage = 'http://your.website.com'

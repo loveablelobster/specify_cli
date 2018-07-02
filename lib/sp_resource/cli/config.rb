@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module SpResource
+module Specify
   module CLI
     def self.ask(config, keys)
       setting = config.dig(*keys)

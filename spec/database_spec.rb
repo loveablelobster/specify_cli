@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 #
-module SpResource
+module Specify
   # Tests for the Specify module
   module Specify
     RSpec.describe Database do

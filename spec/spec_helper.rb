@@ -5,7 +5,7 @@ require 'pry'
 require_relative 'helpers'
 require_relative '../lib/sp_resource'
 
-SPSPEC = SpResource::Specify::Database.new('SPSPEC',
+SPSPEC = Specify::Database.new('SPSPEC',
                                user: 'specmaster',
                                password: 'masterpass')
 DB = SPSPEC.connect

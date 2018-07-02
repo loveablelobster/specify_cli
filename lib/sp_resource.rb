@@ -19,7 +19,7 @@ require_relative 'sp_resource/user_type'
 require_relative 'sp_resource/view_loader'
 
 # A module that provides functionaliy to manage Specify app resources.
-module SpResource
+module Specify
   CONFIG = File.expand_path(Pathname.new('~/.specify.rc'))
   GIT_CURRENT_BRANCH = 'git rev-parse --abbrev-ref HEAD'
 
@@ -29,9 +29,7 @@ module SpResource
     VIEWS_FILE = 'Files must be .views.xml files'
   end
 
-  module Specify
-    module LoginError
-      INCONSISTENT_LOGIN = 'User is already logged in to a different collection'
-    end
+  module LoginError
+    INCONSISTENT_LOGIN = 'User is already logged in to a different collection'
   end
 end

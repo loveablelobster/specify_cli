@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module SpResource
+module Specify
   # A class that can upload a ViewSetObject
   class ViewLoader
     attr_reader :target
@@ -10,11 +10,11 @@ module SpResource
     def initialize(database:, collection:, level:, config: nil)
       config ||= CONFIG
       @config = load_config config, database
-      @db = Specify::Database.new(database,
-                                  host: @config['host'],
-                                  port: @config['port'],
-                                  user: @config['db_user']['name'],
-                                  password: @config['db_user']['password'])
+      @db = Database.new(database,
+                         host: @config['host'],
+                         port: @config['port'],
+                         user: @config['db_user']['name'],
+                         password: @config['db_user']['password'])
       @session = @db.start_session @config['sp_user'], collection
       @target = nil
       self.target = level
@@ -61,7 +61,7 @@ module SpResource
 
     def user_target(hash)
       return unless hash.key? :user
-      Specify::Model::User.first(Name: hash[:user])
+      Model::User.first(Name: hash[:user])
     end
 
     def user_type_target(hash)

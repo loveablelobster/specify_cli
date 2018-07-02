@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module SpResource
+module Specify
   # A class that parses target information (_database_, _collection_, _level_)
   # from a string that follows the convention <tt>Database/Collection/level</tt>
   # this can be the name of a git branch.

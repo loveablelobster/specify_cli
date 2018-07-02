@@ -1,17 +1,17 @@
 # frozen_string_literal: true
 
 # Tests for the
-module SpResource
+module Specify
   RSpec.describe UserType do
     let :collection do
-      Specify::Model::Collection.first CollectionName: 'Test Collection'
+      Model::Collection.first CollectionName: 'Test Collection'
     end
 
     let(:user_type) { described_class.new('guest') }
 
     it 'returns all AppResourceDir instances' do
       expect(user_type.app_resource_dirs(collection).all)
-        .to include an_instance_of Specify::Model::AppResourceDir
+        .to include an_instance_of Model::AppResourceDir
     end
 
     it 'returns the ViewSetObject for the given collection' do
