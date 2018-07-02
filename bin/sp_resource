@@ -33,7 +33,7 @@ The configuration file db.yml stores information about the databases
 arg_name '[database]'
 command [:config, :c] do |c|
   c.desc 'Overwrite an existing config file'
-  c.switch :overwrite
+  c.switch :force
 
   c.desc 'Create an empty template'
   c.flag :t, :template # FIXME: should have arg for path
@@ -47,7 +47,7 @@ command [:config, :c] do |c|
     config = SpResource::CLI.load_config
 
     if options[:file]
-      if config && !options[:o]
+      if config && !options[:force]
         STDERR.puts "file #{CONFIG} exists"
         STDERR.puts 'use the -o option (overwrite) if you want to overwrite it'
         exit 1
