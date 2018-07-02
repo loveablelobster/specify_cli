@@ -26,7 +26,7 @@ arguments :strict
 # arg_name 'The name of the argument'
 # flag [:f,:flagname]
 
-desc 'Adds a configuration file as ~/.sp_resource.yml'
+desc 'Adds a configuration file as ~/.specify.rc'
 long_desc "
 The configuration file db.yml stores information about the databases
 "
@@ -38,7 +38,7 @@ command [:config, :c] do |c|
   c.desc 'Create an empty template'
   c.flag :t, :template # FIXME: should have arg for path
 
-  c.desc 'Copy an existing configuration file to~/.sp_resource.yml'
+  c.desc 'Copy an existing configuration file to~/.specify.rc'
   c.flag :f, :file
   c.action do |global_options,options,args|
 
@@ -54,7 +54,7 @@ command [:config, :c] do |c|
       end
       config = Psych.load_file(options[:file])
       SpResource::CLI.save_config(config)
-      puts 'file installed as ~/.sp_resource.yml'
+      puts 'file installed as ~/.specify.rc'
       exit 0
     end
 

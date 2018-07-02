@@ -10,12 +10,12 @@ sp_resource.rb(1) -- Manage Specify application resources from the command line
 
 ## FILES
 
-`~/.sp_resource.yml` is used ...
+`~/.specify.rc` is used ...
 
 ## COMMANDS
 
 * `config` `[-o]` `[-t]` `[database...]`
-  create a `~/.sp_resource.yml` configuration file
+  create a `~/.specify.rc` configuration file
 * `viewset`
 
 ## OPTIONS

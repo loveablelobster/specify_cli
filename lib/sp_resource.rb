@@ -19,7 +19,7 @@ require_relative 'sp_resource/view_loader'
 
 # A module that provides functionaliy to manage Specify app resources.
 module SpResource
-  CONFIG = File.expand_path(Pathname.new('~/.sp_resource.yml'))
+  CONFIG = File.expand_path(Pathname.new('~/.specify.rc'))
   GIT_CURRENT_BRANCH = 'git rev-parse --abbrev-ref HEAD'
 
   BRANCH_ERROR = 'Branch name not parsable: '
