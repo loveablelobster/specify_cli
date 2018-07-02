@@ -1,7 +1,7 @@
 # Ensure we require the local version and not one we might have installed already
-require File.join([File.dirname(__FILE__),'lib','sp_resource','version.rb'])
+require File.join([File.dirname(__FILE__),'lib','specify','version.rb'])
 spec = Gem::Specification.new do |s| 
-  s.name = 'sp_resource'
+  s.name = 'specify'
   s.version = Specify::VERSION
   s.author = 'Your Name Here'
   s.email = 'your@email.address.com'
@@ -12,10 +12,10 @@ spec = Gem::Specification.new do |s|
 ")
   s.require_paths << 'lib'
   s.has_rdoc = true
-  s.extra_rdoc_files = ['README.rdoc','sp_resource.rdoc']
-  s.rdoc_options << '--title' << 'sp_resource' << '--main' << 'README.rdoc' << '-ri'
+  s.extra_rdoc_files = ['README.rdoc','specify.rdoc']
+  s.rdoc_options << '--title' << 'specify' << '--main' << 'README.rdoc' << '-ri'
   s.bindir = 'bin'
-  s.executables << 'sp_resource'
+  s.executables << 'specify'
   s.add_development_dependency('rake')
   s.add_development_dependency('rdoc')
   s.add_development_dependency('aruba')

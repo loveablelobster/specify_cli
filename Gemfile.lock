@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    sp_resource (0.0.1)
+    specify (0.0.1)
       gli (= 2.17.1)
 
 GEM
@@ -111,7 +111,7 @@ DEPENDENCIES
   rspec
   rubocop-rspec
   sequel
-  sp_resource!
+  specify!
 
 BUNDLED WITH
    1.16.1

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'sp_resource/version.rb'
+require 'specify/version.rb'
 
 require 'fileutils'
 require 'io/console'
@@ -11,12 +11,12 @@ require 'psych'
 require 'readline'
 require 'sequel'
 
-require_relative 'sp_resource/branch_parser'
-require_relative 'sp_resource/cli'
-require_relative 'sp_resource/database'
-require_relative 'sp_resource/session'
-require_relative 'sp_resource/user_type'
-require_relative 'sp_resource/view_loader'
+require_relative 'specify/branch_parser'
+require_relative 'specify/cli'
+require_relative 'specify/database'
+require_relative 'specify/session'
+require_relative 'specify/user_type'
+require_relative 'specify/view_loader'
 
 # A module that provides functionaliy to manage Specify app resources.
 module Specify
