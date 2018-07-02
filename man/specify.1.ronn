@@ -1,12 +1,12 @@
-sp_resource.rb(1) -- Manage Specify application resources from the command line
+specify.rb(1) -- Manage Specify application resources from the command line
 ===============================================================================
 
 ## SYNOPSIS
 
-`sp_resource.rb` <>
+`specify.rb` <>
 
 ## DESCRIPTION
-**sp_resource.rb** is a command-line tool to ...
+**specify.rb** is a command-line tool to ...
 
 ## FILES
 

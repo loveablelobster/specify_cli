@@ -1,4 +1,4 @@
-= sp_resource
+= specify
 
 Describe your project here
 

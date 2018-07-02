@@ -1,4 +1,4 @@
-= sp_resource
+= specify
 
 Generate this with
     sp_resource rdoc
