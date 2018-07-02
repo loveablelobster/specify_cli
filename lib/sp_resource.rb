@@ -13,7 +13,8 @@ require 'sequel'
 
 require_relative 'sp_resource/branch_parser'
 require_relative 'sp_resource/cli'
-require_relative 'sp_resource/specify'
+require_relative 'sp_resource/database'
+require_relative 'sp_resource/session'
 require_relative 'sp_resource/user_type'
 require_relative 'sp_resource/view_loader'
 
@@ -26,5 +27,11 @@ module SpResource
 
   module FileError
     VIEWS_FILE = 'Files must be .views.xml files'
+  end
+
+  module Specify
+    module LoginError
+      INCONSISTENT_LOGIN = 'User is already logged in to a different collection'
+    end
   end
 end
