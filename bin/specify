@@ -71,6 +71,13 @@ command [:config, :c] do |c|
   end
 end
 
+desc 'Creates stub records'
+long_desc ""
+arg_name '[collection][count]'
+command [:stubs, :s] do |c|
+
+end
+
 desc 'Describe viewset here'
 arg_name 'Describe arguments to viewset here'
 command [:viewset, :vs] do |c|
