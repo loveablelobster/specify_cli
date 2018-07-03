@@ -7,6 +7,13 @@ module Specify
       many_to_one :user, key: :SpecifyUserID
       many_to_one :division, key: :DivisionID
 
+      one_to_many :created_autonumbering_schemes,
+                  class: 'Specify::Model::AutonumberinScheme',
+                  key: :CreatedByAgentID
+      one_to_many :modified_autonumbering_schemes,
+                  class: 'Specify::Model::AutonumberinScheme',
+                  key: :ModifiedByAgentID
+
       one_to_many :created_collecting_events,
                   class: 'Specify::Model::CollectingEvent',
                   key: :CreatedByAgentID

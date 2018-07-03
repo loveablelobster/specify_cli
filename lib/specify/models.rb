@@ -3,6 +3,7 @@
 require_relative 'models/agent'
 require_relative 'models/app_resource_data'
 require_relative 'models/app_resource_dir'
+require_relative 'models/auto_numbering_scheme'
 require_relative 'models/collecting_event'
 require_relative 'models/collection'
 require_relative 'models/collection_object'

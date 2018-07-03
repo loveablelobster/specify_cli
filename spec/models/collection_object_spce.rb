@@ -12,11 +12,20 @@ module Specify
       end
 
       context 'when adding to collection' do
-      	context 'when collecting event is emebedded' do
-      		subject do
-      		  collection.add_collection_object(CatalogNumber: '1')
-      		end
+        subject do
+          collection.add_collection_object(CatalogNumber: '1')
+        end
 
+        it do
+          is_expected.to have_attributes Version: 0,
+                                         TimestampCreated: an_instance_of(Time),
+                                         collection_member: collection,
+                                         CatalogedDate: an_instance_of(Date),
+                                         CatalogedDatePrecision: 1,
+                                         GUID: an_instance_of(String)
+        end
+
+      	context 'when collecting event is emebedded' do
       		it do
       		  ce = an_instance_of(Specify::Model::CollectingEvent)
       			is_expected.to have_attributes collecting_event: ce
