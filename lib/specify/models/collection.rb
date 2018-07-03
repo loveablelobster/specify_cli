@@ -5,6 +5,7 @@ module Specify
     #
     class Collection < Sequel::Model(:collection)
       many_to_one :discipline, key: :DisciplineID
+      one_to_many :collection_objects, key: :CollectionID
 
       def before_save
         self.Version += 1

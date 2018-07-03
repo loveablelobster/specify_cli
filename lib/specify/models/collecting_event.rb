@@ -3,7 +3,7 @@
 module Specify
   module Model
     #
-    class CollectionEvent < Sequel::Model(:collectingevent)
+    class CollectingEvent < Sequel::Model(:collectingevent)
       many_to_one :discipline, key: :DisciplineID
       one_to_many :collection_objects, key: :CollectingEventID
       many_to_one :created_by,

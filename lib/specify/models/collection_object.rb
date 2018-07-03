@@ -27,7 +27,8 @@ module Specify
         self.CatalogedDate = Date.today
         self.CatalogedDatePrecision = 1
         self.GUID = SecureRandom.uuid
-        # TODO: block to create collecting event if embedded
+        self.collecting_event = embed_collecting_event(self.collection)
+
         # TODO: block to set cataloger (logged in user or from arg)
         super
       end
@@ -37,6 +38,11 @@ module Specify
         self.TimestampModified = Time.now
         # TODO: set modified_by
         super
+      end
+
+      def embed_collecting_event(collection)
+        return unless collection.IsEmbeddedCollectingEvent
+        Specify::Model::CollectingEvent.create discipline: collection.discipline
       end
     end
   end

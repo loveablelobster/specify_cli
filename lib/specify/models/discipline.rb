@@ -8,6 +8,7 @@ module Specify
       one_to_many :app_resourcedirs,
                   class: 'Specify::Model::AppResourceDir',
                   key: :DisciplineID
+      one_to_many :collecting_events, key: :DisciplineID
 
       def before_save
         self.Version += 1
