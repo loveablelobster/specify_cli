@@ -2,6 +2,7 @@
 
 require 'specify/version.rb'
 
+require 'date'
 require 'fileutils'
 require 'io/console'
 require 'mysql2'
@@ -9,6 +10,7 @@ require 'open3'
 require 'pathname'
 require 'psych'
 require 'readline'
+require 'securerandom'
 require 'sequel'
 
 require_relative 'specify/branch_parser'
