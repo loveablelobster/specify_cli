@@ -7,14 +7,24 @@ module Specify
         described_class.first Name: 'Test Discipline'
       end
 
-      it 'returns all AppResourceDir instances' do
-        expect(discipline.app_resource_dirs.all)
-          .to include an_instance_of AppResourceDir
+      describe '#view_set_dir' do
+        subject { discipline.view_set_dir }
+
+        it do
+          is_expected
+            .to have_attributes DisciplineType: 'Invertebrate Paleontology',
+                                IsPersonal: false,
+                                UserType: nil,
+                                collection: nil
+        end
       end
 
-      it 'returns the ViewSetObject for the given collection' do
-        expect(discipline.view_set.values)
-          .to include :Name => "paleo.views"
+      describe '#view_set' do
+        subject { discipline.view_set }
+
+        it 'returns the ViewSetObject for the given collection' do
+          is_expected.to have_attributes Name: 'Paleo Views'
+        end
       end
     end
   end

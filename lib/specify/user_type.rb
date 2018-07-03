@@ -10,8 +10,8 @@ module Specify
     end
 
     # Returns the AppResourceDir for the user type for a given Collection
-    def app_resource_dirs(collection)
-      Model::AppResourceDir.where(collection: collection,
+    def view_set_dir(collection)
+      Model::AppResourceDir.first(collection: collection,
                                   discipline: collection.discipline,
                                   UserType: @name,
                                   IsPersonal: false)
@@ -19,9 +19,7 @@ module Specify
 
     # Returns the user's ViewSetObject for _collection_.
     def view_set(collection)
-      # FIXME: this works, but would be more coherent if also could use assoc
-      dirs = app_resource_dirs(collection).map(&:SpAppResourceDirID)
-      Model::ViewSetObject.first(SpAppResourceDirID: dirs)
+      view_set_dir(collection).view_set_object
     end
 
     private

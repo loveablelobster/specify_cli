@@ -77,14 +77,26 @@ module Specify
           .to include FirstName: 'John', LastName: 'Doe'
       end
 
-      it 'returns all AppResourceDir instances' do
-        expect(user.app_resource_dirs(collection).all)
-          .to include an_instance_of AppResourceDir
+      describe '#view_set_dir' do
+        subject { user.view_set_dir(collection) }
+
+        it do
+          is_expected
+            .to have_attributes DisciplineType: 'Invertebrate Paleontology',
+                                IsPersonal: true,
+                                UserType: 'manager',
+                                collection: collection,
+                                user: user,
+                                discipline: collection.discipline
+        end
       end
 
-      it 'returns the ViewSetObject for the given collection' do
-        expect(user.view_set(collection).values)
-          .to include :Name => 'Paleo Views'
+      describe '#view_set' do
+        subject { user.view_set(collection) }
+
+        it do
+          is_expected.to have_attributes Name: 'paleo.views'
+        end
       end
     end
   end

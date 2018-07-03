@@ -36,6 +36,34 @@ module Specify
         # TODO: set modified_by
         super
       end
+
+      def max
+        collections.each do |col|
+          col.collection_objects.each { |co| p co.CatalogNumber }
+        end
+      end
+
+      def pattern
+        case self.FormatName
+        when 'CatalogNumberNumeric'
+          /^\d{9}$/
+        end
+        # TODO: get proper number format and create pattern
+      end
     end
   end
 end
+
+# formats are in spappresourcedata
+# referenced by spappresource with 'description' == 'UIFormatters',
+# referencing spappresourcedir, referencing discipline
+# if not persisted, file is in Specify/config/backstop/uiformatters.xml
+#
+# <format system="true"
+#         name="CatalogNumberNumeric"
+#         class="edu.ku.brc.specify.datamodel.CollectionObject"
+#         fieldname="catalogNumber"
+#         default="false">
+#     <autonumber>edu.ku.brc.specify.dbsupport.CollectionAutoNumber</autonumber>
+#     <external>edu.ku.brc.specify.ui.CatalogNumberUIFieldFormatter</external>
+# </format>

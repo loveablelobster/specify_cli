@@ -5,6 +5,7 @@ module Specify
     # A class that represents a Specify user.
     class User < Sequel::Model(:specifyuser)
       one_to_many :agents, key: :SpecifyUserID
+      one_to_many :app_resource_dirs, key: :SpecifyUserID
 
       def before_save
         self.Version += 1
@@ -41,17 +42,16 @@ module Specify
       end
 
       # Returns the user's AppResourceDir instances for _collection_.
-      def app_resource_dirs(collection)
-        AppResourceDir.where(collection: collection,
-                             discipline: collection.discipline,
-                             UserType: self[:UserType],
-                             user: self,
-                             IsPersonal: true)
+      def view_set_dir(collection)
+        app_resource_dirs_dataset.first(collection: collection,
+                                        discipline: collection.discipline,
+                                        UserType: self[:UserType],
+                                        IsPersonal: true)
       end
 
       # Returns the user's ViewSetObject for _collection_.
       def view_set(collection)
-        ViewSetObject.first(app_resource_dir: app_resource_dirs(collection))
+        view_set_dir(collection).view_set_object
       end
 
       # Returns the collection and login time if the user is logged in.

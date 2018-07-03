@@ -14,6 +14,9 @@ module Specify
           puts "Divisions: #{ans.divisions}" unless ans.divisions.empty?
         end
         p collection.auto_numbering_schemes
+        puts
+        ans = AutoNumberingScheme.first
+        p ans.max
       end
     end
   end

@@ -27,7 +27,7 @@ module Specify
 
       	context 'when collecting event is emebedded' do
       		it do
-      		  ce = an_instance_of(Specify::Model::CollectingEvent)
+      		  ce = an_instance_of(CollectingEvent)
       			is_expected.to have_attributes collecting_event: ce
       		end
       	end

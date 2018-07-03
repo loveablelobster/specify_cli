@@ -42,7 +42,7 @@ module Specify
 
       def embed_collecting_event(collection)
         return unless collection.IsEmbeddedCollectingEvent
-        Specify::Model::CollectingEvent.create discipline: collection.discipline
+        CollectingEvent.create discipline: collection.discipline
       end
     end
   end

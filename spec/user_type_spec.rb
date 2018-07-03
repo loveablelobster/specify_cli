@@ -9,14 +9,26 @@ module Specify
 
     let(:user_type) { described_class.new('guest') }
 
-    it 'returns all AppResourceDir instances' do
-      expect(user_type.app_resource_dirs(collection).all)
-        .to include an_instance_of Model::AppResourceDir
+    describe '#view_set_dir' do
+      subject { user_type.view_set_dir(collection) }
+
+      it do
+        is_expected
+          .to have_attributes DisciplineType: 'Invertebrate Paleontology',
+                              IsPersonal: false,
+                              UserType: 'guest',
+                              collection: collection,
+                              discipline: collection.discipline
+      end
     end
 
-    it 'returns the ViewSetObject for the given collection' do
-    	expect(user_type.view_set(collection).values)
-    	  .to include :Name => 'Paleo Views'
+    describe '#view_set' do
+      subject { user_type.view_set(collection) }
+
+      it 'returns the ViewSetObject for the given collection' do
+        is_expected
+          .to have_attributes Name: 'Paleo Views'
+      end
     end
   end
 end
