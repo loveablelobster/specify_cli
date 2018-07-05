@@ -6,6 +6,26 @@ module Specify
       let(:collection) { Collection.first CollectionName: 'Test Collection' }
       let(:user) { described_class.first Name: 'specuser' }
 
+      describe '#collection_valid?' do
+        before { user.log_out }
+
+        context 'when logged in to the collection passed as argument' do
+          before { user.log_in collection }
+
+          subject { user.collection_valid? collection }
+
+          it { is_expected.to be_truthy }
+        end
+
+        context 'when logged in to another collection' do
+        	before { user.log_in(Collection.first(Code: 'NECE')) }
+
+          subject { user.collection_valid? collection }
+
+          it { is_expected.to be_falsey }
+        end
+      end
+
       describe '#log_in' do
         context 'when not logged in' do
           before { user.log_out }
@@ -78,6 +98,27 @@ module Specify
                           LoginCollectionName: nil,
                           LoginDisciplineName: nil,
                           LoginOutTime: a_value >= just_before))
+        end
+      end
+
+      describe '#logged_in?' do
+        before { user.log_out }
+
+        context 'when logged in to the collection passed as argument' do
+          before { user.log_in collection }
+
+          subject { user.logged_in? collection }
+
+          it { is_expected.to include collection => a_value <= Time.now }
+        end
+
+        context 'when logged in to another collection' do
+        	before { user.log_in(Collection.first(Code: 'NECE')) }
+
+        	it do
+        	  expect { user.log_in collection }
+              .to raise_error LoginError::INCONSISTENT_LOGIN
+          end
         end
       end
 

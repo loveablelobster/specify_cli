@@ -25,19 +25,7 @@ module Specify
         d_match && c_match
       end
 
-      # Returns the collection and login time if the user is logged in.
-      def logged_in?(collection)
-        return nil unless self.IsLoggedIn
-        raise LoginError::INCONSISTENT_LOGIN unless collection_valid? collection
-        { collection => self.LoginOutTime }
-      end
-
-      # Returns the Agent for the Division the user is logged in to.
-      def logged_in_agent
-        division = Discipline.first(Name: self.LoginDisciplineName).division
-        agents_dataset.first(division: division)
-      end
-
+      # -> Hash
       # Logs the user in to _collection_
       # (an instance of Specify::Model::Collection).
       def log_in(collection)
@@ -54,6 +42,20 @@ module Specify
         self.LoginDisciplineName = nil
         save
         self.LoginOutTime
+      end
+
+      # Returns the collection and login time if the user is logged in.
+      def logged_in?(collection)
+        return nil unless self.IsLoggedIn
+        raise LoginError::INCONSISTENT_LOGIN unless collection_valid? collection
+        { collection => self.LoginOutTime }
+      end
+
+      # -> Specify::Model::Agent
+      # Returns the Agent for the Division the user is logged in to.
+      def logged_in_agent
+        division = Discipline.first(Name: self.LoginDisciplineName).division
+        agents_dataset.first(division: division)
       end
 
       # -> Hash
