@@ -6,75 +6,114 @@ module Specify
       let(:collection) { Collection.first CollectionName: 'Test Collection' }
       let(:user) { described_class.first Name: 'specuser' }
 
-      context 'when logging in' do
-        it 'raises an error if already logged in to a different collection' do
-          user[:LoginCollectionName] = 'Test Collection'
-          user[:LoginDisciplineName] = 'Wrong Discipline'
-          user[:IsLoggedIn] = true
-          expect { user.login collection }
-            .to raise_error LoginError::INCONSISTENT_LOGIN
+      describe '#log_in' do
+        context 'when not logged in' do
+          before { user.log_out }
+
+          it do
+            just_before = Time.now
+            expect(user.log_in(collection))
+              .to include collection => a_value >= just_before
+          end
+
+          it do
+            just_before = Time.now
+            expect { user.log_in(collection) }
+              .to change { user.values }
+              .from(including(IsLoggedIn: false,
+                              LoginCollectionName: nil,
+                              LoginDisciplineName: nil,
+                              LoginOutTime: a_value <= just_before))
+              .to(including(IsLoggedIn: true,
+                            LoginCollectionName: collection[:CollectionName],
+                            LoginDisciplineName: collection.discipline[:Name],
+                            LoginOutTime: a_value >= just_before))
+          end
         end
 
-        it 'returns a hash with the collection as key' do
-          expect(user.login(collection)).to include collection
+        context 'when already logged in' do
+          before { user.log_in(collection) }
+
+          it do
+            just_before = Time.now
+            expect(user.log_in(collection))
+              .to include collection => a_value <= just_before
+          end
+
+          it do
+            just_before = Time.now
+            expect { user.log_in(collection) }
+              .not_to change { user.values }
+          end
         end
 
-        it 'returns a hash with the login time as value' do
-          just_before = Time.now
-          expect(user.login(collection)[collection]).to be >= just_before
-        end
+        context 'when already logged in to a different collection' do
+        	before { user.log_in(Collection.first(Code: 'NECE')) }
 
-        it 'sets the flag that the user is logged in' do
-          user.login collection
-          expect(user[:IsLoggedIn]).to be_truthy
-        end
-
-        it 'sets the login/out timestamp upon login' do
-          just_before = Time.now
-          user.login collection
-          expect(user[:LoginOutTime]).to be >= just_before
-        end
-
-        it 'sets the name of the collection logged in to' do
-          user.login collection
-          expect(user[:LoginCollectionName]).to eq 'Test Collection'
-        end
-
-        it 'sets the name of the discipline logged in to' do
-          user.login collection
-          expect(user[:LoginDisciplineName]).to eq 'Test Discipline'
-        end
-      end
-
-      context 'when logging out' do
-        it 'sets the flag that the user is logged out' do
-          user.logout
-          expect(user[:IsLoggedIn]).to be_falsey
-        end
-
-        it 'returns a hash with the logout time as value' do
-          user.login collection
-          just_before = Time.now
-          expect(user.logout).to be >= just_before
-        end
-
-        it 'resets the name of the collection logged in to' do
-          user.login collection
-          user.logout
-          expect(user[:LoginCollectionName]).to be_nil
-        end
-
-        it 'resets the name of the discipline logged in to' do
-          user.login collection
-          user.logout
-          expect(user[:LoginDisciplineName]).to be_nil
+        	it do
+        	  expect { user.log_in collection }
+              .to raise_error LoginError::INCONSISTENT_LOGIN
+          end
         end
       end
 
-      it 'returns the Agent for the collection the user is logged in to' do
-        user.login collection
-        expect(user.logged_in_agent.values)
-          .to include FirstName: 'John', LastName: 'Doe'
+      describe '#log_out' do
+        before { user.log_in collection }
+
+        it do
+          just_before = Time.now
+        	expect(user.log_out)
+            .to be >= just_before
+        end
+
+        it do
+          just_before = Time.now
+          expect { user.log_out }
+            .to change { user.values }
+            .from(including(IsLoggedIn: true,
+                            LoginCollectionName: collection[:CollectionName],
+                            LoginDisciplineName: collection.discipline[:Name],
+                            LoginOutTime: a_value <= just_before))
+            .to(including(IsLoggedIn: false,
+                          LoginCollectionName: nil,
+                          LoginDisciplineName: nil,
+                          LoginOutTime: a_value >= just_before))
+        end
+      end
+
+      describe '#logged_in_agent' do
+        before { user.log_in collection }
+
+        subject { user.logged_in_agent }
+
+        it do
+          is_expected
+            .to have_attributes FirstName: 'John', LastName: 'Doe'
+        end
+      end
+
+      describe '#new_login' do
+        before { user.log_out }
+
+        it do
+          just_before = Time.now
+          expect(user.new_login(collection))
+            .to include collection => a_value >= just_before
+        end
+
+        it do
+          just_before = Time.now
+          expect { user.new_login(collection) }
+            .to change { user.values }
+            .from(including(IsLoggedIn: false,
+                            LoginCollectionName: nil,
+                            LoginDisciplineName: nil,
+                            LoginOutTime: a_value <= just_before))
+            .to(including(IsLoggedIn: true,
+                          LoginCollectionName: collection[:CollectionName],
+                          LoginDisciplineName: collection.discipline[:Name],
+                          LoginOutTime: a_value >= just_before))
+        end
       end
 
       describe '#view_set_dir' do

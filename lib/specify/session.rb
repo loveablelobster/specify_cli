@@ -24,14 +24,14 @@ module Specify
     end
 
     def close
-      @user.logout
+      @user.log_out
       @active = false
       changed
       notify_observers(self)
     end
 
     def open
-      @user.login(@collection)
+      @user.log_in(@collection)
       @active = true
       @database << self
     end
