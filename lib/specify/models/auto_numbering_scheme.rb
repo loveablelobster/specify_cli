@@ -37,33 +37,56 @@ module Specify
         super
       end
 
-      def max
-        collections.each do |col|
-          col.collection_objects.each { |co| p co.CatalogNumber }
+      # -> Class
+      # Returns the model class using the numbering scheme
+      # (e.g. Specify::Model::CollectionObject).
+      def scheme_model
+        case self.TableNumber
+        when 1
+          CollectionObject
+        when 7
+          Accession
         end
       end
 
-      def pattern
+      # -> Symbol
+      # Returns the kind of numbering scheme (e.g. :catalog_number).
+      def scheme_type
+        case self.SchemeName
+        when 'Catalog Numbering Scheme'
+          :catalog_number
+        when 'Accession Numbering Scheme'
+          :accession_number
+        else
+          :custom
+        end
+      end
+
+      # -> String
+      # Returns the currently highest number in the scheme.
+      def max
+        if scheme_model == CollectionObject && scheme_type == :catalog_number
+          collections.map { |col| col.highest_catalog_number }
+                     .max
+        end
+      end
+
+      # -> String
+      # Returns the next available number formatted according to the scheme.
+      def increment
+        @number_format ||= number_format
+        @number_format.create(@number_format.incrementer(max) + 1)
+      end
+
+      # -> Specify::NumberFormat
+      # Returns a NumberFormat instance for the AutoNumberingScheme.
+      def number_format
+        # TODO: get proper number format from xml
         case self.FormatName
         when 'CatalogNumberNumeric'
-          /^\d{9}$/
+          NumberFormat.new
         end
-        # TODO: get proper number format and create pattern
       end
     end
   end
 end
-
-# formats are in spappresourcedata
-# referenced by spappresource with 'description' == 'UIFormatters',
-# referencing spappresourcedir, referencing discipline
-# if not persisted, file is in Specify/config/backstop/uiformatters.xml
-#
-# <format system="true"
-#         name="CatalogNumberNumeric"
-#         class="edu.ku.brc.specify.datamodel.CollectionObject"
-#         fieldname="catalogNumber"
-#         default="false">
-#     <autonumber>edu.ku.brc.specify.dbsupport.CollectionAutoNumber</autonumber>
-#     <external>edu.ku.brc.specify.ui.CatalogNumberUIFieldFormatter</external>
-# </format>

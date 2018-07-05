@@ -7,6 +7,13 @@ module Specify
       many_to_one :user, key: :SpecifyUserID
       many_to_one :division, key: :DivisionID
 
+      one_to_many :created_accessions,
+                  class: 'Specify::Model::Accession',
+                  key: :CreatedByAgentID
+      one_to_many :modified_accessions,
+                  class: 'Specify::Model::Accession',
+                  key: :ModifiedByAgentID
+
       one_to_many :created_autonumbering_schemes,
                   class: 'Specify::Model::AutonumberinScheme',
                   key: :CreatedByAgentID

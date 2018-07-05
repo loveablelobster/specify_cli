@@ -11,7 +11,7 @@ module Specify
                   class: 'Specify::Model::AppResourceDir',
                   key: :CollectionID
 
-      many_to_many :auto_numbering_schemes,
+      one_through_one :auto_numbering_scheme,
                    left_key: :CollectionID,
                    right_key: :AutoNumberingSchemeID,
                    join_table: :autonumsch_coll
@@ -39,6 +39,11 @@ module Specify
       # The argument is only for ducktyping/overloading.
       def view_set(_collection = nil)
         view_set_dir.view_set_object
+      end
+
+      #
+      def highest_catalog_number
+        collection_objects_dataset.max(:CatalogNumber)
       end
     end
   end

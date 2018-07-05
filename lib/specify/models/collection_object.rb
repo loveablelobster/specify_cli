@@ -2,7 +2,7 @@
 
 module Specify
   module Model
-    #
+    # A Sequel::Model representing collection objects
     class CollectionObject < Sequel::Model(:collectionobject)
       many_to_one :collection, key: :CollectionID
       many_to_one :collection_member,
@@ -22,14 +22,12 @@ module Specify
       def before_create
         self.Version = 0
         self.TimestampCreated = Time.now
-        self.collection_member = self.collection
-        # TODO: block to fill catalog number
+        self.collection_member = collection
+        self.CatalogNumber = auto_number
         self.CatalogedDate = Date.today
         self.CatalogedDatePrecision = 1
         self.GUID = SecureRandom.uuid
-        self.collecting_event = embed_collecting_event(self.collection)
-
-        # TODO: block to set cataloger (logged in user or from arg)
+        self.collecting_event = embed_collecting_event
         super
       end
 
@@ -40,7 +38,11 @@ module Specify
         super
       end
 
-      def embed_collecting_event(collection)
+      def auto_number
+        self.CatalogNumber || collection.auto_numbering_scheme.increment
+      end
+
+      def embed_collecting_event
         return unless collection.IsEmbeddedCollectingEvent
         CollectingEvent.create discipline: collection.discipline
       end

@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require_relative 'models/accession'
 require_relative 'models/agent'
 require_relative 'models/app_resource_data'
 require_relative 'models/app_resource_dir'
