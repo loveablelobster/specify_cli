@@ -22,15 +22,50 @@ module Specify
                   .auto_numbering_scheme
       end
 
-      describe '#max' do
-        subject { auto_numbering_scheme.max }
-        it { is_expected.to eq '000000013' }
+      describe '#catalog_number?' do
+        context 'when the scheme is a catalog number' do
+        	subject { auto_numbering_scheme.catalog_number? }
+
+        	it { is_expected.to be true }
+        end
       end
 
       describe '#increment' do
       	subject { auto_numbering_scheme.increment }
 
       	it { is_expected.to eq '000000014' }
+      end
+
+      describe '#max' do
+        subject { auto_numbering_scheme.max }
+
+        it { is_expected.to eq '000000013' }
+      end
+
+      describe '#number_format' do
+        context 'when the scheme is a numeric catalog number format' do
+          subject { auto_numbering_scheme.number_format }
+
+          it do
+            is_expected.to have_attributes incrementer_length: 9
+          end
+        end
+      end
+
+      describe '#scheme_model' do
+      	context 'when the scheme is defined for collection objects' do
+      		subject { auto_numbering_scheme.scheme_model }
+
+      		it { is_expected.to be CollectionObject }
+      	end
+      end
+
+      describe '#scheme_type' do
+      	context 'when the scheme is a catalog number' do
+      		subject { auto_numbering_scheme.scheme_type }
+
+      		it { is_expected.to be :catalog_number }
+      	end
       end
 
       # FIXME: move to shared context
