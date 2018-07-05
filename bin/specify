@@ -1,11 +1,14 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
+
 require 'gli'
-begin # XXX: Remove this begin/rescue before distributing your app
-require 'specify'
+
+# TODO: Remove this begin/rescue before distributing your app
+begin
+  require 'specify'
 rescue LoadError
-  STDERR.puts "In development, you need to use `bundle exec bin/sp_resource` to run your app"
-  STDERR.puts "At install-time, RubyGems will make sure lib, etc. are in the load path"
-  STDERR.puts "Feel free to remove this message from bin/sp_resource now"
+  STDERR.puts 'In development, you need to use `bundle exec bin/specify` to'\
+              ' run your app'
   exit 64
 end
 
@@ -18,17 +21,43 @@ version Specify::VERSION
 subcommand_option_handling :normal
 arguments :strict
 
+# global options
+
 # desc 'Describe some switch here'
 # switch [:s,:switch]
 #
-# desc 'Describe some flag here'
-# default_value 'the default'
-# arg_name 'The name of the argument'
-# flag [:f,:flagname]
+desc 'Host name for the database server'
+default_value 'localhost'
+arg_name '[hostname]'
+flag %i[H host]
+
+desc 'Port for the database server'
+default_value '3306'
+arg_name '[port]'
+flag %i[P port]
+
+desc 'MySQL/MariaDB user'
+default_value 'root'
+arg_name '[name]'
+flag %i[U user]
+
+desc 'Password'
+arg_name '[password]'
+flag %i[p password]
+# global options
+
+desc 'the Specify database'
+default_value 'specify'
+arg_name '[name]'
+flag %i[d database]
+
+desc 'the Specify user'
+arg_name '[name]'
+flag %i[u specify_user]
 
 desc 'Adds a configuration file as ~/.specify.rc'
 long_desc "
-The configuration file db.yml stores information about the databases
+The configuration file ~/.specify.rc stores information about the databases
 "
 arg_name '[database]'
 command [:config, :c] do |c|
@@ -73,9 +102,22 @@ end
 
 desc 'Creates stub records'
 long_desc ""
-arg_name '[collection][count]'
+arg_name '[database][collection][count]'
 command [:stubs, :s] do |c|
+  c.desc 'the collection in which stub records are created'
+  c.arg_name '[collection_name]'
+  c.flag %i[c collection]
 
+  c.action do |global_options,options,args|
+    SPECIFY = Specify::Database.new(global_options[:database],
+                                    user: global_options[:user],
+                                    password: global_options[:password])
+    DB = SPECIFY.connect
+    puts "stubs command ran"
+    p DB
+    puts "global options - #{global_options.inspect}"
+    puts "args - #{args.inspect}"
+  end
 end
 
 desc 'Describe viewset here'
