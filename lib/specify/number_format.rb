@@ -11,17 +11,17 @@ module Specify
     end
 
     def self.parse(format_string)
-
+      # TODO: implement
     end
 
     def self.from_xml(format_node)
-
+      # TODO: implement
     end
 
+    # -> String
+    # Returns a new formatted number string for _number_
     def create(number)
-      if numeric?
-        number.to_s.rjust(incrementer_length, '0')
-      end
+      number.to_s.rjust(incrementer_length, '0') if numeric?
     end
 
     # -> Integer
