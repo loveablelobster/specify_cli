@@ -60,6 +60,7 @@ module Specify
 
     def start_session(user, collection)
       connect
+      p connection
       session = Session.new self, user, collection
       sessions << session.open
       session
@@ -79,7 +80,7 @@ module Specify
     # connection and creates the object if it does not already exist.
     def connect
       return connection if connection
-      connection = Sequel.connect adapter: :mysql2,
+      @connection = Sequel.connect adapter: :mysql2,
                                    user: @user,
                                    password: @password,
                                    host: @host,

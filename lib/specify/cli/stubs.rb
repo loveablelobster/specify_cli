@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
-
-# DB.transaction do # BEGIN
-#   DB[:foo].insert(1) # INSERT
-# end
+def self.make_stubs(collection, cataloger, count)
+  DB.transaction do
+    count.times do
+      puts count
+      collection.add_collection_object(cataloger: cataloger)
+    end
+  end
+end

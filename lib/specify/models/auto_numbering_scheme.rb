@@ -54,7 +54,7 @@ module Specify
       # Returns the currently highest number in the scheme.
       def max
         raise 'not implemented' unless catalog_number?
-        collections.map(&:highest_catalog_number).max
+        collections.map(&:highest_catalog_number).compact.max
       end
 
       # -> Specify::NumberFormat

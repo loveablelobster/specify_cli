@@ -46,15 +46,6 @@ arg_name '[password]'
 flag %i[p password]
 # global options
 
-desc 'the Specify database'
-default_value 'specify'
-arg_name '[name]'
-flag %i[d database]
-
-desc 'the Specify user'
-arg_name '[name]'
-flag %i[u specify_user]
-
 desc 'Adds a configuration file as ~/.specify.rc'
 long_desc "
 The configuration file ~/.specify.rc stores information about the databases
@@ -104,19 +95,22 @@ desc 'Creates stub records'
 long_desc ""
 arg_name '[database][collection][count]'
 command [:stubs, :s] do |c|
-  c.desc 'the collection in which stub records are created'
-  c.arg_name '[collection_name]'
-  c.flag %i[c collection]
+  c.desc 'the Specify user'
+  c.arg_name '[name]'
+  c.flag %i[u user]
 
-  c.action do |global_options,options,args|
-    SPECIFY = Specify::Database.new(global_options[:database],
+  c.action do |global_options, options, args|
+    database = args.shift
+    collection = args.shift
+    count = args.shift.to_i
+    SPECIFY = Specify::Database.new(database,
                                     user: global_options[:user],
                                     password: global_options[:password])
-    DB = SPECIFY.connect
-    puts "stubs command ran"
-    p DB
-    puts "global options - #{global_options.inspect}"
-    puts "args - #{args.inspect}"
+    session = SPECIFY.start_session options[:user],
+                                    collection
+    DB = SPECIFY.connection
+    make_stubs session.collection, session.session_agent, count
+    session.close
   end
 end
 

@@ -39,5 +39,9 @@ module Specify
     def open?
       @active
     end
+
+    def session_agent
+      user.logged_in_agent
+    end
   end
 end
