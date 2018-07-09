@@ -7,9 +7,9 @@ module Specify
     # _database_: the database
     # _collection_: the collection for the session and the target
     # _level_: Hash (with user)
-    def initialize(database:, collection:, level:, config: nil)
+    def initialize(host:, database:, collection:, level:, config: nil)
       config ||= CONFIG
-      @config = load_config config, database
+      @config = load_config config, host, database
       @db = Database.new(database,
                          host: @config['host'],
                          port: @config['port'],
@@ -27,8 +27,9 @@ module Specify
 
     # Creates a new instance from a branch name
     def self.from_branch(name = nil, config: nil)
-      view_loader = name ? BranchParser.new(name) : BranchParser.current_branch
-      new view_loader.to_h.merge(config: config)
+      params = name ? BranchParser.new(name) : BranchParser.current_branch
+      p params.to_h
+      new params.to_h.merge(config: config)
     end
 
     def target=(level)
@@ -49,8 +50,11 @@ module Specify
 
     private
 
-    def load_config(config, database)
-      Psych.load_file(config || CONFIG)[database]
+    def load_config(config, hostname, database)
+      # FIXME: this is duplicated in database.rb
+      #        there should maybe be a config class wrapping the yml
+      Psych.load_file(config || CONFIG)
+           .dig('hosts', hostname, 'databases', database)
     end
 
     def views_file(path_name)

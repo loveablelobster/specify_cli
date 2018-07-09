@@ -6,10 +6,12 @@ module Specify
   # <tt>Database/Collection/level</tt> this can be the name of a git branch of
   # a repository residing in a folder denoting the hostname.
   class BranchParser
-    attr_reader :hostname, :database, :collection, :level
-    def initialize(name)
-      @hostname, @database, collection, level, user = *name.split('/')
+    attr_reader :host, :database, :collection, :level
+
+    def initialize(name, config = nil)
+      file_dir, @database, collection, level, user = *name.split('/')
       raise ArgumentError, BRANCH_ERROR + name unless collection && level
+      @host = look_up_host(file_dir, config)
       @collection = normalize_name collection
       @level = case level
                when 'collection', 'discipline'
@@ -23,6 +25,7 @@ module Specify
 
     # Creates a new instance of BranchParser from the current HEAD.
     def self.current_branch
+      p Dir.pwd
       stdout_str, stderr_str, status = Open3.capture3(GIT_CURRENT_BRANCH)
       unless status.exitstatus.zero?
         STDERR.puts "There was an error running #{GIT_CURRENT_BRANCH}"
@@ -34,10 +37,17 @@ module Specify
 
     # Returns the BranchParser object's attributes as a hash.
     def to_h
-      { database: @database, collection: @collection, level: @level }
+      { host: host,
+        database: database,
+        collection: collection,
+        level: level }
     end
 
     private
+
+    def look_up_host(file_dir, config = nil)
+      Psych.load_file(config || CONFIG).dig('dir_names', file_dir)
+    end
 
     def normalize_name(name)
       name.gsub(/([A-Z]+)([A-Z][a-z])/, '\1 \2')

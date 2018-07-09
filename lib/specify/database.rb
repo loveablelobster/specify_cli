@@ -33,8 +33,7 @@ module Specify
     # _config_file_: the path to the file
     def self.load_config(hostname, database, config_file = nil)
       config = Psych.load_file(config_file || CONFIG)
-                    .each_value { |v| break v if v['host'] == hostname }
-                    .dig('databases', database)
+                    .dig('hosts', hostname, 'databases', database)
       new(database,
           host: hostname,
           port: config['port'],
@@ -49,14 +48,15 @@ module Specify
       sessions << session
     end
 
-    #
+    # Closes all sessions.
+    # FIXME: should probably also close database connection
     def close
       return if sessions.empty?
-      puts 'cleaning up hanging sessions:'
       sessions.each do |session|
-        puts session
         session.close
+        session.delete_observer self
       end
+      # connection.disconnect
     end
 
     # Returns the Sequel::Database object for the database. Establishes a
@@ -81,14 +81,13 @@ module Specify
 
     # Deletes a closed session from the sessions pool
     def update(session)
-      return if session.open?
       sessions.delete session
     end
 
     def start_session(user, collection)
       connect
-      session = Session.new self, user, collection
-      @sessions << session.open
+      session = Session.new user, collection
+      @sessions << session
       session
     end
 

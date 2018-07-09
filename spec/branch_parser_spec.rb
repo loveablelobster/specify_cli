@@ -5,6 +5,10 @@ TEST_BRANCH = 'SPSPEC/TestCollection/user/specuser'
 module Specify
   RSpec.describe BranchParser do
     context 'when creating instances from branch names' do
+      let :config do
+        Pathname.new(Dir.pwd).join('spec', 'support', 'db.yml')
+      end
+
       let(:collection_level) { 'sp_resource/SPSPEC/TestCollection/collection' }
       let(:discipline_level) { 'sp_resource/SPSPEC/TestCollection/discipline' }
       let(:user_type_level) { 'sp_resource/SPSPEC/TestCollection/Manager' }
@@ -14,32 +18,48 @@ module Specify
         Pathname.new(Dir.pwd).join('spec', 'support', 'db.yml')
       end
 
-      it 'returns a hash for the collection level' do
-        expect(described_class.new(collection_level).to_h)
-          .to include database: 'SPSPEC',
-                      collection: 'Test Collection',
-                      level: :collection
+      context 'when collection' do
+        subject { described_class.new collection_level, config }
+
+        it do
+          is_expected.to have_attributes host: 'localhost',
+                                         database: 'SPSPEC',
+        	                               collection: 'Test Collection',
+        	                               level: :collection
+        end
       end
 
-      it 'returns a hash for the discipline level' do
-        expect(described_class.new(discipline_level).to_h)
-          .to include database: 'SPSPEC',
-                      collection: 'Test Collection',
-                      level: :discipline
+      context 'when discipline' do
+        subject { described_class.new discipline_level, config }
+
+        it do
+          is_expected.to have_attributes host: 'localhost',
+                                         database: 'SPSPEC',
+        	                               collection: 'Test Collection',
+        	                               level: :discipline
+        end
       end
 
-      it 'returns a hash for the user type level' do
-      	expect(described_class.new(user_type_level).to_h)
-          .to include database: 'SPSPEC',
-                      collection: 'Test Collection',
-                      level: { user_type: :manager }
+      context 'when user type' do
+        subject { described_class.new user_type_level, config }
+
+        it do
+          is_expected.to have_attributes host: 'localhost',
+                                         database: 'SPSPEC',
+        	                               collection: 'Test Collection',
+        	                               level: { user_type: :manager }
+        end
       end
 
-      it 'returns a hash for the user level' do
-        expect(described_class.new(user_level).to_h)
-          .to include database: 'SPSPEC',
-                      collection: 'Test Collection',
-                      level: { user: 'specuser' }
+      context 'when user' do
+        subject { described_class.new user_level, config }
+
+        it do
+          is_expected.to have_attributes host: 'localhost',
+                                         database: 'SPSPEC',
+        	                               collection: 'Test Collection',
+        	                               level: { user: 'specuser' }
+        end
       end
     end
 

@@ -8,22 +8,22 @@ module Specify
     end
 
     let :collection_level do
-      described_class.from_branch 'SPSPEC/TestCollection/collection',
+      described_class.from_branch 'sp_resource/SPSPEC/TestCollection/collection',
                                   config: config
     end
 
     let :discipline_level do
-      described_class.from_branch 'SPSPEC/TestCollection/discipline',
+      described_class.from_branch 'sp_resource/SPSPEC/TestCollection/discipline',
                                   config: config
     end
 
     let :user_type_level do
-      described_class.from_branch 'SPSPEC/TestCollection/Manager',
+      described_class.from_branch 'sp_resource/SPSPEC/TestCollection/Manager',
                                   config: config
     end
 
     let :user_level do
-      described_class.from_branch 'SPSPEC/TestCollection/user/specuser',
+      described_class.from_branch 'sp_resource/SPSPEC/TestCollection/user/specuser',
                                   config: config
     end
 
