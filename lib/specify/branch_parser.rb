@@ -25,14 +25,14 @@ module Specify
 
     # Creates a new instance of BranchParser from the current HEAD.
     def self.current_branch
-      p Dir.pwd
       stdout_str, stderr_str, status = Open3.capture3(GIT_CURRENT_BRANCH)
       unless status.exitstatus.zero?
         STDERR.puts "There was an error running #{GIT_CURRENT_BRANCH}"
         STDERR.puts stderr_str
         exit 1
       end
-      new(stdout_str.chomp)
+      dir_and_branch = File.basename(Dir.pwd) + '/' + stdout_str.chomp
+      new(dir_and_branch)
     end
 
     # Returns the BranchParser object's attributes as a hash.
