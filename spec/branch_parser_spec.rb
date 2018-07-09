@@ -5,10 +5,10 @@ TEST_BRANCH = 'SPSPEC/TestCollection/user/specuser'
 module Specify
   RSpec.describe BranchParser do
     context 'when creating instances from branch names' do
-      let(:collection_level) { 'SPSPEC/TestCollection/collection' }
-      let(:discipline_level) { 'SPSPEC/TestCollection/discipline' }
-      let(:user_type_level) { 'SPSPEC/TestCollection/Manager' }
-      let(:user_level) { 'SPSPEC/TestCollection/user/specuser' }
+      let(:collection_level) { 'sp_resource/SPSPEC/TestCollection/collection' }
+      let(:discipline_level) { 'sp_resource/SPSPEC/TestCollection/discipline' }
+      let(:user_type_level) { 'sp_resource/SPSPEC/TestCollection/Manager' }
+      let(:user_level) { 'sp_resource/SPSPEC/TestCollection/user/specuser' }
 
       let :config do
         Pathname.new(Dir.pwd).join('spec', 'support', 'db.yml')

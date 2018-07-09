@@ -4,7 +4,7 @@ module Specify
   # A class that represents a Specify database.
   class Database
     attr_accessor :connection
-    attr_reader :database, :host, :port, :sessions
+    attr_reader :database, :host, :port, :user, :sessions
 
     # Creates a new instance.
     # _database_: the name of the MySQL database to connect to
@@ -27,26 +27,16 @@ module Specify
       yield(self) if block_given?
     end
 
-    # Returns a string containing a human-readable representation of Database.
-    def inspect
-      "#{self} database: #{@database}, host: #{@host}, port: #{@port}"\
-      ", user: #{@user}, connected: #{connection ? true : false}"
-    end
-
-    # Deletes a closed session from the sessions pool
-    def update(session)
-      return if session.open?
-      sessions.delete session
-    end
-
     # Creates a new instance from a config file.
     # Default config file is '/usr/local/etc/sp_view_loader/db.yml'
     # _database_: the name of the database
     # _config_file_: the path to the file
-    def self.load_config(database, config_file = nil)
-      config = Psych.load_file(config_file || CONFIG)[database]
+    def self.load_config(hostname, database, config_file = nil)
+      config = Psych.load_file(config_file || CONFIG)
+                    .each_value { |v| break v if v['host'] == hostname }
+                    .dig('databases', database)
       new(database,
-          host: config['host'],
+          host: hostname,
           port: config['port'],
           user: config['db_user']['name'],
           password: config['db_user']['password'])
@@ -54,16 +44,9 @@ module Specify
 
     # Adds a new Session to the sessions pool.
     def <<(session)
-      return unless session.open?
+      session.open
+      session.add_observer self
       sessions << session
-    end
-
-    def start_session(user, collection)
-      connect
-      p connection
-      session = Session.new self, user, collection
-      sessions << session.open
-      session
     end
 
     #
@@ -88,6 +71,25 @@ module Specify
                                    database: @database
       require_relative 'models'
       connection
+    end
+
+    # Returns a string containing a human-readable representation of Database.
+    def inspect
+      "#{self} database: #{@database}, host: #{@host}, port: #{@port}"\
+      ", user: #{@user}, connected: #{connection ? true : false}"
+    end
+
+    # Deletes a closed session from the sessions pool
+    def update(session)
+      return if session.open?
+      sessions.delete session
+    end
+
+    def start_session(user, collection)
+      connect
+      session = Session.new self, user, collection
+      @sessions << session.open
+      session
     end
 
     private

@@ -1,13 +1,14 @@
 # frozen_string_literal: true
 
 module Specify
-  # A class that parses target information (_database_, _collection_, _level_)
-  # from a string that follows the convention <tt>Database/Collection/level</tt>
-  # this can be the name of a git branch.
+  # A class that parses target information (_hostname_, _database_,
+  # _collection_, _level_) from a string that follows the convention
+  # <tt>Database/Collection/level</tt> this can be the name of a git branch of
+  # a repository residing in a folder denoting the hostname.
   class BranchParser
-    attr_reader :database, :collection, :level
+    attr_reader :hostname, :database, :collection, :level
     def initialize(name)
-      @database, collection, level, user = *name.split('/')
+      @hostname, @database, collection, level, user = *name.split('/')
       raise ArgumentError, BRANCH_ERROR + name unless collection && level
       @collection = normalize_name collection
       @level = case level

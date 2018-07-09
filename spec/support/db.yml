@@ -3,16 +3,22 @@
 # you can leave the password blank and will be prompted for it
 
 ---
-SPSPEC:
+sp_resource:
   host: localhost
-  port: 3306
-#  db_admin:
-#    name: testdbadmin
-#    password: adminpass
-  db_user:
-    name: specmaster
-    password: masterpass
-  sp_user: specuser
+  databases:
+    SPSPEC:
+      port: 3306
+      db_user:
+        name: specmaster
+        password: masterpass
+      sp_user: specuser
 
-#UniqueDBName:
-#  host: host_name_for_the_db
+# [DIRECTORY_NAME]:
+#  host: [HOSTNAME]
+#  databases:
+#    [DATABASE_NAME]:
+#      port: [PORT]
+#      db_user:
+#        name: [USERNAME]
+#        password: [PASSWORD]
+#      sp_user: [SPECIFY_USERNAME]

@@ -7,11 +7,9 @@ module Specify
   class Session
     include Observable
 
-    attr_reader :database, :collection, :user
+    attr_reader :collection, :user, :active
 
-    def initialize(database, user, collection)
-      @database = database
-      add_observer(@database)
+    def initialize(user, collection)
       @user = Model::User.first(Name: user)
       @collection = Model::Collection.first(CollectionName: collection)
       @active = false
@@ -19,7 +17,7 @@ module Specify
 
     # Returns a string containing a human-readable representation of Session.
     def inspect
-      "#{self} database: #{@database}, specify user: #{@user}"\
+      "#{self} specify user: #{@user}"\
       ", collection: #{@collection}, open: #{@active}"
     end
 
@@ -28,12 +26,13 @@ module Specify
       @active = false
       changed
       notify_observers(self)
+      self
     end
 
     def open
       @user.log_in(@collection)
       @active = true
-      @database << self
+      self
     end
 
     def open?
