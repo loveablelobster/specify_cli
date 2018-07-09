@@ -9,7 +9,9 @@ module Specify
     # _level_: Hash (with user)
     def initialize(host:, database:, collection:, level:, config: nil)
       config ||= CONFIG
-      @config = load_config config, host, database
+      @config = Configuration.new(file: config,
+                                  host: host,
+                                  database: database).params
       @db = Database.new(database,
                          host: @config['host'],
                          port: @config['port'],
@@ -49,13 +51,6 @@ module Specify
     end
 
     private
-
-    def load_config(config, hostname, database)
-      # FIXME: this is duplicated in database.rb
-      #        there should maybe be a config class wrapping the yml
-      Psych.load_file(config || CONFIG)
-           .dig('hosts', hostname, 'databases', database)
-    end
 
     def views_file(path_name)
       path = Pathname.new path_name

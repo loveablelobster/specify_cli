@@ -15,6 +15,7 @@ require 'sequel'
 
 require_relative 'specify/branch_parser'
 require_relative 'specify/cli'
+require_relative 'specify/configuration'
 require_relative 'specify/database'
 require_relative 'specify/number_format'
 require_relative 'specify/session'
