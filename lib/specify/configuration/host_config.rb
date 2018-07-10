@@ -8,7 +8,7 @@ module Specify
 
       def initialize(file = nil)
         super(file)
-        @params = params.dig('dir_names')
+        @params = params.dig(:dir_names)
       end
 
       def resolve_host(dir)

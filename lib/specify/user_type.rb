@@ -4,6 +4,8 @@
 module Specify
   #
   class UserType
+    attr_reader :name
+
     def initialize(name)
       @name = name.downcase
       valid?

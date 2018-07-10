@@ -3,66 +3,155 @@
 # Tests for the
 module Specify
   RSpec.describe ViewLoader do
-    def config
+    let :config do
       Pathname.new(Dir.pwd).join('spec', 'support', 'db.yml')
     end
 
-    let :collection_level do
-      described_class.from_branch 'sp_resource/SPSPEC/TestCollection/collection',
-                                  config: config
+    describe '.from_branch(name, config)' do
+    	context 'when branch is discipline level' do
+        subject do
+          bname = 'sp_resource/SPSPEC/TestCollection/discipline'
+          described_class.from_branch(bname, config: config).target
+        end
+
+        it do
+          expect(subject)
+            .to be_a(Model::Discipline)
+            .and have_attributes Name: 'Test Discipline'
+        end
+    	end
+
+    	context 'when branch is collection level' do
+        subject do
+          bname = 'sp_resource/SPSPEC/TestCollection/collection'
+          described_class.from_branch(bname, config: config).target
+        end
+
+        it do
+          expect(subject)
+            .to be_a(Model::Collection)
+            .and have_attributes CollectionName: 'Test Collection'
+        end
+    	end
+
+    	context 'when branch is user type level' do
+        subject do
+          bname = 'sp_resource/SPSPEC/TestCollection/Manager'
+          described_class.from_branch(bname, config: config).target
+        end
+
+        it do
+          expect(subject)
+            .to be_a(UserType)
+            .and have_attributes name: :manager
+        end
+    	end
+
+    	context 'when branch is user level' do
+        subject do
+          bname = 'sp_resource/SPSPEC/TestCollection/user/specuser'
+          described_class.from_branch(bname, config: config).target
+        end
+
+        it do
+          expect(subject)
+            .to be_a(Model::User)
+            .and have_attributes EMail: 'john.doe@example.com',
+                                 Name: 'specuser'
+        end
+    	end
     end
 
-    let :discipline_level do
-      described_class.from_branch 'sp_resource/SPSPEC/TestCollection/discipline',
-                                  config: config
+    describe 'target=(level)' do
+    	let :view_loader do
+    		described_class.new host: 'localhost',
+    		                    database: 'SPSPEC',
+    		                    collection: 'Test Collection',
+    		                    config: config
+    	end
+
+      context 'when level is :discipline' do
+        it do
+          expect { view_loader.target = :discipline }
+            .to change { view_loader.target }
+            .from(be_nil)
+            .to a_kind_of(Model::Discipline)
+            .and have_attributes Name: 'Test Discipline'
+        end
+      end
+
+      context 'when level is :collection' do
+        it do
+          expect { view_loader.target = :collection }
+            .to change { view_loader.target }
+            .from(be_nil)
+            .to a_kind_of(Model::Collection)
+            .and have_attributes CollectionName: 'Test Collection'
+        end
+      end
+
+      context 'when level is { user_type: :manager }' do
+        it do
+          expect { view_loader.target = { user_type: :manager } }
+            .to change { view_loader.target }
+            .from(be_nil)
+            .to a_kind_of(UserType)
+            .and have_attributes name: :manager
+        end
+      end
+
+      context 'when level is { user: \'specuser\' }' do
+        it do
+          expect { view_loader.target = { user: 'specuser' } }
+            .to change { view_loader.target }
+            .from(be_nil)
+            .to a_kind_of(Model::User)
+            .and have_attributes EMail: 'john.doe@example.com',
+                                 Name: 'specuser'
+        end
+      end
+
+      context 'when level is nil' do
+      	it do
+      		expect { view_loader.target = nil }
+      		  .not_to change { view_loader.target }
+      	end
+      end
     end
 
-    let :user_type_level do
-      described_class.from_branch 'sp_resource/SPSPEC/TestCollection/Manager',
-                                  config: config
-    end
+    describe 'import(file)' do
+    	let :view_loader do
+    		described_class.new host: 'localhost',
+    		                    database: 'SPSPEC',
+    		                    collection: 'Test Collection',
+    		                    level: :collection,
+    		                    config: config
+    	end
 
-    let :user_level do
-      described_class.from_branch 'sp_resource/SPSPEC/TestCollection/user/specuser',
-                                  config: config
-    end
-
-    context 'when creating instances from branch names' do
-      it 'creates an instance for the discipline level' do
-        expect(collection_level.target).to be_a Model::Collection
+      context 'when file is not a .views.xml file' do
+        it do
+        	expect { view_loader.import('resource.xml') }
+            .to raise_error ArgumentError, FileError::VIEWS_FILE
+        end
       end
 
-      it 'creates an instance for the collection level' do
-        expect(discipline_level.target).to be_a Model::Discipline
-      end
+      context 'when file is a .views.xml file' do
+        let :file do
+          Pathname.new(Dir.pwd).join('spec', 'support',
+                                     'viewsets', 'paleo.views.xml')
+        end
 
-      it 'creates an instance for the user type level' do
-        expect(user_type_level.target).to be_a UserType
-      end
+        before do
+          datadir = view_loader.target.view_set.app_resource_data
+          datadir.data = nil
+          datadir.save
+        end
 
-      it 'creates an instance for the user level' do
-        expect(user_level.target).to be_a Model::User
-      end
-    end
-
-    context 'when uploading a file' do
-      let :file do
-        Pathname.new(Dir.pwd).join('spec', 'support',
-                                   'viewsets', 'paleo.views.xml')
-      end
-
-      it 'raises an error if the file is not a .views.xml file' do
-        expect { collection_level.import('resource.xml') }
-          .to raise_error ArgumentError, FileError::VIEWS_FILE
-      end
-
-      it 'imports a views file for the target' do
-        dd = collection_level.target.view_set.app_resource_data
-        dd.data = nil
-        dd.save
-      	expect { collection_level.import(file) }
-      	  .to change { collection_level.target.view_set.app_resource_data.data }
-      	  .from(nil).to(Sequel.blob(File.read(file)))
+        it do
+          expect { view_loader.import(file) }
+            .to change { view_loader.target.view_set.app_resource_data.data }
+            .from(nil).to(Sequel.blob(File.read(file)))
+        end
       end
     end
   end

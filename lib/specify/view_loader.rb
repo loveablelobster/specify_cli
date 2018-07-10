@@ -7,7 +7,7 @@ module Specify
     # _database_: the database
     # _collection_: the collection for the session and the target
     # _level_: Hash (with user)
-    def initialize(host:, database:, collection:, level:, config: nil)
+    def initialize(host:, database:, collection:, level: nil, config: nil)
       config ||= DATABASES
       @config = Configuration::DBConfig.new(host, database, config)
       @db = Database.new database, @config.connection
@@ -23,11 +23,17 @@ module Specify
 
     # Creates a new instance from a branch name
     def self.from_branch(name = nil, config: nil)
-      params = name ? BranchParser.new(name) : BranchParser.current_branch
+      params = name ? BranchParser.new(name, config) : BranchParser.current_branch
       new params.to_h.merge(config: config)
     end
 
+    # Sets the target for the instance.
+    # _level_: symbol (+:collection+ or +:discipline+) or Hash
+    #          { :user_type => Symbol } for UserType where _Symbol_ is the
+    #          UserType _name_.
+    #          { :user => String } for User, where _String_ is the user name.
     def target=(level)
+      return unless level
       @target = case level
                 when :collection
                   @session.collection
