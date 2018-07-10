@@ -8,72 +8,72 @@ module Specify
     end
 
     describe '.from_branch(name, config)' do
-    	context 'when branch is discipline level' do
+      context 'when branch is discipline level' do
         subject do
           bname = 'sp_resource/SPSPEC/TestCollection/discipline'
           described_class.from_branch(bname, config: config).target
         end
 
         it do
-          expect(subject)
+          is_expected
             .to be_a(Model::Discipline)
             .and have_attributes Name: 'Test Discipline'
         end
-    	end
+      end
 
-    	context 'when branch is collection level' do
+      context 'when branch is collection level' do
         subject do
           bname = 'sp_resource/SPSPEC/TestCollection/collection'
           described_class.from_branch(bname, config: config).target
         end
 
         it do
-          expect(subject)
+          is_expected
             .to be_a(Model::Collection)
             .and have_attributes CollectionName: 'Test Collection'
         end
-    	end
+      end
 
-    	context 'when branch is user type level' do
+      context 'when branch is user type level' do
         subject do
           bname = 'sp_resource/SPSPEC/TestCollection/Manager'
           described_class.from_branch(bname, config: config).target
         end
 
         it do
-          expect(subject)
+          is_expected
             .to be_a(UserType)
             .and have_attributes name: :manager
         end
-    	end
+      end
 
-    	context 'when branch is user level' do
+      context 'when branch is user level' do
         subject do
           bname = 'sp_resource/SPSPEC/TestCollection/user/specuser'
           described_class.from_branch(bname, config: config).target
         end
 
         it do
-          expect(subject)
+          is_expected
             .to be_a(Model::User)
             .and have_attributes EMail: 'john.doe@example.com',
                                  Name: 'specuser'
         end
-    	end
+      end
     end
 
     describe 'target=(level)' do
-    	let :view_loader do
-    		described_class.new host: 'localhost',
-    		                    database: 'SPSPEC',
-    		                    collection: 'Test Collection',
-    		                    config: config
-    	end
+      let :view_loader do
+        described_class.new host: 'localhost',
+                            database: 'SPSPEC',
+                            collection: 'Test Collection',
+                            config: config
+      end
 
       context 'when level is :discipline' do
         it do
           expect { view_loader.target = :discipline }
-            .to change { view_loader.target }
+            .to change(view_loader, :target)
             .from(be_nil)
             .to a_kind_of(Model::Discipline)
             .and have_attributes Name: 'Test Discipline'
@@ -83,7 +83,7 @@ module Specify
       context 'when level is :collection' do
         it do
           expect { view_loader.target = :collection }
-            .to change { view_loader.target }
+            .to change(view_loader, :target)
             .from(be_nil)
             .to a_kind_of(Model::Collection)
             .and have_attributes CollectionName: 'Test Collection'
@@ -93,7 +93,7 @@ module Specify
       context 'when level is { user_type: :manager }' do
         it do
           expect { view_loader.target = { user_type: :manager } }
-            .to change { view_loader.target }
+            .to change(view_loader, :target)
             .from(be_nil)
             .to a_kind_of(UserType)
             .and have_attributes name: :manager
@@ -103,7 +103,7 @@ module Specify
       context 'when level is { user: \'specuser\' }' do
         it do
           expect { view_loader.target = { user: 'specuser' } }
-            .to change { view_loader.target }
+            .to change(view_loader, :target)
             .from(be_nil)
             .to a_kind_of(Model::User)
             .and have_attributes EMail: 'john.doe@example.com',
@@ -112,25 +112,25 @@ module Specify
       end
 
       context 'when level is nil' do
-      	it do
-      		expect { view_loader.target = nil }
-      		  .not_to change { view_loader.target }
-      	end
+        it do
+          expect { view_loader.target = nil }
+            .not_to change(view_loader, :target)
+        end
       end
     end
 
     describe 'import(file)' do
-    	let :view_loader do
-    		described_class.new host: 'localhost',
-    		                    database: 'SPSPEC',
-    		                    collection: 'Test Collection',
-    		                    level: :collection,
-    		                    config: config
-    	end
+      let :view_loader do
+        described_class.new host: 'localhost',
+                            database: 'SPSPEC',
+                            collection: 'Test Collection',
+                            level: :collection,
+                            config: config
+      end
 
       context 'when file is not a .views.xml file' do
         it do
-        	expect { view_loader.import('resource.xml') }
+          expect { view_loader.import('resource.xml') }
             .to raise_error ArgumentError, FileError::VIEWS_FILE
         end
       end

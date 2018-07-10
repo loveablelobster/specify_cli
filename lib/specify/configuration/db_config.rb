@@ -10,18 +10,18 @@ module Specify
         super(file)
         @host = host
         @database = database
-        @params = params.dig('hosts', host, 'databases', database)
+        @params = params.dig(:hosts, host, :databases, database)
       end
 
       def connection
         { host: host,
-          port: params.fetch('port'),
-          user: params.dig('db_user', 'name'),
-          password: params.dig('db_user', 'password') }
+          port: params.fetch(:port),
+          user: params.dig(:db_user, :name),
+          password: params.dig(:db_user, :password) }
       end
 
       def session_user
-        params['sp_user']
+        params[:sp_user]
       end
     end
   end

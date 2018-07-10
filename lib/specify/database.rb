@@ -32,7 +32,7 @@ module Specify
     # _database_: the name of the database
     # _config_file_: the path to the file
     def self.load_config(host, database, config_file = nil)
-      config = Configuration::DBConfig.new(host, database, config)
+      config = Configuration::DBConfig.new(host, database, config_file)
       new(database, config.connection)
     end
 

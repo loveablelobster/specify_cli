@@ -1,28 +1,12 @@
-# Create a copy of this file with your settings to
-#   /usr/local/etc/sp_view_loader/db.yml
-# you can leave the password blank and will be prompted for it
-
 ---
 :dir_names:
   sp_resource: localhost
-hosts:
+:hosts:
   localhost:
-    databases:
+    :databases:
       SPSPEC:
-        port: 3306
-        db_user:
-          name: specmaster
-          password: masterpass
-        sp_user: specuser
-
-# dir_names:
-#   [RESOURCE_DIRECTORY_NAME]: [HOSTNAME]
-# hosts:
-#   [HOSTNAME]:
-#     databases:
-#       [DATABASE_NAME]:
-#         port: [PORT]
-#         db_user:
-#           name: [USERNAME]
-#           password: [PASSWORD]
-#         sp_user: [SPECIFY_USERNAME]
+        :port: 3306
+        :db_user:
+          :name: specmaster
+          :password: masterpass
+        :sp_user: specuser

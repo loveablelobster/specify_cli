@@ -7,12 +7,12 @@ module Specify
     let(:db) { SPSPEC }
     let(:session) { Session.new('specuser', 'Test Collection') }
 
+    let :config do
+      Pathname.new(Dir.pwd).join('spec', 'support', 'db.yml')
+    end
+
     describe '.load_config(hostname, database, config_file)' do
       subject { described_class.load_config('localhost', 'SPSPEC', config) }
-
-      let :config do
-        Pathname.new(Dir.pwd).join('spec', 'support', 'db.yml')
-      end
 
       it do
         is_expected.to be_a(Database)
