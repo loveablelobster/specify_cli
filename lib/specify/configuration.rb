@@ -7,6 +7,6 @@ require_relative 'configuration/host_config'
 module Specify
   # A module that provides configuration facilities
   module Configuration
-    CONFIG = File.expand_path(Pathname.new('~/.specify.rc'))
+    DATABASES = File.expand_path(Pathname.new('~/.specify_dbs.rc.yaml'))
   end
 end

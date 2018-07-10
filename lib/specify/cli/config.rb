@@ -15,7 +15,7 @@ module Specify
     end
 
     def self.config?
-      File.exist?(CONFIG)
+      File.exist?(DATABASES)
     end
 
     def self.config_template(database = 'database_name', config = {})
@@ -48,11 +48,11 @@ module Specify
 
     def self.load_config
       return unless config?
-      Psych.load_file(CONFIG)
+      Psych.load_file(DATABASES)
     end
 
     def self.save_config(yaml)
-      File.open(CONFIG, 'w') do |file|
+      File.open(DATABASES, 'w') do |file|
         file.write(Psych.dump(yaml))
       end
     end

@@ -68,7 +68,7 @@ command [:config, :c] do |c|
 
     if options[:file]
       if config && !options[:force]
-        STDERR.puts "file #{CONFIG} exists"
+        STDERR.puts "file #{DATABASES} exists"
         STDERR.puts 'use the -o option (overwrite) if you want to overwrite it'
         exit 1
       end

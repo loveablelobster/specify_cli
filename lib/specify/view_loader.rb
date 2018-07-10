@@ -8,7 +8,7 @@ module Specify
     # _collection_: the collection for the session and the target
     # _level_: Hash (with user)
     def initialize(host:, database:, collection:, level:, config: nil)
-      config ||= CONFIG
+      config ||= DATABASES
       @config = Configuration::DBConfig.new(host, database, config)
       @db = Database.new database, @config.connection
       @session = @db.start_session @config.session_user, collection
