@@ -9,15 +9,9 @@ module Specify
     # _level_: Hash (with user)
     def initialize(host:, database:, collection:, level:, config: nil)
       config ||= CONFIG
-      @config = Configuration.new(file: config,
-                                  host: host,
-                                  database: database).params
-      @db = Database.new(database,
-                         host: @config['host'],
-                         port: @config['port'],
-                         user: @config['db_user']['name'],
-                         password: @config['db_user']['password'])
-      @session = @db.start_session @config['sp_user'], collection
+      @config = Configuration::DBConfig.new(host, database, config)
+      @db = Database.new database, @config.connection
+      @session = @db.start_session @config.session_user, collection
       @target = nil
       self.target = level
     end
@@ -30,7 +24,6 @@ module Specify
     # Creates a new instance from a branch name
     def self.from_branch(name = nil, config: nil)
       params = name ? BranchParser.new(name) : BranchParser.current_branch
-      p params.to_h
       new params.to_h.merge(config: config)
     end
 

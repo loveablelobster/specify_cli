@@ -31,14 +31,9 @@ module Specify
     # Default config file is '/usr/local/etc/sp_view_loader/db.yml'
     # _database_: the name of the database
     # _config_file_: the path to the file
-    def self.load_config(hostname, database, config_file = nil)
-      config = Psych.load_file(config_file || CONFIG)
-                    .dig('hosts', hostname, 'databases', database)
-      new(database,
-          host: hostname,
-          port: config['port'],
-          user: config['db_user']['name'],
-          password: config['db_user']['password'])
+    def self.load_config(host, database, config_file = nil)
+      config = Configuration::DBConfig.new(host, database, config)
+      new(database, config.connection)
     end
 
     # Adds a new Session to the sessions pool.

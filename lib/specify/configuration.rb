@@ -1,26 +1,12 @@
 # frozen_string_literal: true
 
+require_relative 'configuration/config'
+require_relative 'configuration/db_config'
+require_relative 'configuration/host_config'
+
 module Specify
-  # A class that wraps a yml .rc file
-  class Configuration
-    attr_reader :host, :database
-
-    def initialize(file: nil, host:, database:)
-      @yaml = Psych.load_file(file || CONFIG)
-      @host = host
-      @database = database
-    end
-
-    def connection(host, database)
-      params = database_params host, database
-      [database, { host: params['host'],
-                   port: params['port'],
-                   user: params.dig('db_user', 'name'),
-                   password: params.dig('db_user', 'password') }]
-    end
-
-    def params
-      @yaml.dig('hosts', host, 'databases', database)
-    end
+  # A module that provides configuration facilities
+  module Configuration
+    CONFIG = File.expand_path(Pathname.new('~/.specify.rc'))
   end
 end

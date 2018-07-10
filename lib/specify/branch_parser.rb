@@ -6,21 +6,14 @@ module Specify
   # <tt>Database/Collection/level</tt> this can be the name of a git branch of
   # a repository residing in a folder denoting the hostname.
   class BranchParser
-    attr_reader :host, :database, :collection, :level
+    attr_reader :collection, :config, :database, :host, :user
 
     def initialize(name, config = nil)
-      file_dir, @database, collection, level, user = *name.split('/')
+      @config = Configuration::HostConfig.new(config)
+      file_dir, @database, collection, @level, @user = *name.split('/')
       raise ArgumentError, BRANCH_ERROR + name unless collection && level
-      @host = look_up_host(file_dir, config)
+      @host = @config.resolve_host file_dir
       @collection = normalize_name collection
-      @level = case level
-               when 'collection', 'discipline'
-                 level.to_sym
-               when 'user'
-                 { user: user }
-               else
-                 { user_type: level.downcase.to_sym }
-               end
     end
 
     # Creates a new instance of BranchParser from the current HEAD.
@@ -43,11 +36,18 @@ module Specify
         level: level }
     end
 
-    private
-
-    def look_up_host(file_dir, config = nil)
-      Psych.load_file(config || CONFIG).dig('dir_names', file_dir)
+    def level
+      case @level
+      when 'collection', 'discipline'
+        @level.to_sym
+      when 'user'
+        { user: @user }
+      else
+        { user_type: @level.downcase.to_sym }
+      end
     end
+
+    private
 
     def normalize_name(name)
       name.gsub(/([A-Z]+)([A-Z][a-z])/, '\1 \2')
