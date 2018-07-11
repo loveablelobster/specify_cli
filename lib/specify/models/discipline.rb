@@ -36,18 +36,9 @@ module Specify
         "#{self} name: #{self.Name}"
       end
 
-      # Returns the AppResourceDir instances.
-      # The argument is only for ducktyping/overloading.
-      def view_set_dirs(_collection = nil)
-        app_resource_dirs_dataset.where(CollectionID: nil,
-                                        UserType: nil,
-                                        IsPersonal: false)
-      end
-
       # Returns the ViewSetObject.
       # The argument is only for ducktyping/overloading.
       def view_set(_collection = nil)
-        ViewSetObject.first(app_resource_dir: view_set_dirs)
         view_set_dir.view_set_object
       end
     end

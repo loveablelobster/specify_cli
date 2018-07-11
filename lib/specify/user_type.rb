@@ -11,6 +11,11 @@ module Specify
       valid?
     end
 
+    #
+    def add_app_resource_dir
+
+    end
+
     # Returns the AppResourceDir for the user type for a given Collection
     def view_set_dir(collection)
       Model::AppResourceDir.first(collection: collection,
