@@ -63,22 +63,21 @@ module Specify
     end
 
     describe '.user_target(hash)' do
-      subject { ViewLoader.user_target({ user: 'specuser' }) }
+      subject { described_class.user_target(user: 'specuser') }
 
       it do
-      	is_expected.to be_a(Model::User)
-      	  .and have_attributes Name: 'specuser'
+        is_expected.to be_a(Model::User)
+          .and have_attributes Name: 'specuser'
       end
     end
 
     describe '.user_type_target(hash)' do
-      subject { ViewLoader.user_type_target({ user_type: 'manager' }) }
+      subject { described_class.user_type_target(user_type: 'manager') }
 
       it do
-      	is_expected.to be_a(UserType)
-      	  .and have_attributes name: 'manager'
+        is_expected.to be_a(UserType)
+          .and have_attributes name: 'manager'
       end
-
     end
 
     describe '#target=(level)' do
@@ -184,9 +183,9 @@ module Specify
         end
 
         context 'when uploading to the collection' do
-        	before { view_loader.target = :collection }
+          before { view_loader.target = :collection }
 
-        	it do
+          it do
             expect { view_loader.import(file) }
               .to change { view_loader.target.view_set }
               .from(nil).to(an_instance_of(Model::ViewSetObject))
@@ -196,10 +195,11 @@ module Specify
         end
 
         context 'when uploading to the user type' do
-        	before { view_loader.target = { user_type: 'manager' } }
+          before { view_loader.target = { user_type: 'manager' } }
 
-          let(:collection) { Model::Collection.first(Code: 'NECE')}
-        	it do
+          let(:collection) { Model::Collection.first(Code: 'NECE') }
+
+          it do
             expect { view_loader.import(file) }
               .to change { view_loader.target.view_set(collection) }
               .from(nil).to(an_instance_of(Model::ViewSetObject))
@@ -211,14 +211,14 @@ module Specify
     end
 
     describe '#view_collection' do
+      subject { view_loader.view_collection }
+
       let :view_loader do
         described_class.new host: 'localhost',
                             database: 'SPSPEC',
                             collection: 'Test Collection',
                             config: config
       end
-
-      subject { view_loader.view_collection }
 
       context 'when level is not discipline' do
         before { view_loader.target = :collection }
@@ -238,6 +238,8 @@ module Specify
     end
 
     describe '#view_discipline' do
+      subject { view_loader.view_discipline }
+
       let :view_loader do
         described_class.new host: 'localhost',
                             database: 'SPSPEC',
@@ -245,15 +247,15 @@ module Specify
                             config: config
       end
 
-      subject { view_loader.view_discipline }
-
       it do
-      	is_expected.to be_a(Model::Discipline)
-      	  .and have_attributes Name: 'Test Discipline'
+        is_expected.to be_a(Model::Discipline)
+          .and have_attributes Name: 'Test Discipline'
       end
     end
 
     describe '#view_is_personal' do
+      subject { view_loader.view_is_personal }
+
       let :view_loader do
         described_class.new host: 'localhost',
                             database: 'SPSPEC',
@@ -261,34 +263,34 @@ module Specify
                             config: config
       end
 
-      subject { view_loader.view_is_personal }
-
       context 'when discipline level' do
-      	before { view_loader.target = :discipline }
+        before { view_loader.target = :discipline }
 
-      	it { is_expected.to be_falsey }
+        it { is_expected.to be_falsey }
       end
 
       context 'when collection level' do
-      	before { view_loader.target = :collection }
+        before { view_loader.target = :collection }
 
-      	it { is_expected.to be_falsey }
+        it { is_expected.to be_falsey }
       end
 
       context 'when user type level' do
-      	before { view_loader.target = { user_type: 'manager' } }
+        before { view_loader.target = { user_type: 'manager' } }
 
-      	it { is_expected.to be_falsey }
+        it { is_expected.to be_falsey }
       end
 
       context 'when user level' do
-      	before { view_loader.target = { user: 'specguest' } }
+        before { view_loader.target = { user: 'specguest' } }
 
-      	it { is_expected.to be_truthy }
+        it { is_expected.to be_truthy }
       end
     end
 
     describe '#view_level' do
+      subject { view_loader.view_level }
+
       let :view_loader do
         described_class.new host: 'localhost',
                             database: 'SPSPEC',
@@ -296,47 +298,47 @@ module Specify
                             config: config
       end
 
-      subject { view_loader.view_level }
-
       context 'when discipline level' do
-      	before { view_loader.target = :discipline }
+        before { view_loader.target = :discipline }
 
-      	it { is_expected.to be 0 }
+        it { is_expected.to be 0 }
       end
 
       context 'when collection level' do
-      	before { view_loader.target = :collection }
+        before { view_loader.target = :collection }
 
-      	it { is_expected.to be 2 }
+        it { is_expected.to be 2 }
       end
 
       context 'when user type level' do
-      	before { view_loader.target = { user_type: 'manager' } }
+        before { view_loader.target = { user_type: 'manager' } }
 
-      	it { is_expected.to be 0 }
+        it { is_expected.to be 0 }
       end
 
       context 'when user level' do
-      	before { view_loader.target = { user: 'specuser' } }
+        before { view_loader.target = { user: 'specuser' } }
 
-      	it { is_expected.to be 0 }
+        it { is_expected.to be 0 }
       end
     end
 
     describe '#view_type' do
+      subject { view_loader.view_type }
+
       let :view_loader do
         described_class.new host: 'localhost',
                             database: 'SPSPEC',
                             collection: 'Test Collection',
                             config: config
       end
-
-      subject { view_loader.view_type }
 
       it { is_expected.to eq 'Test Discipline' }
     end
 
     describe '#view_user' do
+      subject { view_loader.view_user }
+
       let :view_loader do
         described_class.new host: 'localhost',
                             database: 'SPSPEC',
@@ -344,37 +346,37 @@ module Specify
                             config: config
       end
 
-      subject { view_loader.view_user }
-
       context 'when discipline level' do
-      	before { view_loader.target = :discipline }
+        before { view_loader.target = :discipline }
 
-      	it { is_expected.to be view_loader.session.user }
+        it { is_expected.to be view_loader.session.user }
       end
 
       context 'when collection level' do
-      	before { view_loader.target = :collection }
+        before { view_loader.target = :collection }
 
-      	it { is_expected.to be view_loader.session.user }
+        it { is_expected.to be view_loader.session.user }
       end
 
       context 'when user type level' do
-      	before { view_loader.target = { user_type: 'manager' } }
+        before { view_loader.target = { user_type: 'manager' } }
 
-      	it { is_expected.to be view_loader.session.user }
+        it { is_expected.to be view_loader.session.user }
       end
 
       context 'when user level' do
-      	before { view_loader.target = { user: 'specguest' } }
+        before { view_loader.target = { user: 'specguest' } }
 
-      	it do
-      	  is_expected.to be_a(Model::User)
-      	    .and have_attributes Name: 'specguest'
-      	end
+        it do
+          is_expected.to be_a(Model::User)
+            .and have_attributes Name: 'specguest'
+        end
       end
     end
 
     describe '#view_user_type' do
+      subject { view_loader.view_user_type }
+
       let :view_loader do
         described_class.new host: 'localhost',
                             database: 'SPSPEC',
@@ -382,30 +384,28 @@ module Specify
                             config: config
       end
 
-      subject { view_loader.view_user_type }
-
       context 'when discipline level' do
-      	before { view_loader.target = :discipline }
+        before { view_loader.target = :discipline }
 
-      	it { is_expected.to be_nil }
+        it { is_expected.to be_nil }
       end
 
       context 'when collection level' do
-      	before { view_loader.target = :collection }
+        before { view_loader.target = :collection }
 
-      	it { is_expected.to be_nil }
+        it { is_expected.to be_nil }
       end
 
       context 'when user type level' do
-      	before { view_loader.target = { user_type: 'manager' } }
+        before { view_loader.target = { user_type: 'manager' } }
 
-      	it { is_expected.to eq 'manager' }
+        it { is_expected.to eq 'manager' }
       end
 
       context 'when user level' do
-      	before { view_loader.target = { user: 'specguest' } }
+        before { view_loader.target = { user: 'specguest' } }
 
-      	it { is_expected.to eq 'guest' }
+        it { is_expected.to eq 'guest' }
       end
     end
   end

@@ -10,17 +10,17 @@ module Specify
         before { user.log_out }
 
         context 'when logged in to the collection passed as argument' do
-          before { user.log_in collection }
-
           subject { user.collection_valid? collection }
+
+          before { user.log_in collection }
 
           it { is_expected.to be_truthy }
         end
 
         context 'when logged in to another collection' do
-        	before { user.log_in(Collection.first(Code: 'NECE')) }
-
           subject { user.collection_valid? collection }
+
+          before { user.log_in(Collection.first(Code: 'NECE')) }
 
           it { is_expected.to be_falsey }
         end
@@ -39,7 +39,7 @@ module Specify
           it do
             just_before = Time.now
             expect { user.log_in(collection) }
-              .to change { user.values }
+              .to change(user, :values)
               .from(including(IsLoggedIn: false,
                               LoginCollectionName: nil,
                               LoginDisciplineName: nil,
@@ -61,17 +61,16 @@ module Specify
           end
 
           it do
-            just_before = Time.now
             expect { user.log_in(collection) }
-              .not_to change { user.values }
+              .not_to change(user, :values)
           end
         end
 
         context 'when already logged in to a different collection' do
-        	before { user.log_in(Collection.first(Code: 'NECE')) }
+          before { user.log_in(Collection.first(Code: 'NECE')) }
 
-        	it do
-        	  expect { user.log_in collection }
+          it do
+            expect { user.log_in collection }
               .to raise_error LoginError::INCONSISTENT_LOGIN
           end
         end
@@ -82,14 +81,14 @@ module Specify
 
         it do
           just_before = Time.now
-        	expect(user.log_out)
+          expect(user.log_out)
             .to be >= just_before
         end
 
         it do
           just_before = Time.now
           expect { user.log_out }
-            .to change { user.values }
+            .to change(user, :values)
             .from(including(IsLoggedIn: true,
                             LoginCollectionName: collection[:CollectionName],
                             LoginDisciplineName: collection.discipline[:Name],
@@ -105,27 +104,27 @@ module Specify
         before { user.log_out }
 
         context 'when logged in to the collection passed as argument' do
-          before { user.log_in collection }
-
           subject { user.logged_in? collection }
+
+          before { user.log_in collection }
 
           it { is_expected.to include collection => a_value <= Time.now }
         end
 
         context 'when logged in to another collection' do
-        	before { user.log_in(Collection.first(Code: 'NECE')) }
+          before { user.log_in(Collection.first(Code: 'NECE')) }
 
-        	it do
-        	  expect { user.log_in collection }
+          it do
+            expect { user.log_in collection }
               .to raise_error LoginError::INCONSISTENT_LOGIN
           end
         end
       end
 
       describe '#logged_in_agent' do
-        before { user.log_in collection }
-
         subject { user.logged_in_agent }
+
+        before { user.log_in collection }
 
         it do
           is_expected
@@ -145,7 +144,7 @@ module Specify
         it do
           just_before = Time.now
           expect { user.new_login(collection) }
-            .to change { user.values }
+            .to change(user, :values)
             .from(including(IsLoggedIn: false,
                             LoginCollectionName: nil,
                             LoginDisciplineName: nil,

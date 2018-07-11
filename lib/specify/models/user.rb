@@ -13,12 +13,16 @@ module Specify
         super
       end
 
+      # -> String
       # Returns a string containing a human-readable representation of User.
       def inspect
         "#{self} user name: #{self.Name}, logged in: #{self.IsLoggedIn}"
       end
 
-      # Returns true if information on Collection and Disciplin are consistent
+      # -> +true+ or +false+
+      # Returns +true+ if _collection_ is consistent with the combination of
+      # Model::Collection and Model::Disciplin as registered in the databse.
+      # _collection_: a Model::Collection
       def collection_valid?(collection)
         c_match = self.LoginCollectionName == collection[:CollectionName]
         d_match = self.LoginDisciplineName == collection.discipline[:Name]
@@ -27,7 +31,7 @@ module Specify
 
       # -> Hash
       # Logs the user in to _collection_
-      # (an instance of Specify::Model::Collection).
+      # _collection_: a Model::Collection
       def log_in(collection)
         logged_in?(collection) || new_login(collection)
       end
@@ -44,7 +48,10 @@ module Specify
         self.LoginOutTime
       end
 
-      # Returns the collection and login time if the user is logged in.
+      # -> Hash or +nil+
+      # Returns the collection and login time if the user is logged in to
+      # _collection_.
+      # _collection_: a Model::Collection
       def logged_in?(collection)
         return nil unless self.IsLoggedIn
         raise LoginError::INCONSISTENT_LOGIN unless collection_valid? collection
@@ -52,14 +59,16 @@ module Specify
       end
 
       # -> Specify::Model::Agent
-      # Returns the Agent for the Division the user is logged in to.
+      # Returns the Model::Agent for the division of the collection the user is
+      # logged in to.
       def logged_in_agent
         division = Discipline.first(Name: self.LoginDisciplineName).division
         agents_dataset.first(division: division)
       end
 
       # -> Hash
-      # Registers a new login with the database.
+      # Registers a new login in _collection_ with the database.
+      # _collection_: a Model::Collection
       def new_login(collection)
         login_time = Time.now
         self.LoginOutTime = login_time
@@ -72,6 +81,7 @@ module Specify
 
       # -> Specify::Model::AppResourceDir
       # Returns the user's AppResourceDir instances for _collection_.
+      # _collection_: a Model::Collection
       def view_set_dir(collection)
         app_resource_dirs_dataset.first(collection: collection,
                                         discipline: collection.discipline,
@@ -81,6 +91,7 @@ module Specify
 
       # -> Specify::Model::ViewSetObject
       # Returns the user's ViewSetObject for _collection_.
+      # _collection_: a Model::Collection
       def view_set(collection)
         view_set_dir(collection)&.view_set_object
       end
