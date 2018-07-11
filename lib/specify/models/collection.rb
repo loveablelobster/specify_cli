@@ -38,7 +38,7 @@ module Specify
       # Returns the ViewSetObject.
       # The argument is only for ducktyping/overloading.
       def view_set(_collection = nil)
-        view_set_dir.view_set_object
+        view_set_dir&.view_set_object
       end
 
       #

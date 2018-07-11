@@ -4,14 +4,26 @@ module Specify
   module Model
     #
     class ViewSetObject < Sequel::Model(:spviewsetobj)
-      one_to_one :app_resource_dir,
-                 class: 'Specify::Model::AppResourceDir',
-                 key: :SpAppResourceDirID
+      many_to_one :app_resource_dir,
+                  class: 'Specify::Model::AppResourceDir',
+                  key: :SpAppResourceDirID
       one_to_one :app_resource_data,
                  class: 'Specify::Model::AppResourceData',
                  key: :SpViewSetObjID
+      many_to_one :created_by,
+                  class: 'Specify::Model::Agent',
+                  key: :CreatedByAgentID
+      many_to_one :modified_by,
+                  class: 'Specify::Model::Agent',
+                  key: :ModifiedByAgentID
 
-      def before_save
+      def before_create
+        self.Version = 0
+        self.TimestampCreated = Time.now
+        super
+      end
+
+      def before_update
         self.Version += 1
         self.TimestampModified = Time.now
         super
@@ -27,6 +39,3 @@ module Specify
     end
   end
 end
-
-#   Level (smallint)
-#   Name (varchar)  : stores filename without extension

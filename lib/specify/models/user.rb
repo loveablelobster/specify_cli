@@ -82,7 +82,7 @@ module Specify
       # -> Specify::Model::ViewSetObject
       # Returns the user's ViewSetObject for _collection_.
       def view_set(collection)
-        view_set_dir(collection).view_set_object
+        view_set_dir(collection)&.view_set_object
       end
     end
   end
