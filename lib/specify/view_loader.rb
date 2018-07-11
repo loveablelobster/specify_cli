@@ -9,7 +9,7 @@ module Specify
     # _database_: the database to which views are uploaded.
     # _collection_: the collection for the session and the target.
     # _level_: the level at which the view will be uploaded (+:discipline+,
-    #          +:collection+, <tt>{ user_type: Symbol }</tt>, or
+    #          +:collection+, <tt>{ user_type: String }</tt>, or
     #          <tt>{ user: String }.
     # _config_: a yaml file containing the database configuration.
     def initialize(host:, database:, collection:, level: nil, config: nil)
@@ -44,7 +44,7 @@ module Specify
 
     # -> UserType
     # Returns the UserType for _hash_.
-    # _hash_: <tt>{ user_type: Symbol }</tt> where Symbol is :fullaccess,
+    # _hash_: <tt>{ user_type: String }</tt> where Symbol is :fullaccess,
     #         :guest, :limitedaccess, :manager.
     def self.user_type_target(hash)
       return unless hash.key? :user_type
@@ -54,7 +54,7 @@ module Specify
     # -> Object
     # Sets the target for the instance.
     # _level_: symbol (+:collection+ or +:discipline+) or Hash
-    #          { :user_type => Symbol } for UserType where _Symbol_ is the
+    #          { :user_type => String } for UserType where _String_ is the
     #          UserType _name_.
     #          { :user => String } for User, where _String_ is the user name.
     def target=(level)

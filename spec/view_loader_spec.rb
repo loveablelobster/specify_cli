@@ -72,11 +72,11 @@ module Specify
     end
 
     describe '.user_type_target(hash)' do
-      subject { ViewLoader.user_type_target({ user_type: :manager }) }
+      subject { ViewLoader.user_type_target({ user_type: 'manager' }) }
 
       it do
       	is_expected.to be_a(UserType)
-      	  .and have_attributes name: :manager
+      	  .and have_attributes name: 'manager'
       end
 
     end
@@ -111,11 +111,11 @@ module Specify
 
       context 'when level is { user_type: :manager }' do
         it do
-          expect { view_loader.target = { user_type: :manager } }
+          expect { view_loader.target = { user_type: 'manager' } }
             .to change(view_loader, :target)
             .from(be_nil)
             .to a_kind_of(UserType)
-            .and have_attributes name: :manager
+            .and have_attributes name: 'manager'
         end
       end
 
@@ -196,7 +196,7 @@ module Specify
         end
 
         context 'when uploading to the user type' do
-        	before { view_loader.target = { user_type: :manager } }
+        	before { view_loader.target = { user_type: 'manager' } }
 
           let(:collection) { Model::Collection.first(Code: 'NECE')}
         	it do
@@ -276,7 +276,7 @@ module Specify
       end
 
       context 'when user type level' do
-      	before { view_loader.target = { user_type: :manager } }
+      	before { view_loader.target = { user_type: 'manager' } }
 
       	it { is_expected.to be_falsey }
       end
@@ -311,7 +311,7 @@ module Specify
       end
 
       context 'when user type level' do
-      	before { view_loader.target = { user_type: :manager } }
+      	before { view_loader.target = { user_type: 'manager' } }
 
       	it { is_expected.to be 0 }
       end
@@ -359,7 +359,7 @@ module Specify
       end
 
       context 'when user type level' do
-      	before { view_loader.target = { user_type: :manager } }
+      	before { view_loader.target = { user_type: 'manager' } }
 
       	it { is_expected.to be view_loader.session.user }
       end
@@ -397,7 +397,7 @@ module Specify
       end
 
       context 'when user type level' do
-      	before { view_loader.target = { user_type: :manager } }
+      	before { view_loader.target = { user_type: 'manager' } }
 
       	it { is_expected.to eq 'manager' }
       end
