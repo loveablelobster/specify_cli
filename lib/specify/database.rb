@@ -82,7 +82,7 @@ module Specify
     def start_session(user, collection)
       connect
       session = Session.new user, collection
-      @sessions << session
+      self << session
       session
     end
 
