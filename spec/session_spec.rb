@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-# DB = Sequel.connect('mysql2://specmaster:masterpass@localhost:3306/SPSPEC')
-# require_relative '../lib/target_model'
-
 module Specify
   RSpec.describe Session do
     let :session do
@@ -37,7 +34,7 @@ module Specify
 
         it do
           expect { session.close }
-            .to change { SPSPEC.sessions }
+            .to change(SPSPEC, :sessions)
             .from(including(an_instance_of(described_class)))
             .to be_empty
         end

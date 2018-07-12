@@ -12,47 +12,57 @@ module Specify
         Collection.first(CollectionName: 'Test Collection').view_set
       end
 
-      context 'when uploading a file' do
-        it 'increments the version number' do
-          v = view_set_object.Version
-          expect { view_set_object.import(file) }
-            .to change { view_set_object.Version }.from(v).to(v + 1)
+      describe '#import(views_file)' do
+        subject(:view_set_import) { view_set_object.import(file) }
+
+        before { view_set_object.app_resource_data.data = nil }
+
+        it do
+          expect { view_set_import }
+            .to change(view_set_object, :Version)
+            .by 1
         end
 
-        it 'updates the modification timestamp' do
-          expect { view_set_object.import(file) }
+        it do
+          just_before = Time.now
+          expect { view_set_import }
             .to change(view_set_object, :TimestampModified)
+            .from(a_value <= just_before)
+            .to a_value >= just_before
         end
 
-        it 'increments the version number of the AppResourceDir' do
-          v = view_set_object.app_resource_dir.Version
-          expect { view_set_object.import(file) }
+        it do
+          expect { view_set_import }
             .to change { view_set_object.app_resource_dir.Version }
-              .from(v).to(v + 1)
+            .by 1
         end
 
-        it 'updates the modification timestamp of the AppResourceDir' do
-          expect { view_set_object.import(file) }
+        it do
+          just_before = Time.now
+          expect { view_set_import }
             .to change(view_set_object.app_resource_dir, :TimestampModified)
+            .from(a_value <= just_before)
+            .to a_value >= just_before
         end
 
-        it 'increments the version number of the AppResourceData' do
-          v = view_set_object.app_resource_data.Version
-          expect { view_set_object.import(file) }
+        it do
+          expect { view_set_import }
             .to change { view_set_object.app_resource_data.Version }
-              .from(v).to(v + 1)
+            .by 1
         end
 
-        it 'updates the modification timestamp of the AppResourceData' do
-          expect { view_set_object.import(file) }
+        it do
+          just_before = Time.now
+          expect { view_set_import }
             .to change(view_set_object.app_resource_data, :TimestampModified)
+            .from(a_value <= just_before)
+            .to a_value >= just_before
         end
 
-        it 'uploads the files content as a Sequel Blob' do
-          view_set_object.app_resource_data.data = nil
-          expect { view_set_object.import(file) }
+        it do
+          expect { view_set_import }
             .to change { view_set_object.app_resource_data.data }
-              .from(nil).to(Sequel.blob(File.read(file)))
+            .from(nil).to(Sequel.blob(File.read(file)))
         end
       end
     end

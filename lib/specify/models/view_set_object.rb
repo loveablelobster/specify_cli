@@ -2,7 +2,7 @@
 
 module Specify
   module Model
-    #
+    # Sequel::Model class for view set objects.
     class ViewSetObject < Sequel::Model(:spviewsetobj)
       many_to_one :app_resource_dir,
                   class: 'Specify::Model::AppResourceDir',
@@ -29,8 +29,10 @@ module Specify
         super
       end
 
-      def import(views_file)
-        app_resource_data.import views_file
+      # -> Model::ViewSetObject
+      # Persists _file_ as a blob the database.
+      def import(file)
+        app_resource_data.import file
         app_resource_dir[:Version] += 1
         app_resource_dir[:TimestampModified] = Time.now
         app_resource_dir.save
