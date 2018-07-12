@@ -7,12 +7,14 @@ module Specify
   class Session
     include Observable
 
-    attr_reader :collection, :user, :active
+    attr_reader :active, :collection, :discipline, :division, :user
 
     # Creates an instance.
     def initialize(user, collection)
       @user = Model::User.first(Name: user)
       @collection = Model::Collection.first(CollectionName: collection)
+      @discipline = @collection.discipline
+      @division = @discipline.division
       @active = false
     end
 

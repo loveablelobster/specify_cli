@@ -20,7 +20,7 @@ require_relative 'specify/database'
 require_relative 'specify/number_format'
 require_relative 'specify/session'
 require_relative 'specify/user_type'
-require_relative 'specify/view_loader'
+require_relative 'specify/services'
 
 # A module that provides functionaliy to manage Specify app resources.
 module Specify

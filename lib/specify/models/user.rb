@@ -7,7 +7,7 @@ module Specify
       one_to_many :agents, key: :SpecifyUserID
       one_to_many :app_resource_dirs, key: :SpecifyUserID
 
-      def before_save
+      def before_update
         self.Version += 1
         self.TimestampModified = Time.now
         super

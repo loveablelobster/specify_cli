@@ -2,7 +2,7 @@
 
 module Specify
   module Model
-    #
+    # Sequel::Model for preparations.
     class Preparation < Sequel::Model(:preparation)
       many_to_one :discipline, key: :DisciplineID
       many_to_one :collection_object, key: :CollectionObjectID
@@ -21,14 +21,12 @@ module Specify
         self.Version = 0
         self.TimestampCreated = Time.now
         self.GUID = SecureRandom.uuid
-        # TODO: set preparation_type
         super
       end
 
       def before_update
         self.Version += 1
         self.TimestampModified = Time.now
-        # TODO: set modified_by
         super
       end
     end
