@@ -13,6 +13,7 @@ require_relative 'models/division'
 require_relative 'models/institution'
 require_relative 'models/preparation'
 require_relative 'models/preparation_type'
+require_relative 'models/taxonomy'
 require_relative 'models/user'
 require_relative 'models/view_set_object'
 

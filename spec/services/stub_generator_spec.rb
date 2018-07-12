@@ -38,7 +38,7 @@ module Specify
       	end
 
       	it do
-      	  expect { full_generator.create 100 }
+      	  expect { full_generator.create 10 }
       	    .to change { Model::CollectionObject.dataset.count }
       	end
       end

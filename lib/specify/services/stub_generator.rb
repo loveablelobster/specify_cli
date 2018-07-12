@@ -4,7 +4,11 @@ module Specify
   module Service
     # A class that generates collection object stub records in a collection.
     class StubGenerator < Service
-      attr_reader :accession, :cataloger, :preparation_count, :preparation_type
+      attr_reader :accession,
+                  :cataloger,
+                  :determination,
+                  :preparation_count,
+                  :preparation_type
 
       def initialize(host:,
                      database:,
@@ -15,6 +19,7 @@ module Specify
         super
         @accession = nil
         @cataloger = agent
+        @determination = nil
         @preparation_type = nil
         @preparation_count = nil
         yield(self) if block_given?
@@ -32,6 +37,12 @@ module Specify
       def cataloger=(user_name)
         @cataloger = Model::User.first(Name: user_name)
                                 .agents_dataset.first division: division
+      end
+
+      # -> Model::Determination
+      # _taxon_: String
+      def determination=(taxon)
+        #
       end
 
       # <em>prep_type</em>: String
