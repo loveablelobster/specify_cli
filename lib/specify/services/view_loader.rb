@@ -13,10 +13,16 @@ module Specify
       #          +:collection+, <tt>{ user_type: String }</tt>, or
       #          <tt>{ user: String }.
       # _config_: a yaml file containing the database configuration.
-      def initialize(host:, database:, collection:, level: nil, config: nil)
+      def initialize(host:,
+                     database:,
+                     collection:,
+                     specify_user: nil,
+                     level: nil,
+                     config: nil)
         super(host: host,
               database: database,
               collection: collection,
+              specify_user: specify_user,
               config: config)
         @target = nil
         self.target = level

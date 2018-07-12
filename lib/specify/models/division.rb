@@ -9,6 +9,7 @@ module Specify
                    left_key: :DivisionID,
                    right_key: :AutoNumberingSchemeID,
                    join_table: :autonumsch_div
+      one_to_many :accessions, key: :DivisionID
 
       def before_save
         self.Version += 1

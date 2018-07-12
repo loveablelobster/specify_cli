@@ -3,11 +3,9 @@
 module Specify
   module Model
     #
-    class Preparation < Sequel::Model(:preparation)
-      many_to_one :discipline, key: :DisciplineID
-      many_to_one :collection_object, key: :CollectionObjectID
+    class PreparationType < Sequel::Model(:preptype)
       many_to_one :collection, key: :CollectionID
-      one_to_many :preparation_type, key: :PrepTypeID
+      one_to_many :preparations, key: :PrepTypeID
       many_to_one :created_by,
                   class: 'Specify::Model::Agent',
                   key: :CreatedByAgentID

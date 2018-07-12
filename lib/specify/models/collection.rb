@@ -6,6 +6,7 @@ module Specify
     class Collection < Sequel::Model(:collection)
       many_to_one :discipline, key: :DisciplineID
       one_to_many :collection_objects, key: :CollectionID
+      one_to_many :preparation_types, key: :CollectionID
 
       one_to_many :app_resource_dirs,
                   class: 'Specify::Model::AppResourceDir',

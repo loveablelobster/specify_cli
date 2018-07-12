@@ -4,9 +4,8 @@ module Specify
   module Model
     # Sequel::Model for preparations.
     class Preparation < Sequel::Model(:preparation)
-      many_to_one :discipline, key: :DisciplineID
       many_to_one :collection_object, key: :CollectionObjectID
-      many_to_one :collection_member,
+      many_to_one :collection,
                   class: 'Specify::Model::Collection',
                   key: :CollectionMemberID
       many_to_one :preparation_type, key: :PrepTypeID

@@ -4,13 +4,18 @@ module Specify
   module Service
     # Superclass for service classes.
     class Service
-      attr_reader :session, :agent, :collection, :discipline, :division
+      attr_reader :session, :agent, :collection, :discipline, :division, :user
 
-      def initialize(host:, database:, collection:, config: nil)
+      def initialize(host:,
+                     database:,
+                     collection:,
+                     specify_user: nil,
+                     config: nil)
         config ||= DATABASES
         @config = Configuration::DBConfig.new(host, database, config)
         @db = Database.new database, @config.connection
-        @session = @db.start_session @config.session_user, collection
+        session_user = specify_user || @config.session_user
+        @session = @db.start_session session_user, collection
         @collection = @session.collection
         @discipline = @session.discipline
         @division = @session.division

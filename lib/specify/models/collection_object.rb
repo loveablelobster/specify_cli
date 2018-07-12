@@ -8,10 +8,12 @@ module Specify
       many_to_one :collection_member,
                   class: 'Specify::Model::Collection',
                   key: :CollectionMemberID
+      many_to_one :accession, key: :AccessionID
       many_to_one :cataloger,
                   class: 'Specify::Model::Agent',
                   key: :CatalogerID
       many_to_one :collecting_event, key: :CollectingEventID
+      one_to_many :preparations, key: :CollectionObjectID
       many_to_one :created_by,
                   class: 'Specify::Model::Agent',
                   key: :CreatedByAgentID
@@ -34,7 +36,6 @@ module Specify
       def before_update
         self.Version += 1
         self.TimestampModified = Time.now
-        # TODO: set modified_by
         super
       end
 
