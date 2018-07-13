@@ -17,6 +17,8 @@ module Specify
                    right_key: :AutoNumberingSchemeID,
                    join_table: :autonumsch_dsp
 
+      many_to_one :taxonomies, key: :TaxonTreeDefID
+
       one_to_one :view_set_dir,
                  class: 'Specify::Model::AppResourceDir',
                  key: :DisciplineID do |ds|
