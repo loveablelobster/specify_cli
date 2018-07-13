@@ -13,7 +13,9 @@ module Specify
                   class: 'Specify::Model::Agent',
                   key: :CatalogerID
       many_to_one :collecting_event, key: :CollectingEventID
+      one_to_many :determinations, key: :CollectionObjectID
       one_to_many :preparations, key: :CollectionObjectID
+
       many_to_one :created_by,
                   class: 'Specify::Model::Agent',
                   key: :CreatedByAgentID
@@ -46,6 +48,17 @@ module Specify
       def embed_collecting_event
         return unless collection.IsEmbeddedCollectingEvent
         CollectingEvent.create discipline: collection.discipline
+      end
+
+      # _collecting_information_: Hash
+      def georeference(collecting_information)
+
+      end
+
+      # _determination_information_: Hash
+      def identify(determination_information)
+        add_determination determination_information
+        self.save
       end
     end
   end

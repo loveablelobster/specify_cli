@@ -6,8 +6,10 @@ module Specify
     class Taxon < Sequel::Model(:taxon)
       many_to_one :taxonomy, key: :TaxonTreeDefID
       many_to_one :rank, key: :TaxonTreeDefItemID
-      many_to_one :parent, key: :ParentID, class: self
-      one_to_many :children, key: :ParentID, class: self
+      many_to_one :parent, class: self, key: :ParentID
+      many_to_one :accepted_name, class: self, key: :AcceptedID
+      one_to_many :synonyms, class: self, key: :AcceptedID
+      one_to_many :children, class: self, key: :ParentID
       one_to_many :common_names, key: :TaxonID
 
       # create: rank.add_taxon or parent.add_child

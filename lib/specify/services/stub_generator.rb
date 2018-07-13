@@ -6,9 +6,11 @@ module Specify
     class StubGenerator < Service
       attr_reader :accession,
                   :cataloger,
-                  :determination,
+                  :locality,
                   :preparation_count,
-                  :preparation_type
+                  :preparation_type,
+                  :taxon,
+                  :taxonomy
 
       def initialize(host:,
                      database:,
@@ -19,10 +21,19 @@ module Specify
         super
         @accession = nil
         @cataloger = agent
-        @determination = nil
+        @locality = nil
         @preparation_type = nil
         @preparation_count = nil
+        @taxon = nil
+        @taxonomy = discipline.taxonomy
         yield(self) if block_given?
+      end
+
+      # -> StubGenerator
+      # Loads a YAML _file_ and creates an instance according to specifications
+      # in the file.
+      def self.load_yaml(file)
+        #
       end
 
       # -> Model::Accession
@@ -39,10 +50,16 @@ module Specify
                                 .agents_dataset.first division: division
       end
 
-      # -> Model::Determination
+      # -> Model::Locality
+      def collecting_event=(locality: nil, county: nil, state: nil, country:)
+
+      end
+
+      # -> Model::Taxon
       # _taxon_: String
-      def determination=(taxon)
-        #
+      def determination=(taxon:, rank: nil)
+        @taxon = taxonomy.taxa_dataset.first Name: taxon,
+                                             rank: taxonomy.rank(rank)
       end
 
       # <em>prep_type</em>: String
@@ -58,10 +75,14 @@ module Specify
         count.times do
           co = collection.add_collection_object(cataloger: cataloger)
           co.accession = accession
+          co.georeference(locality: locality) if locality
+          co.identify(taxon: taxon) if taxon
+          co.save
+          next unless preparation_type
           co.add_preparation collection: collection,
                              preparation_type: preparation_type,
                              CountAmt: preparation_count
-          #TODO: log co.CatalogNumber
+          # TODO: log co.CatalogNumber
         end
         # end
       end

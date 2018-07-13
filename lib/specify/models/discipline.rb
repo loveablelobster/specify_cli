@@ -17,7 +17,8 @@ module Specify
                    right_key: :AutoNumberingSchemeID,
                    join_table: :autonumsch_dsp
 
-      many_to_one :taxonomies, key: :TaxonTreeDefID
+      many_to_one :taxonomy, key: :TaxonTreeDefID
+      many_to_one :geography, key: :GeographyTreeDefID
 
       one_to_one :view_set_dir,
                  class: 'Specify::Model::AppResourceDir',

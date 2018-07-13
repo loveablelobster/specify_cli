@@ -2,9 +2,13 @@
 
 def self.make_stubs(collection, cataloger, count)
   DB.transaction do
-    count.times do
-      puts count
-      collection.add_collection_object(cataloger: cataloger)
+    Specify::StubGenerator.new(host: 'localhost',
+                               database: 'SPSPEC',
+                               collection: 'Test Collection',
+                               config: file) do |stubs|
+      stubs.cataloger = 'specmanager'
+      stubs.preparation = prep
+      stubs.accession = '2018-AA-001'
     end
   end
 end
