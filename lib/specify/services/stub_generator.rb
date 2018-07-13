@@ -6,6 +6,8 @@ module Specify
     class StubGenerator < Service
       attr_reader :accession,
                   :cataloger,
+                  :collecting_geography,
+                  :geography,
                   :locality,
                   :preparation_count,
                   :preparation_type,
@@ -21,11 +23,13 @@ module Specify
         super
         @accession = nil
         @cataloger = agent
+        @collecting_geography = nil
         @locality = nil
         @preparation_type = nil
         @preparation_count = nil
         @taxon = nil
         @taxonomy = discipline.taxonomy
+        @geography = discipline.geography
         yield(self) if block_given?
       end
 
@@ -51,8 +55,10 @@ module Specify
       end
 
       # -> Model::Locality
-      def collecting_event=(locality: nil, county: nil, state: nil, country:)
-
+      # _geography_: Hash
+      #              { 'Administrative division name' => 'Geographic name' }
+      def collecting_data=(higher_geography:, locality: nil)
+        @collecting_geography = geography.search_tree(higher_geography)
       end
 
       # -> Model::Taxon

@@ -39,6 +39,71 @@ module Specify
         end
       end
 
+      describe '#collecting_data=(higher_geography:, locality:)' do
+        let :country do
+        	rank = an_instance_of(Model::AdministrativeDivision)
+        	       .and have_attributes(Name: 'Country')
+          an_instance_of(Model::GeographicName)
+            .and have_attributes(Name: 'United States',
+                                 administrative_division: rank)
+        end
+
+        let :county do
+        	rank = an_instance_of(Model::AdministrativeDivision)
+        	       .and have_attributes(Name: 'County')
+          an_instance_of(Model::GeographicName)
+            .and have_attributes(Name: 'Douglas County',
+                                 administrative_division: rank)
+        end
+
+        context 'when passed country only' do
+        	subject(:set_collecting) { stub_generator.collecting_data = cd }
+
+          let :cd do
+            { higher_geography: { 'Country' => 'United States' } }
+          end
+
+          it do
+          	expect { set_collecting }
+          	  .to change(stub_generator, :collecting_geography)
+          	  .from(be_nil).to country
+          end
+        end
+
+        context 'when passed country, state, and county' do
+        	subject(:set_collecting) { stub_generator.collecting_data = cd }
+
+        	let :cd do
+        	  { higher_geography: { 'Country' => 'United States',
+                                  'State' => 'Kansas',
+                                  'County' => 'Douglas County' } }
+        	end
+
+        	it do
+        		expect { set_collecting }
+        		  .to change(stub_generator, :collecting_geography)
+        		  .from(be_nil).to county
+        	end
+        end
+
+        context 'when passed geography and locality' do
+        	subject(:set_collecting) { stub_generator.collecting_data = cd }
+
+        	let :cd do
+        	  { higher_geography: { 'Country' => 'United States',
+                                  'State' => 'Kansas',
+                                  'County' => 'Douglas County' },
+              locality: 'Downtown Lawrence' }
+        	end
+        end
+
+        context 'when passed locality only' do
+          subject(:set_collecting) { stub_generator.collecting_data = cd }
+
+          let(:cd) { { locality: 'Downtown Lawrence' } }
+        end
+      end
+
       describe '#create(count)' do
         it do
           expect { stub_generator.create(10) }
@@ -88,7 +153,9 @@ module Specify
           end
         end
 
-        context 'when creating with collecting events'
+        context 'when creating with collecting events' do
+          it 'adds locality information to the collecting event'
+        end
 
         context 'when creating with preparations' do
           before { stub_generator.preparation = prep }
