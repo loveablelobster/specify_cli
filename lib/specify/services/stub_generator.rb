@@ -64,8 +64,8 @@ module Specify
       # -> Model::Taxon
       # _taxon_: String
       def determination=(taxon:, rank: nil)
-        @taxon = taxonomy.taxa_dataset.first Name: taxon,
-                                             rank: taxonomy.rank(rank)
+        @taxon = taxonomy.names_dataset.first Name: taxon,
+                                              rank: taxonomy.rank(rank)
       end
 
       # <em>prep_type</em>: String

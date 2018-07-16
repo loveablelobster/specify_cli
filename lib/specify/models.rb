@@ -10,6 +10,7 @@ String.inflections do |inflect|
   inflect.irregular 'taxon', 'taxa'
 end
 
+require_relative 'models/tree_queryable'
 require_relative 'models/accession'
 require_relative 'models/agent'
 require_relative 'models/app_resource_data'
