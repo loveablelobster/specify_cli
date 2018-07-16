@@ -56,6 +56,13 @@ module Specify
                   class: 'Specify::Model::Determination',
                   key: :ModifiedByAgentID
 
+      one_to_many :created_localities,
+                  class: 'Specify::Model::Locality',
+                  key: :CreatedByAgentID
+      one_to_many :modified_localities,
+                  class: 'Specify::Model::Locality',
+                  key: :ModifiedByAgentID
+
       one_to_many :created_preparations,
                   class: 'Specify::Model::Preparation',
                   key: :CreatedByAgentID

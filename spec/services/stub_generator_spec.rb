@@ -30,6 +30,22 @@ module Specify
                                                        rank: rank)
       end
 
+      let :country do
+        rank = an_instance_of(Model::AdministrativeDivision)
+               .and have_attributes(Name: 'Country')
+        an_instance_of(Model::GeographicName)
+          .and have_attributes(Name: 'United States',
+                               administrative_division: rank)
+      end
+
+      let :county do
+        rank = an_instance_of(Model::AdministrativeDivision)
+               .and have_attributes(Name: 'County')
+        an_instance_of(Model::GeographicName)
+          .and have_attributes(Name: 'Douglas County',
+                               administrative_division: rank)
+      end
+
       describe '#accession' do
         subject(:set_accession) { stub_generator.accession = '2018-AA-001' }
 
@@ -40,20 +56,10 @@ module Specify
       end
 
       describe '#collecting_data=(higher_geography:, locality:)' do
-        let :country do
-        	rank = an_instance_of(Model::AdministrativeDivision)
-        	       .and have_attributes(Name: 'Country')
-          an_instance_of(Model::GeographicName)
-            .and have_attributes(Name: 'United States',
-                                 administrative_division: rank)
-        end
-
-        let :county do
-        	rank = an_instance_of(Model::AdministrativeDivision)
-        	       .and have_attributes(Name: 'County')
-          an_instance_of(Model::GeographicName)
-            .and have_attributes(Name: 'Douglas County',
-                                 administrative_division: rank)
+        let :locality do
+        	an_instance_of(Model::Locality)
+        	  .and have_attributes(LocalityName: 'Downtown Lawrence',
+        	                       geographic_name: county)
         end
 
         context 'when passed country only' do
@@ -95,7 +101,7 @@ module Specify
 
         	it do
         		expect { set_collecting }
-        		  .to raise_error Model::TreeQueryable::AMBIGUOUS_RESULTS_ERROR +
+        		  .to raise_error Model::TreeQueryable::AMBIGUOUS_MATCH_ERROR +
         		                  ' for Douglas County: ["United States, Kansas,'\
         		                  ' Douglas County", "United States, Wisconsin,'\
         		                  ' Douglas County"]'
@@ -111,12 +117,26 @@ module Specify
                                   'County' => 'Douglas County' },
               locality: 'Downtown Lawrence' }
         	end
+
+          it do
+          	expect { set_collecting }
+              .to change(stub_generator, :collecting_geography)
+        		  .from(be_nil).to(county)
+          	  .and change(stub_generator, :collecting_locality)
+          	  .from(be_nil).to(locality)
+          end
         end
 
         context 'when passed locality only' do
           subject(:set_collecting) { stub_generator.collecting_data = cd }
 
           let(:cd) { { locality: 'Downtown Lawrence' } }
+
+          it do
+          	expect { set_collecting }
+          	  .to change(stub_generator, :collecting_locality)
+          	  .from(be_nil).to locality
+          end
         end
       end
 

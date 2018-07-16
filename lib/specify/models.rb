@@ -24,6 +24,7 @@ require_relative 'models/discipline'
 require_relative 'models/division'
 require_relative 'models/geography'
 require_relative 'models/institution'
+require_relative 'models/locality'
 require_relative 'models/preparation'
 require_relative 'models/preparation_type'
 require_relative 'models/taxonomy'
@@ -33,5 +34,6 @@ require_relative 'models/view_set_object'
 module Specify
   # A module that contains Sequel::Model classes for the Spceify schema.
   module Model
+    AMBIGUOUS_MATCH_ERROR = 'Ambiguous results during search'
   end
 end

@@ -7,8 +7,8 @@ module Specify
       attr_reader :accession,
                   :cataloger,
                   :collecting_geography,
+                  :collecting_locality,
                   :geography,
-                  :locality,
                   :preparation_count,
                   :preparation_type,
                   :taxon,
@@ -24,7 +24,7 @@ module Specify
         @accession = nil
         @cataloger = agent
         @collecting_geography = nil
-        @locality = nil
+        @collecting_locality = nil
         @preparation_type = nil
         @preparation_count = nil
         @taxon = nil
@@ -57,8 +57,15 @@ module Specify
       # -> Model::Locality
       # _geography_: Hash
       #              { 'Administrative division name' => 'Geographic name' }
-      def collecting_data=(higher_geography:, locality: nil)
-        @collecting_geography = geography.search_tree(higher_geography)
+      def collecting_data=(higher_geography: nil, locality: nil)
+        if higher_geography
+          @collecting_geography = geography.search_tree(higher_geography)
+        end
+        localities = @collecting_geography&.localities_dataset ||
+          Model::Locality.dataset
+        locality_matches = localities.where LocalityName: locality
+        raise Model::AMBIGUOUS_MATCH_ERROR if locality_matches.count > 1
+        @collecting_locality = locality_matches.first
       end
 
       # -> Model::Taxon

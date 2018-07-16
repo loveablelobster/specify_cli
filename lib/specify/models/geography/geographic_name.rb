@@ -8,8 +8,9 @@ module Specify
       many_to_one :administrative_division, key: :GeographyTreeDefItemID
       many_to_one :parent, class: self, key: :ParentID
       many_to_one :accepted_name, class: self, key: :AcceptedID
-      one_to_many :synonyms, class: self, key: :AcceptedID
       one_to_many :children, class: self, key: :ParentID
+      one_to_many :synonyms, class: self, key: :AcceptedID
+      one_to_many :localities, key: :GeographyID
 
       # create: rank.add_taxon or parent.add_child
       def before_create
