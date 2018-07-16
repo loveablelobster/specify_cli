@@ -27,6 +27,10 @@ module Specify
         super
       end
 
+      def inspect
+        "id: #{self.GeographyID}; Full Name: '#{self.FullName}'"
+      end
+
       def children?
         !children.empty?
       end

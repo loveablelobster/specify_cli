@@ -86,6 +86,22 @@ module Specify
         	end
         end
 
+        context 'when passed county only and county is ambiguous' do
+        	subject(:set_collecting) { stub_generator.collecting_data = cd }
+
+        	let :cd do
+        	  { higher_geography: { 'County' => 'Douglas County' } }
+        	end
+
+        	it do
+        		expect { set_collecting }
+        		  .to raise_error Model::TreeQueryable::AMBIGUOUS_RESULTS_ERROR +
+        		                  ' for Douglas County: ["United States, Kansas,'\
+        		                  ' Douglas County", "United States, Wisconsin,'\
+        		                  ' Douglas County"]'
+        	end
+        end
+
         context 'when passed geography and locality' do
         	subject(:set_collecting) { stub_generator.collecting_data = cd }
 

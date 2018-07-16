@@ -4,6 +4,7 @@ module Specify
   module Model
     # Mixin that provides convienience methods for nested hierarchies.
     module TreeQueryable
+      AMBIGUOUS_RESULTS_ERROR = 'Ambiguous Results'
       # ->
       def rank(rank_name)
         ranks_dataset.first(Name: rank_name.capitalize)
@@ -17,8 +18,10 @@ module Specify
       def search_tree(hash)
         hash.reduce(nil) do |geo, (rank, name)|
           geo_names = geo&.children_dataset || names_dataset
-          div = rank(rank)
-          geo = geo_names.first(Name: name, administrative_division: div)
+          geo = geo_names.where(Name: name, administrative_division: rank(rank))
+          next geo.first unless geo.count > 1
+          raise AMBIGUOUS_RESULTS_ERROR +
+                " for #{name}: #{geo.to_a.map(&:FullName)}"
         end
       end
     end
