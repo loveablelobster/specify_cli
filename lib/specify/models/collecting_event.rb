@@ -5,7 +5,10 @@ module Specify
     #
     class CollectingEvent < Sequel::Model(:collectingevent)
       many_to_one :discipline, key: :DisciplineID
+      many_to_one :locality, key: :LocalityID
+
       one_to_many :collection_objects, key: :CollectingEventID
+
       many_to_one :created_by,
                   class: 'Specify::Model::Agent',
                   key: :CreatedByAgentID

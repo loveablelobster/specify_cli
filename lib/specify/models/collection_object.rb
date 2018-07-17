@@ -52,7 +52,8 @@ module Specify
 
       # _collecting_information_: Hash
       def geo_locate(collecting_information)
-
+        collecting_event.update(collecting_information)
+        collecting_event.save
       end
 
       # _determination_information_: Hash

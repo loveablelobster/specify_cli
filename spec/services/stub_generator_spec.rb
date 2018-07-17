@@ -140,8 +140,64 @@ module Specify
           end
         end
 
-        context 'when creating with collecting events' do
-          it 'adds locality information to the collecting event'
+        context 'when creating with collecting event with locality' do
+          let :cd do
+              { 'Country' => 'United States',
+              'State' => 'Kansas',
+              'County' => 'Douglas County',
+              locality: 'Downtown Lawrence' }
+          end
+
+          let :collecting_event do
+          	an_instance_of(Model::CollectingEvent)
+          	  .and have_attributes locality: locality
+          end
+
+          let :locality do
+            an_instance_of(Model::Locality)
+              .and have_attributes(LocalityName: 'Downtown Lawrence',
+                                   geographic_name: county)
+          end
+
+          before { stub_generator.collecting_data = cd }
+
+          it do
+          	expect { stub_generator.create 1 }
+          	  .to change { Model::CollectionObject.dataset.last }
+              .from(be_nil)
+              .to having_attributes(collecting_event: collecting_event)
+          end
+        end
+
+        context 'when creating with collecting event without locality' do
+          let :cd do
+              { 'Country' => 'United States',
+              'State' => 'Kansas',
+              'County' => 'Douglas County' }
+          end
+
+          let :collecting_event do
+          	an_instance_of(Model::CollectingEvent)
+          	  .and have_attributes locality: locality
+          end
+
+          let :locality do
+            an_instance_of(Model::Locality)
+              .and have_attributes(LocalityName: 'default locality',
+                                   geographic_name: county)
+          end
+
+          before do
+            stub_generator.collecting_data = cd
+          	stub_generator.default_locality = 'default locality'
+          end
+
+          it do
+          	expect { stub_generator.create 1 }
+          	  .to change { Model::CollectionObject.dataset.last }
+              .from(be_nil)
+              .to having_attributes(collecting_event: collecting_event)
+          end
         end
 
         context 'when creating with preparations' do

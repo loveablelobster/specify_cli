@@ -71,11 +71,23 @@ module Specify
         raise LOCALITY_NOT_FOUND_ERROR + locality unless collecting_locality
       end
 
+      def collecting_locality!
+        return collecting_locality if collecting_locality
+        return unless collecting_geography && !collecting_locality
+        self.default_locality=(nil) unless default_locality
+        default_locality
+      end
+
       # Sets the default locality.
       # Will create a Model::Locality in the instance's _localities_ dataset,
       # for the instance's <em>collecting_geography</em> if given, or
       # _discipline_.
-      def default_locality=(locality_name = 'not cataloged, see label')
+      # FIXME: this should be held off until record creation
+      #        otherwise this depends on the collecting_geography being assigned
+      #        BEFORE
+      #        assign only the name!
+      def default_locality=(locality_name = nil)
+        locality_name ||= 'not cataloged, see label'
         @default_locality = find_locality locality_name
         return if @default_locality
         @default_locality = discipline
@@ -138,7 +150,7 @@ module Specify
         count.times do
           co = collection.add_collection_object(cataloger: cataloger)
           co.accession = accession
-          co.geo_locate(locality: collecting_locality) if collecting_locality
+          co.geo_locate(locality: collecting_locality!) if collecting_locality!
           co.identify(taxon: taxon) if taxon
           co.save
           next unless preparation_type
