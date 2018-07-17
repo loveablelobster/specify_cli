@@ -33,7 +33,7 @@ module Specify
       # Loads a YAML _file_ and creates an instance according to specifications
       # in the file.
       def self.load_yaml(file)
-        #
+        # load YAML file here
       end
 
       # -> Model::Accession
@@ -56,20 +56,36 @@ module Specify
       #                locality: 'Locality name' }
       def collecting_data=(vals)
         locality = vals.delete :locality
-        unless vals.empty?
-          @collecting_geography = geography.search_tree(vals)
-        end
-        localities = @collecting_geography&.localities_dataset ||
-                     Model::Locality.dataset
-        locality_matches = localities.where LocalityName: locality
-        raise Model::AMBIGUOUS_MATCH_ERROR if locality_matches.count > 1
-        @collecting_locality = locality_matches.first
+        @collecting_geography = geography.search_tree(vals) unless vals.empty?
+        self.collecting_locality = locality
+      end
+
+      # -> Model::Locality
+      def collecting_locality=(locality_name)
+        @collecting_locality = find_locality locality_name
+      end
+
+      # Sets the default locality if it does not exist
+      def default_locality=()
+        #
       end
 
       # -> Model::Taxon
       # _taxon_: Hash { 'Rank name' => 'Taxon name' }
       def determination=(taxon)
         @taxon = taxonomy.search_tree taxon
+      end
+
+      # -> Model::Locality
+      # Returns the Specify::Model::Locality for <em>locality_name</em> from
+      # the instance's _discipline_'s locality dataset or the instance's
+      # <em>collecting_geography</em>'s locality dataset.
+      def find_locality(locality_name)
+        localities = @collecting_geography&.localities_dataset ||
+                     discipline.localities_dataset
+        locality_matches = localities.where LocalityName: locality_name
+        raise Model::AMBIGUOUS_MATCH_ERROR if locality_matches.count > 1
+        locality_matches.first
       end
 
       def geography

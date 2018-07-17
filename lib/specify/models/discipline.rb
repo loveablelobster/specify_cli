@@ -11,6 +11,7 @@ module Specify
                   key: :DisciplineID
 
       one_to_many :collecting_events, key: :DisciplineID
+      one_to_many :localities, key: :DisciplineID
 
       many_to_many :auto_numbering_schemes,
                    left_key: :DisciplineID,
