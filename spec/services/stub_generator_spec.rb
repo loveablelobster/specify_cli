@@ -12,7 +12,7 @@ module Specify
                             config: file
       end
 
-      let(:det) { { taxon: 'Asaphidae', rank: 'Family' } }
+      let(:det) { { 'Family' => 'Asaphidae' } }
       let(:prep) { { type: 'Specimen', count: 1 } }
 
       let :accession do
@@ -35,7 +35,7 @@ module Specify
                .and have_attributes(Name: 'Country')
         an_instance_of(Model::GeographicName)
           .and have_attributes(Name: 'United States',
-                               administrative_division: rank)
+                               rank: rank)
       end
 
       let :county do
@@ -43,7 +43,7 @@ module Specify
                .and have_attributes(Name: 'County')
         an_instance_of(Model::GeographicName)
           .and have_attributes(Name: 'Douglas County',
-                               administrative_division: rank)
+                               rank: rank)
       end
 
       describe '#accession' do
@@ -223,7 +223,7 @@ module Specify
         end
       end
 
-      describe '#determination=(taxon:, rank:)' do
+      describe '#determination=(taxon)' do
         subject(:set_determination) { stub_generator.determination = det }
 
         it do

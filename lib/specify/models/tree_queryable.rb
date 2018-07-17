@@ -15,12 +15,13 @@ module Specify
       #           ...
       #           'Lowest Rank' => 'Name' }
       def search_tree(hash)
-        hash.reduce(nil) do |geo, (rank, name)|
-          geo_names = geo&.children_dataset || names_dataset
-          geo = geo_names.where(Name: name, administrative_division: rank(rank))
-          next geo.first unless geo.count > 1
+        hash.reduce(nil) do |item, (rank_name, name)|
+          searchset = item&.children_dataset || names_dataset
+          item = searchset.where(Name: name,
+                                 rank: rank(rank_name))
+          next item.first unless item.count > 1
           raise AMBIGUOUS_MATCH_ERROR +
-                " for #{name}: #{geo.to_a.map(&:FullName)}"
+                " for #{name}: #{item.to_a.map(&:FullName)}"
         end
       end
     end

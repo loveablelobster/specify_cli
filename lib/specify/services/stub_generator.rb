@@ -8,11 +8,9 @@ module Specify
                   :cataloger,
                   :collecting_geography,
                   :collecting_locality,
-                  :geography,
                   :preparation_count,
                   :preparation_type,
-                  :taxon,
-                  :taxonomy
+                  :taxon
 
       def initialize(host:,
                      database:,
@@ -28,8 +26,6 @@ module Specify
         @preparation_type = nil
         @preparation_count = nil
         @taxon = nil
-        @taxonomy = discipline.taxonomy
-        @geography = discipline.geography
         yield(self) if block_given?
       end
 
@@ -62,17 +58,21 @@ module Specify
           @collecting_geography = geography.search_tree(higher_geography)
         end
         localities = @collecting_geography&.localities_dataset ||
-          Model::Locality.dataset
+                     Model::Locality.dataset
         locality_matches = localities.where LocalityName: locality
         raise Model::AMBIGUOUS_MATCH_ERROR if locality_matches.count > 1
         @collecting_locality = locality_matches.first
       end
 
       # -> Model::Taxon
-      # _taxon_: String
-      def determination=(taxon:, rank: nil)
-        @taxon = taxonomy.names_dataset.first Name: taxon,
-                                              rank: taxonomy.rank(rank)
+      # _taxon_: Hash { 'Rank name' => 'Taxon name' }
+      def determination=(taxon)
+        p taxon
+        @taxon = taxonomy.search_tree taxon
+      end
+
+      def geography
+        discipline.geography
       end
 
       # <em>prep_type</em>: String
@@ -83,12 +83,16 @@ module Specify
         @preparation_count = count
       end
 
+      def taxonomy
+        discipline.taxonomy
+      end
+
       def create(count)
         #  DB.transaction do
         count.times do
           co = collection.add_collection_object(cataloger: cataloger)
           co.accession = accession
-          co.georeference(locality: locality) if locality
+          co.georeference(locality: collecting_locality) if collecting_locality
           co.identify(taxon: taxon) if taxon
           co.save
           next unless preparation_type
