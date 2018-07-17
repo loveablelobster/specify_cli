@@ -46,12 +46,121 @@ module Specify
                                rank: rank)
       end
 
+      let :disciplines do
+        a_collection_including(stub_generator.discipline)
+      end
+
       describe '#accession' do
-        subject(:set_accession) { stub_generator.accession = '2018-AA-001' }
+        context 'when passed a known accession number' do
+          subject(:set_accession) { stub_generator.accession = '2018-AA-001' }
+
+          it do
+            expect { set_accession }
+              .to change(stub_generator, :accession).from(be_nil).to accession
+          end
+        end
+
+        context 'when passed an unknown accession number' do
+        	subject(:set_accession) { stub_generator.accession = 'void' }
+
+          it do
+          	expect { set_accession }
+          	  .to raise_error ACCESSION_NOT_FOUND_ERROR + 'void'
+          end
+        end
+      end
+
+      describe '#cataloger=(user_name)' do
+        context 'when passed a known user name' do
+          subject(:set_cataloger) { stub_generator.cataloger = 'specmanager' }
+
+          it do
+            expect { set_cataloger }
+              .to change(stub_generator, :cataloger)
+              .from(stub_generator.agent).to agent
+          end
+        end
+
+        context 'when passed an unknown user name' do
+        	subject(:set_cataloger) { stub_generator.cataloger = 'nobody' }
+
+          it do
+          	expect { set_cataloger }
+          	  .to raise_error USER_NOT_FOUND_ERROR + 'nobody'
+          end
+        end
+      end
+
+      describe '#create(count)' do
+        it do
+          expect { stub_generator.create(10) }
+            .to change { Model::CollectionObject.dataset.count }.by 10
+        end
 
         it do
-          expect { set_accession }
-            .to change(stub_generator, :accession).from(be_nil).to accession
+          expect { stub_generator.create 1 }
+            .to change { Model::CollectionObject.dataset.last }
+            .from(be_nil).to having_attributes(cataloger: stub_generator.agent)
+        end
+
+        context 'when creating with an accession' do
+          before { stub_generator.accession = '2018-AA-001' }
+
+          it do
+          	expect { stub_generator.create 1 }
+          	  .to change { Model::CollectionObject.dataset.last }
+          	  .from(be_nil).to having_attributes(accession: accession)
+          end
+        end
+
+        context 'when creating with another cataloger' do
+          before { stub_generator.cataloger = 'specmanager' }
+
+          it do
+            expect { stub_generator.create 1 }
+              .to change { Model::CollectionObject.dataset.last }
+              .from(be_nil)
+              .to having_attributes(cataloger: agent)
+          end
+        end
+
+        context 'when creating with determinations' do
+          before { stub_generator.determination = det }
+
+          let :determinations do
+            a_collection_including an_instance_of(Model::Determination)
+              .and have_attributes(taxon: taxon)
+          end
+
+          it do
+            expect { stub_generator.create 1 }
+              .to change { Model::CollectionObject.dataset.last }
+              .from(be_nil)
+              .to having_attributes(determinations: determinations)
+          end
+        end
+
+        context 'when creating with collecting events' do
+          it 'adds locality information to the collecting event'
+        end
+
+        context 'when creating with preparations' do
+          before { stub_generator.preparation = prep }
+
+          let :preparations do
+            preptype = an_instance_of(Model::PreparationType)
+                       .and have_attributes(Name: 'Specimen')
+            a_collection_including an_instance_of(Model::Preparation)
+              .and have_attributes(CountAmt: 1,
+                                   preparation_type: preptype)
+          end
+
+          it do
+            expect { stub_generator.create 1 }
+              .to change { Model::CollectionObject.dataset.last }
+              .from(be_nil)
+              .to having_attributes(preparations: preparations)
+          end
         end
       end
 
@@ -134,110 +243,147 @@ module Specify
           	  .from(be_nil).to locality
           end
         end
-      end
 
-      describe '#create(count)' do
-        it do
-          expect { stub_generator.create(10) }
-            .to change { Model::CollectionObject.dataset.count }.by 10
-        end
+        context 'when passing an unknown locality' do
+        	subject(:set_collecting) { stub_generator.collecting_data = cd }
 
-        it do
-          expect { stub_generator.create 1 }
-            .to change { Model::CollectionObject.dataset.last }
-            .from(be_nil).to having_attributes(cataloger: stub_generator.agent)
-        end
-
-        context 'when creating with an accession' do
-          before { stub_generator.accession = '2018-AA-001' }
+          let(:cd) { { locality: 'No place' } }
 
           it do
-          	expect { stub_generator.create 1 }
-          	  .to change { Model::CollectionObject.dataset.last }
-          	  .from(be_nil).to having_attributes(accession: accession)
-          end
-        end
-
-        context 'when creating with another cataloger' do
-          before { stub_generator.cataloger = 'specmanager' }
-
-          it do
-            expect { stub_generator.create 1 }
-              .to change { Model::CollectionObject.dataset.last }
-              .from(be_nil)
-              .to having_attributes(cataloger: agent)
-          end
-        end
-
-        context 'when creating with determinations' do
-          before { stub_generator.determination = det }
-
-          let :determinations do
-            a_collection_including an_instance_of(Model::Determination)
-              .and have_attributes(taxon: taxon)
-          end
-
-          it do
-            expect { stub_generator.create 1 }
-              .to change { Model::CollectionObject.dataset.last }
-              .from(be_nil)
-              .to having_attributes(determinations: determinations)
-          end
-        end
-
-        context 'when creating with collecting events' do
-          it 'adds locality information to the collecting event'
-        end
-
-        context 'when creating with preparations' do
-          before { stub_generator.preparation = prep }
-
-          let :preparations do
-            preptype = an_instance_of(Model::PreparationType)
-                       .and have_attributes(Name: 'Specimen')
-            a_collection_including an_instance_of(Model::Preparation)
-              .and have_attributes(CountAmt: 1,
-                                   preparation_type: preptype)
-          end
-
-          it do
-            expect { stub_generator.create 1 }
-              .to change { Model::CollectionObject.dataset.last }
-              .from(be_nil)
-              .to having_attributes(preparations: preparations)
+          	expect { set_collecting }
+          	  .to raise_error LOCALITY_NOT_FOUND_ERROR + 'No place'
           end
         end
       end
 
-      describe '#cataloger=(user_name)' do
-        subject(:set_cataloger) { stub_generator.cataloger = 'specmanager' }
+      describe '#default_locality=(locality_name)' do
+        subject(:set_default) { stub_generator.default_locality = name }
 
-        it do
-          expect { set_cataloger }
-            .to change(stub_generator, :cataloger)
-            .from(stub_generator.agent).to agent
+        let(:name) { 'not cataloged, see label' }
+
+        context 'when collecting_geography is set' do
+          let :locality do
+            an_instance_of(Model::Locality)
+              .and have_attributes(LocalityName: 'not cataloged, see label',
+                                   geographic_name: country)
+          end
+
+          before do
+            stub_generator.collecting_data = { 'Country' => 'United States' }
+          end
+
+          it do
+          	expect { set_default }
+          	  .to change(stub_generator, :default_locality)
+          	  .from(be_nil)
+          	  .to locality
+          end
+        end
+
+        context 'when collecting_geography is not set' do
+          let :locality do
+            an_instance_of(Model::Locality)
+              .and have_attributes(LocalityName: 'not cataloged, see label',
+                                   geographic_name: be_nil)
+          end
+
+          it do
+          	expect { set_default }
+          	  .to change(stub_generator, :default_locality)
+          	  .from(be_nil)
+          	  .to locality
+          end
         end
       end
 
-      describe '#determination=(taxon)' do
-        subject(:set_determination) { stub_generator.determination = det }
+      describe '#determination=(vals)' do
+        context 'when passed a known taxon' do
+          subject(:set_determination) { stub_generator.determination = det }
+
+          it do
+            expect { set_determination }
+              .to change(stub_generator, :taxon).from(be_nil).to taxon
+          end
+        end
+
+        context 'when passed an unknown taxon' do
+          subject(:set_determination) { stub_generator.determination = indet }
+
+          let(:indet) { { 'Family' => 'Illaenidae' } }
+
+          it do
+          	expect { set_determination }
+          	  .to raise_error TAXON_NOT_FOUND_ERROR + '{"Family"=>"Illaenidae"}'
+          end
+        end
+      end
+
+      describe "#find_locality(locality_name)" do
+        subject { stub_generator.find_locality 'Downtown Lawrence' }
 
         it do
-          expect { set_determination }
-            .to change(stub_generator, :taxon).from(be_nil).to taxon
+        	is_expected.to be_a(Model::Locality)
+        	  .and have_attributes(LocalityName: 'Downtown Lawrence',
+        	                       geographic_name: county)
+        end
+      end
+
+      describe "#geography" do
+      	subject { stub_generator.geography }
+
+      	it do
+      		is_expected.to be_a(Model::Geography)
+      		  .and have_attributes disciplines: disciplines
+      	end
+      end
+
+      describe '#localities' do
+        subject { stub_generator.localities }
+
+        let :locality do
+        	an_instance_of(Model::Locality)
+        	  .and have_attributes(LocalityName: 'Downtown Lawrence',
+        	                       geographic_name: county)
+        end
+
+        it do
+        	is_expected.to be_a(Sequel::Dataset)
+        	  .and include locality
         end
       end
 
       describe '#preparation=(type:, count:)' do
-        subject(:set_preparation) { stub_generator.preparation = prep }
+        context 'when type is known' do
+          subject(:set_preparation) { stub_generator.preparation = prep }
 
-        it do
-          expect { set_preparation }
-            .to change(stub_generator, :preparation_type)
-            .from(be_nil).to(an_instance_of(Model::PreparationType))
-            .and change(stub_generator, :preparation_count)
-            .from(be_nil).to 1
+          it do
+            expect { set_preparation }
+              .to change(stub_generator, :preparation_type)
+              .from(be_nil).to(an_instance_of(Model::PreparationType))
+              .and change(stub_generator, :preparation_count)
+              .from(be_nil).to 1
+          end
         end
+
+        context 'when type is unknown' do
+        	subject(:set_preparation) { stub_generator.preparation = unprep }
+
+        	let(:unprep) { { type: 'Thing', count: 1 } }
+
+        	it do
+        		expect { set_preparation }
+        		  .to raise_error PREPTYPE_NOT_FOUND_ERROR + 'Thing'
+        	end
+        end
+      end
+
+      describe '#taxonomy' do
+      	subject { stub_generator.taxonomy }
+
+      	it do
+      	  is_expected.to be_a(Model::Taxonomy)
+      	    .and have_attributes disciplines: disciplines
+      	end
       end
     end
   end

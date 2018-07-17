@@ -19,6 +19,7 @@ module Specify
         self.Version = 0
         self.TimestampCreated = Time.now
         self.GUID = SecureRandom.uuid
+        self.SrcLatLongUnit = 3
         super
       end
 

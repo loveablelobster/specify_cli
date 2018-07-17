@@ -51,7 +51,7 @@ module Specify
       end
 
       # _collecting_information_: Hash
-      def georeference(collecting_information)
+      def geo_locate(collecting_information)
 
       end
 
