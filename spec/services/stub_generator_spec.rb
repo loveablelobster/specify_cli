@@ -55,7 +55,7 @@ module Specify
         end
       end
 
-      describe '#collecting_data=(higher_geography:, locality:)' do
+      describe '#collecting_data=(vals)' do
         let :locality do
         	an_instance_of(Model::Locality)
         	  .and have_attributes(LocalityName: 'Downtown Lawrence',
@@ -65,9 +65,7 @@ module Specify
         context 'when passed country only' do
         	subject(:set_collecting) { stub_generator.collecting_data = cd }
 
-          let :cd do
-            { higher_geography: { 'Country' => 'United States' } }
-          end
+          let(:cd) { { 'Country' => 'United States' } }
 
           it do
           	expect { set_collecting }
@@ -80,9 +78,9 @@ module Specify
         	subject(:set_collecting) { stub_generator.collecting_data = cd }
 
         	let :cd do
-        	  { higher_geography: { 'Country' => 'United States',
-                                  'State' => 'Kansas',
-                                  'County' => 'Douglas County' } }
+        	  { 'Country' => 'United States',
+              'State' => 'Kansas',
+              'County' => 'Douglas County' }
         	end
 
         	it do
@@ -95,9 +93,7 @@ module Specify
         context 'when passed county only and county is ambiguous' do
         	subject(:set_collecting) { stub_generator.collecting_data = cd }
 
-        	let :cd do
-        	  { higher_geography: { 'County' => 'Douglas County' } }
-        	end
+        	let(:cd) { { 'County' => 'Douglas County' } }
 
         	it do
         		expect { set_collecting }
@@ -112,9 +108,9 @@ module Specify
         	subject(:set_collecting) { stub_generator.collecting_data = cd }
 
         	let :cd do
-        	  { higher_geography: { 'Country' => 'United States',
-                                  'State' => 'Kansas',
-                                  'County' => 'Douglas County' },
+        	  { 'Country' => 'United States',
+              'State' => 'Kansas',
+              'County' => 'Douglas County',
               locality: 'Downtown Lawrence' }
         	end
 

@@ -52,10 +52,12 @@ module Specify
 
       # -> Model::Locality
       # _geography_: Hash
-      #              { 'Administrative division name' => 'Geographic name' }
-      def collecting_data=(higher_geography: nil, locality: nil)
-        if higher_geography
-          @collecting_geography = geography.search_tree(higher_geography)
+      #              { 'Administrative division name' => 'Geographic name',
+      #                locality: 'Locality name' }
+      def collecting_data=(vals)
+        locality = vals.delete :locality
+        unless vals.empty?
+          @collecting_geography = geography.search_tree(vals)
         end
         localities = @collecting_geography&.localities_dataset ||
                      Model::Locality.dataset
@@ -67,7 +69,6 @@ module Specify
       # -> Model::Taxon
       # _taxon_: Hash { 'Rank name' => 'Taxon name' }
       def determination=(taxon)
-        p taxon
         @taxon = taxonomy.search_tree taxon
       end
 
