@@ -77,6 +77,20 @@ module Specify
                   class: 'Specify::Model::PreparationType',
                   key: :ModifiedByAgentID
 
+      one_to_many :created_record_sets,
+                  class: 'Specify::Model::RecordSet',
+                  key: :CreatedByAgentID
+      one_to_many :modified_record_sets,
+                  class: 'Specify::Model::RecordSet',
+                  key: :ModifiedByAgentID
+
+      one_to_many :created_record_set_items,
+                  class: 'Specify::Model::RecordSetItem',
+                  key: :CreatedByAgentID
+      one_to_many :modified_record_set_items,
+                  class: 'Specify::Model::RecordSetItem',
+                  key: :ModifiedByAgentID
+
       one_to_many :created_view_set_objects,
                   class: 'Specify::Model::ViewSetObject',
                   key: :CreatedByAgentID

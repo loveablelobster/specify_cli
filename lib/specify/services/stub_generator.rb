@@ -4,14 +4,12 @@ module Specify
   module Service
     # A class that generates collection object stub records in a collection.
     class StubGenerator < Service
-      attr_accessor :default_locality_name
+      attr_accessor :default_locality_name, :name
 
-      attr_reader :accession,
-                  :cataloger,
-                  :collecting_geography,
-                  :collecting_locality,
-                  :preparation_count,
-                  :preparation_type,
+      attr_reader :accession, :cataloger,
+                  :collecting_geography, :collecting_locality,
+                  :preparation_count, :preparation_type,
+                  :record_set,
                   :taxon
 
       def initialize(host:,
@@ -25,8 +23,10 @@ module Specify
         @collecting_geography = nil
         @collecting_locality = nil
         @default_locality_name = 'not cataloged, see label'
+        @name = "stub record set #{Time.now}"
         @preparation_type = nil
         @preparation_count = nil
+        @record_set = nil
         @taxon = nil
         yield(self) if block_given?
       end
@@ -90,7 +90,12 @@ module Specify
 
       # Creates Model::CollectionObject instances and persists them.
       def create(count)
-        count.times { create_stub }
+        @record_set = collection.add_record_set Name: name,
+                                                user: cataloger.user
+        count.times do
+          stub = create_stub
+          @record_set.add_record_set_item collection_object: stub
+        end
       end
 
       # -> Model::Locality
@@ -125,6 +130,11 @@ module Specify
         locality_matches = localities.where LocalityName: locality_name
         raise Model::AMBIGUOUS_MATCH_ERROR if locality_matches.count > 1
         locality_matches.first
+      end
+
+      # ->
+      def generated
+        record_set&.collection_objects
       end
 
       # -> Model::Geography
@@ -169,7 +179,6 @@ module Specify
         co.identify(taxon: taxon) if taxon
         make_preparation(co) if preparation_type
         co.save
-        # TODO: log co.CatalogNumber
       end
 
       def make_preparation(collection_object)

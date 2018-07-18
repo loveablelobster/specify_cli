@@ -283,6 +283,25 @@ module Specify
       end
 
       describe '#create(count)' do
+        let :record_set_items do
+          first_item = an_instance_of(Model::RecordSetItem)
+        	  .and(have_attributes(OrderNumber: 0))
+        	last_item = an_instance_of(Model::RecordSetItem)
+        	  .and(have_attributes(OrderNumber: 9))
+        	a_collection_including(first_item, last_item)
+        	  .and have_attributes count: 10
+        end
+
+        let :generated do
+          first_collection_object = an_instance_of(Model::CollectionObject)
+        	  .and(have_attributes(CatalogNumber: '000000001'))
+        	last_collection_object = an_instance_of(Model::CollectionObject)
+        	  .and(have_attributes(CatalogNumber: '000000010'))
+          a_collection_including(first_collection_object,
+                                 last_collection_object)
+          .and have_attributes count: 10
+        end
+
         it do
           expect { stub_generator.create(10) }
             .to change { Model::CollectionObject.dataset.count }.by 10
@@ -292,6 +311,21 @@ module Specify
           expect { stub_generator.create 1 }
             .to change { Model::CollectionObject.dataset.last }
             .from(be_nil).to having_attributes(cataloger: stub_generator.agent)
+        end
+
+        it do
+          expect { stub_generator.create 10 }
+            .to change(stub_generator, :record_set)
+            .from(be_nil)
+            .to an_instance_of(Model::RecordSet)
+            .and have_attributes record_set_items: record_set_items
+        end
+
+        it do
+          expect { stub_generator.create 10 }
+            .to change(stub_generator, :generated)
+            .from(be_nil)
+            .to generated
         end
 
         context 'when creating with an accession' do
