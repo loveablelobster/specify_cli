@@ -17,8 +17,7 @@ module Specify
       def initialize(host:,
                      database:,
                      collection:,
-                     specify_user:
-                     nil,
+                     specify_user: nil,
                      config: nil)
         super
         @accession = nil
@@ -36,7 +35,13 @@ module Specify
       # Loads a YAML _file_ and creates an instance according to specifications
       # in the file.
       def self.load_yaml(file)
-        # load YAML file here
+        params = Psych.load_file file
+        new params.delete(:stub_generator) do |stubs|
+          params.each do |key, value|
+            setter = (key + '=').to_sym
+            stubs.public_send(setter, value)
+          end
+        end
       end
 
       # -> Model::Accession

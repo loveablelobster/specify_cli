@@ -1,0 +1,16 @@
+---
+:stub_generator:
+  :host: localhost
+  :database: SPSPEC
+  :collection: Test Collection
+  :config: spec/support/db.yml
+accession: 2018-AA-001
+cataloger: specmanager
+collecting_data:
+  Country: United States
+default_locality_name: default stub locality US
+determination:
+  Family: Asaphidae
+preparation:
+  :type: Specimen
+  :count: 1

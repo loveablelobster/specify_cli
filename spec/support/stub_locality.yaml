@@ -1,0 +1,18 @@
+---
+:stub_generator:
+  :host: localhost
+  :database: SPSPEC
+  :collection: Test Collection
+  :config: spec/support/db.yml
+accession: 2018-AA-001
+cataloger: specmanager
+collecting_data:
+  Country: United States
+  State: Kansas
+  County: Douglas County
+  :locality: Downtown Lawrence
+determination:
+  Family: Asaphidae
+preparation:
+  :type: Specimen
+  :count: 1

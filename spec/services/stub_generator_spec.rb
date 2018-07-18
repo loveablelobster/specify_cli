@@ -50,6 +50,67 @@ module Specify
         a_collection_including(stub_generator.discipline)
       end
 
+      let :prep_type do
+      	an_instance_of(Model::PreparationType)
+      	  .and have_attributes Name: 'Specimen'
+      end
+
+      describe '.load_yaml(file)' do
+        context 'when YAML specifies locality' do
+          subject { described_class.load_yaml file }
+
+          let :file do
+            Pathname.new(Dir.pwd).join('spec', 'support', 'stub_locality.yaml')
+          end
+
+          let :locality do
+            have_attributes LocalityName: 'Downtown Lawrence',
+                            geographic_name: county
+          end
+
+          it { is_expected.to have_attributes accession: accession }
+
+          it { is_expected.to have_attributes cataloger: agent }
+
+          it { is_expected.to have_attributes collecting_geography: county }
+
+          it { is_expected.to have_attributes collecting_locality: locality }
+
+          it { is_expected.to have_attributes taxon: taxon }
+
+          it { is_expected.to have_attributes preparation_type: prep_type }
+
+          it { is_expected.to have_attributes preparation_count: 1 }
+        end
+
+        context 'when YAML does not specify locality' do
+          subject { described_class.load_yaml file }
+
+          let :file do
+            Pathname.new(Dir.pwd).join('spec', 'support', 'stub.yaml')
+          end
+
+          let :locality do
+            have_attributes LocalityName: 'default stub locality US',
+                            geographic_name: country
+          end
+
+          it { is_expected.to have_attributes accession: accession }
+
+          it { is_expected.to have_attributes cataloger: agent }
+
+          it { is_expected.to have_attributes collecting_geography: country }
+
+          it { is_expected.to have_attributes default_locality: locality }
+
+          it { is_expected.to have_attributes taxon: taxon }
+
+          it { is_expected.to have_attributes preparation_type: prep_type }
+
+          it { is_expected.to have_attributes preparation_count: 1 }
+        end
+      end
+
       describe '#accession' do
         context 'when passed a known accession number' do
           subject(:set_accession) { stub_generator.accession = '2018-AA-001' }
@@ -485,7 +546,7 @@ module Specify
           it do
             expect { set_preparation }
               .to change(stub_generator, :preparation_type)
-              .from(be_nil).to(an_instance_of(Model::PreparationType))
+              .from(be_nil).to(prep_type)
               .and change(stub_generator, :preparation_count)
               .from(be_nil).to 1
           end
