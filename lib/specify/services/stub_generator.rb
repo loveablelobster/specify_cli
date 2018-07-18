@@ -88,22 +88,9 @@ module Specify
         default_locality!
       end
 
-      #
+      # Creates Model::CollectionObject instances and persists them.
       def create(count)
-        #  DB.transaction do
-        count.times do
-          co = collection.add_collection_object(cataloger: cataloger)
-          co.accession = accession
-          co.geo_locate(locality: collecting_locality!) if collecting_locality!
-          co.identify(taxon: taxon) if taxon
-          co.save
-          next unless preparation_type
-          co.add_preparation collection: collection,
-                             preparation_type: preparation_type,
-                             CountAmt: preparation_count
-          # TODO: log co.CatalogNumber
-        end
-        # end
+        count.times { create_stub }
       end
 
       # -> Model::Locality
@@ -121,6 +108,7 @@ module Specify
           discipline.add_locality(LocalityName: default_locality_name,
                                   geographic_name: collecting_geography)
       end
+
       # -> Model::Taxon
       # Sets the taxon to which stub records will be determined.
       # _taxon_: Hash { 'Rank name' => 'Taxon name' }
@@ -170,6 +158,24 @@ module Specify
 
       def taxonomy
         discipline.taxonomy
+      end
+
+      private
+
+      def create_stub
+        co = collection.add_collection_object(cataloger: cataloger)
+        co.accession = accession
+        co.geo_locate(locality: collecting_locality!) if collecting_locality!
+        co.identify(taxon: taxon) if taxon
+        make_preparation(co) if preparation_type
+        co.save
+        # TODO: log co.CatalogNumber
+      end
+
+      def make_preparation(collection_object)
+        collection_object.add_preparation collection: collection,
+                                          preparation_type: preparation_type,
+                                          CountAmt: preparation_count
       end
     end
   end
