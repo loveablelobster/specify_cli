@@ -30,8 +30,8 @@ module Specify
       end
 
       def inspect
-        'id: ' + self.LocalityID.to_s + '; ' + self.LocalityName
-          + ' (' + geographic_name.FullName + ')'
+        geo = geographic_name ? "(#{geographic_name.FullName})" : ''
+        "id: #{self.LocalityID.to_s}, #{self.LocalityName} #{geo}"
       end
     end
   end

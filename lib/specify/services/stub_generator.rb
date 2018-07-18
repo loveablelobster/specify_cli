@@ -4,11 +4,12 @@ module Specify
   module Service
     # A class that generates collection object stub records in a collection.
     class StubGenerator < Service
+      attr_accessor :default_locality_name
+
       attr_reader :accession,
                   :cataloger,
                   :collecting_geography,
                   :collecting_locality,
-                  :default_locality,
                   :preparation_count,
                   :preparation_type,
                   :taxon
@@ -24,7 +25,7 @@ module Specify
         @cataloger = agent
         @collecting_geography = nil
         @collecting_locality = nil
-        @default_locality = nil
+        @default_locality_name = 'not cataloged, see label'
         @preparation_type = nil
         @preparation_count = nil
         @taxon = nil
@@ -71,30 +72,50 @@ module Specify
         raise LOCALITY_NOT_FOUND_ERROR + locality unless collecting_locality
       end
 
+      # -> Model::Locality
+      # Returns the <em>collecting_locality</em>, or the
+      # <em>default_locality</em> if <em>collecting_locality</em> is not set
+      # but <em>collecting_geography</em> is; creates <em>default_locality</em>
+      # if it does not exist in _localities_ dataset.
       def collecting_locality!
         return collecting_locality if collecting_locality
-        return unless collecting_geography && !collecting_locality
-        self.default_locality=(nil) unless default_locality
-        default_locality
+        return unless collecting_geography
+        default_locality!
       end
 
-      # Sets the default locality.
-      # Will create a Model::Locality in the instance's _localities_ dataset,
-      # for the instance's <em>collecting_geography</em> if given, or
-      # _discipline_.
-      # FIXME: this should be held off until record creation
-      #        otherwise this depends on the collecting_geography being assigned
-      #        BEFORE
-      #        assign only the name!
-      def default_locality=(locality_name = nil)
-        locality_name ||= 'not cataloged, see label'
-        @default_locality = find_locality locality_name
-        return if @default_locality
-        @default_locality = discipline
-          .add_locality LocalityName: locality_name,
-                        geographic_name: collecting_geography
+      #
+      def create(count)
+        #  DB.transaction do
+        count.times do
+          co = collection.add_collection_object(cataloger: cataloger)
+          co.accession = accession
+          co.geo_locate(locality: collecting_locality!) if collecting_locality!
+          co.identify(taxon: taxon) if taxon
+          co.save
+          next unless preparation_type
+          co.add_preparation collection: collection,
+                             preparation_type: preparation_type,
+                             CountAmt: preparation_count
+          # TODO: log co.CatalogNumber
+        end
+        # end
       end
 
+      # -> Model::Locality
+      # Returns the default locality.
+      def default_locality
+        find_locality default_locality_name
+      end
+
+      # -> Model::Locality
+      # Returns the default locality; creates it if it does not exist in
+      # _localities_ dataset.
+      def default_locality!
+        return default_locality if default_locality
+        default_locality ||
+          discipline.add_locality(LocalityName: default_locality_name,
+                                  geographic_name: collecting_geography)
+      end
       # -> Model::Taxon
       # Sets the taxon to which stub records will be determined.
       # _taxon_: Hash { 'Rank name' => 'Taxon name' }
@@ -129,7 +150,7 @@ module Specify
           discipline.localities_dataset
       end
 
-      # ->
+      # -> Array
       # Sets the instance's <em>preparation_type</em> and
       # <em>preparation_count</em>
       # <em>prep_type</em>: String
@@ -139,27 +160,11 @@ module Specify
                                       .first Name: type
         raise PREPTYPE_NOT_FOUND_ERROR + type unless preparation_type
         @preparation_count = count
+        [preparation_type, preparation_count].compact
       end
 
       def taxonomy
         discipline.taxonomy
-      end
-
-      def create(count)
-        #  DB.transaction do
-        count.times do
-          co = collection.add_collection_object(cataloger: cataloger)
-          co.accession = accession
-          co.geo_locate(locality: collecting_locality!) if collecting_locality!
-          co.identify(taxon: taxon) if taxon
-          co.save
-          next unless preparation_type
-          co.add_preparation collection: collection,
-                             preparation_type: preparation_type,
-                             CountAmt: preparation_count
-          # TODO: log co.CatalogNumber
-        end
-        # end
       end
     end
   end
