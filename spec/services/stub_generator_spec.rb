@@ -51,8 +51,8 @@ module Specify
       end
 
       let :prep_type do
-      	an_instance_of(Model::PreparationType)
-      	  .and have_attributes Name: 'Specimen'
+        an_instance_of(Model::PreparationType)
+          .and have_attributes Name: 'Specimen'
       end
 
       describe '.load_yaml(file)' do
@@ -82,7 +82,10 @@ module Specify
 
           it { is_expected.to have_attributes preparation_count: 1 }
 
-          it 'creates a dataset'
+          it do
+            is_expected
+              .to have_attributes dataset_name: 'stubs with locality'
+          end
         end
 
         context 'when YAML does not specify locality' do
@@ -111,7 +114,10 @@ module Specify
 
           it { is_expected.to have_attributes preparation_count: 1 }
 
-          it 'creates a dataset'
+          it do
+            is_expected
+              .to have_attributes dataset_name: 'stubs with default locality'
+          end
         end
       end
 
@@ -289,21 +295,21 @@ module Specify
       describe '#create(count)' do
         let :record_set_items do
           first_item = an_instance_of(Model::RecordSetItem)
-        	  .and(have_attributes(OrderNumber: 0))
-        	last_item = an_instance_of(Model::RecordSetItem)
-        	  .and(have_attributes(OrderNumber: 9))
-        	a_collection_including(first_item, last_item)
-        	  .and have_attributes count: 10
+                       .and(have_attributes(OrderNumber: 0))
+          last_item = an_instance_of(Model::RecordSetItem)
+                      .and(have_attributes(OrderNumber: 9))
+          a_collection_including(first_item, last_item)
+            .and have_attributes count: 10
         end
 
         let :generated do
           first_collection_object = an_instance_of(Model::CollectionObject)
-        	  .and(have_attributes(CatalogNumber: '000000001'))
-        	last_collection_object = an_instance_of(Model::CollectionObject)
-        	  .and(have_attributes(CatalogNumber: '000000010'))
+            .and(have_attributes(CatalogNumber: '000000001'))
+          last_collection_object = an_instance_of(Model::CollectionObject)
+            .and(have_attributes(CatalogNumber: '000000010'))
           a_collection_including(first_collection_object,
                                  last_collection_object)
-          .and have_attributes count: 10
+            .and have_attributes count: 10
         end
 
         it do
