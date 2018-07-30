@@ -4,7 +4,7 @@ module Specify
   module Service
     # A class that generates collection object stub records in a collection.
     class StubGenerator < Service
-      attr_accessor :default_locality_name, :name
+      attr_accessor :default_locality_name, :dataset_name
 
       attr_reader :accession, :cataloger,
                   :collecting_geography, :collecting_locality,
@@ -23,7 +23,7 @@ module Specify
         @collecting_geography = nil
         @collecting_locality = nil
         @default_locality_name = 'not cataloged, see label'
-        @name = "stub record set #{Time.now}"
+        @dataset_name = "stub record set #{Time.now}"
         @preparation_type = nil
         @preparation_count = nil
         @record_set = nil
@@ -90,7 +90,7 @@ module Specify
 
       # Creates Model::CollectionObject instances and persists them.
       def create(count)
-        @record_set = collection.add_record_set Name: name,
+        @record_set = collection.add_record_set Name: dataset_name,
                                                 user: cataloger.user
         count.times do
           stub = create_stub

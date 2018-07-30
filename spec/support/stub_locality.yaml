@@ -4,6 +4,7 @@
   :database: SPSPEC
   :collection: Test Collection
   :config: spec/support/db.yml
+dataset_name: 'stubs with locality'
 accession: 2018-AA-001
 cataloger: specmanager
 collecting_data:

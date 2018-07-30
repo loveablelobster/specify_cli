@@ -81,6 +81,8 @@ module Specify
           it { is_expected.to have_attributes preparation_type: prep_type }
 
           it { is_expected.to have_attributes preparation_count: 1 }
+
+          it 'creates a dataset'
         end
 
         context 'when YAML does not specify locality' do
@@ -108,6 +110,8 @@ module Specify
           it { is_expected.to have_attributes preparation_type: prep_type }
 
           it { is_expected.to have_attributes preparation_count: 1 }
+
+          it 'creates a dataset'
         end
       end
 
