@@ -12,7 +12,10 @@ module Specify
       describe '#params' do
         subject { config.params }
 
-        it { is_expected.to include 'sp_resource' => 'localhost' }
+        it do
+          p subject
+          is_expected.to include 'sp_resource' => 'localhost'
+        end
       end
 
       describe '#resolve_host' do

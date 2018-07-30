@@ -44,21 +44,36 @@ flag %i[U user]
 desc 'Password'
 arg_name '[password]'
 flag %i[p password]
-# global options
 
-desc 'Adds a configuration file as ~/.specify.rc'
+desc 'Database'
+arg_name '[database]'
+flag %i[D database]
+
+desc 'Specify User'
+arg_name '[specify_user_name]'
+flag %i[u specify_user]
+
+desc 'Adds a configuration file as ~/.specify.rc.yaml'
 long_desc "
-The configuration file ~/.specify.rc stores information about the databases
+The configuration file ~/.specify.rc.yaml...
+"
+command [:config, :c] do |c|
+end
+
+desc 'Adds a database configuration file as ~/.specify_dbs.rc.yaml'
+long_desc "
+The database configuration file ~/.specify_dbs.rc.yaml stores information about
+ the databases.
 "
 arg_name '[database]'
-command [:config, :c] do |c|
-  c.desc 'Overwrite an existing config file'
+command [:database, :d] do |c|
+  c.desc 'Overwrite an existing databse configuration file'
   c.switch :force
 
   c.desc 'Create an empty template'
   c.flag :t, :template # FIXME: should have arg for path
 
-  c.desc 'Copy an existing configuration file to~/.specify.rc'
+  c.desc 'Copy an existing database configuration file to~/.specify.rc'
   c.flag :f, :file
   c.action do |global_options,options,args|
 
@@ -93,11 +108,43 @@ end
 
 desc 'Creates stub records'
 long_desc ""
-arg_name '[database][collection][count]'
+arg_name '[collection][count]'
 command [:stubs, :s] do |c|
-  c.desc 'the Specify user'
+  c.desc 'load stub data from file'
+  c.arg_name '[yaml_file]'
+  c.flag %i[f file]
+
+  c.desc 'the cataloger'
   c.arg_name '[name]'
-  c.flag %i[u user]
+  c.flag %i[c cataloger]
+
+  c.desc 'dataset name'
+  c.arg_name '[name]'
+  c.flag %i[d dataset]
+
+  c.desc 'accession number'
+  c.arg_name '[accession_number]'
+  c.flag %i[a accession]
+
+  c.desc 'geographic information (collecting data)'
+  c.arg_name '[geography]' # "Country: Denmark, State: ..."
+  c.flag %i[g geography]
+
+  c.desc 'default locality name'
+  c.arg_name '[name]'
+  c.flag %i[l locality]
+
+  c.desc 'taxon (determination)'
+  c.arg_name 'taxon'
+  c.flag %i[t taxon]
+
+  c.desc 'preparation type'
+  c.arg_name '[name]'
+  c.flag %i[p preptype]
+
+  c.desc 'preparation count'
+  c.arg_name '[number]'
+  c.flag %i[n prepcount]
 
   c.action do |global_options, options, args|
     database = args.shift

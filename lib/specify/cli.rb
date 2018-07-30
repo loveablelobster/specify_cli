@@ -1,4 +1,4 @@
 # frozen_string_literal: true
 
-require_relative 'cli/config'
+require_relative 'cli/database_setup'
 require_relative 'cli/stubs'

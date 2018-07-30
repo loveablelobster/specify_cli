@@ -27,8 +27,7 @@ module Specify
 
         it do
           is_expected
-            .to include port: 3306,
-                        db_user: a_hash_including(name: 'specmaster',
+            .to include db_user: a_hash_including(name: 'specmaster',
                                                   password: 'masterpass'),
                         sp_user: 'specuser'
         end

@@ -14,7 +14,7 @@ module Specify
       setting
     end
 
-    def self.config?
+    def self.db_config?
       File.exist?(DATABASES)
     end
 
