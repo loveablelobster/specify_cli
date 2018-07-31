@@ -31,19 +31,22 @@ module Specify
         yield(self) if block_given?
       end
 
+      #
+      def self.load_yaml(file)
+        unwrap Psych.load_file(file)
+      end
+
       # -> StubGenerator
       # Loads a YAML _file_ and creates an instance according to specifications
       # in the file.
-      def self.load_yaml(file)
-        params = Psych.load_file file
-        new params.delete(:stub_generator) do |stubs|
-          params.each do |key, value|
+      def self.unwrap(hash)
+        new hash.delete(:stub_generator) do |stubs|
+          hash.each do |key, value|
             setter = (key + '=').to_sym
             stubs.public_send(setter, value)
           end
         end
       end
-
       # -> Model::Accession
       # Sets the instance's _accession_ to the Model::Accession with the passed
       # <em>accession_number</em> (String).

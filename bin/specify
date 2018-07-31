@@ -53,6 +53,10 @@ desc 'Specify User'
 arg_name '[specify_user_name]'
 flag %i[u specify_user]
 
+desc 'Database File'
+arg_name '[yaml_file]'
+flag %i[c db_config]
+
 desc 'Adds a configuration file as ~/.specify.rc.yaml'
 long_desc "
 The configuration file ~/.specify.rc.yaml...
@@ -108,7 +112,7 @@ end
 
 desc 'Creates stub records'
 long_desc ""
-arg_name '[collection][count]'
+arg_name '[database][collection][count]'
 command [:stubs, :s] do |c|
   c.desc 'load stub data from file'
   c.arg_name '[yaml_file]'
@@ -147,17 +151,15 @@ command [:stubs, :s] do |c|
   c.flag %i[n prepcount]
 
   c.action do |global_options, options, args|
-    database = args.shift
-    collection = args.shift
-    count = args.shift.to_i
-    SPECIFY = Specify::Database.new(database,
-                                    user: global_options[:user],
-                                    password: global_options[:password])
-    session = SPECIFY.start_session options[:user],
-                                    collection
-    DB = SPECIFY.connection
-    make_stubs session.collection, session.session_agent, count
-    session.close
+    count = args.pop.to_i
+
+    if options[:file]
+      # load the file
+    end
+
+    params = Specify::CLI.wrap_args(global_options, args, options.compact)
+
+    Specify::CLI.make_stubs params, count
   end
 end
 

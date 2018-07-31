@@ -4,7 +4,8 @@ module Specify
   module Service
     # Superclass for service classes.
     class Service
-      attr_reader :session, :agent, :collection, :discipline, :division, :user
+      attr_reader :session, :user,
+                  :agent, :collection, :discipline, :division
 
       def initialize(host:,
                      database:,
@@ -20,6 +21,10 @@ module Specify
         @discipline = @session.discipline
         @division = @session.division
         @agent = @session.session_agent
+      end
+
+      def database
+        @db.connection
       end
     end
   end

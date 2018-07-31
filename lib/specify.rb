@@ -24,6 +24,7 @@ require_relative 'specify/services'
 
 # A module that provides functionaliy to manage Specify app resources.
 module Specify
+  DATABASES = File.expand_path(Pathname.new('~/.specify_dbs.rc.yaml'))
   GIT_CURRENT_BRANCH = 'git rev-parse --abbrev-ref HEAD'
 
   BRANCH_ERROR = 'Branch name not parsable: '
