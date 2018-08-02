@@ -15,7 +15,9 @@ module Specify
         stub_generator.create count
       end
       stub_generator.session.close
-      # log stub_generator.generated
+      puts 'Generated Catalog Numbers:'
+      puts '--------------------------'
+      stub_generator.generated.each { |co| puts co.CatalogNumber }
     end
 
     def self.wrap_args(global_options, args, options)
