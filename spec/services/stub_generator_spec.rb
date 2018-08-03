@@ -252,6 +252,20 @@ module Specify
               .to raise_error LOCALITY_NOT_FOUND_ERROR + 'No place'
           end
         end
+
+        context 'when passed an unknown geography' do
+        	subject(:set_collecting) { stub_generator.collecting_data = cd }
+
+        	let(:cd) do
+        	  { 'Country' => 'United States',
+        		  'State' => 'British Columbia' }
+        	end
+
+        	it do
+        		expect { set_collecting }
+        		  .to raise_error GEOGRAPHY_NOT_FOUND_ERROR + cd.values.join(', ')
+        	end
+        end
       end
 
       describe '#collecting_locality!' do

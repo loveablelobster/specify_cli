@@ -9,6 +9,7 @@ module Specify
   module Service
     ACCESSION_NOT_FOUND_ERROR = 'Accession not found: '
     USER_NOT_FOUND_ERROR = 'User not found: '
+    GEOGRAPHY_NOT_FOUND_ERROR = 'Geography not found: '
     LOCALITY_NOT_FOUND_ERROR = 'Locality not found: '
     TAXON_NOT_FOUND_ERROR = 'Taxon not found: '
     PREPTYPE_NOT_FOUND_ERROR = 'Preparation type not found: '

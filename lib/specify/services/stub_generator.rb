@@ -74,7 +74,13 @@ module Specify
       #                locality: 'Locality name' }
       def collecting_data=(vals)
         locality = vals.delete :locality
-        @collecting_geography = geography.search_tree(vals) unless vals.empty?
+        unless vals.empty?
+          @collecting_geography = geography.search_tree(vals)
+          unless @collecting_geography
+            missing_geo = vals.values.join(', ')
+            raise GEOGRAPHY_NOT_FOUND_ERROR + missing_geo
+          end
+        end
         return unless locality
         @collecting_locality = find_locality locality
         raise LOCALITY_NOT_FOUND_ERROR + locality unless collecting_locality
