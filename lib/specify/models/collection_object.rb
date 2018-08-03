@@ -41,8 +41,20 @@ module Specify
         super
       end
 
+      def to_s
+        "#{catalog_number} cataloged by #{cataloger}, #{cataloged_date}"
+      end
+
       def auto_number
         self.CatalogNumber || collection.auto_numbering_scheme.increment
+      end
+
+      def catalog_number
+        self.CatalogNumber
+      end
+
+      def cataloged_date
+        self.CatalogedDate
       end
 
       def embed_collecting_event

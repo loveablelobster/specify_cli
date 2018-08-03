@@ -103,6 +103,27 @@ module Specify
         self.TimestampModified = Time.now
         super
       end
+
+      def first_name
+        self.FirstName
+      end
+
+      def last_name
+        self.LastName
+      end
+
+      def middle_name
+        self.MiddleInitial
+      end
+
+      def full_name(formatter = nil)
+        formatter ||= "#{last_name}, #{first_name} #{middle_name}"
+        formatter.strip
+      end
+
+      def to_s
+        full_name
+      end
     end
   end
 end

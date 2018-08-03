@@ -11,10 +11,14 @@ module Specify
     end
 
     def self.make_stubs(generator, wrapped_args, count)
+      STDERR.puts "started creating #{count} records"
+      STDERR.puts "cataloger: #{}"
       generator.database.transaction do
         generator.create count
+        STDERR.puts "creating: #{generator.generated.last.catalog_number}"
       end
-      puts 'Generated Catalog Numbers:'
+      STDERR.puts 'done'
+      puts "generated #{generator.generated.count} catalog numbers:"
       puts '--------------------------'
       generator.generated.each { |co| puts co.CatalogNumber }
     end

@@ -164,7 +164,6 @@ command [:stubs, :s] do |c|
     sessions << stub_generator.session
 
     Specify::CLI.make_stubs stub_generator, params, count
-    p sessions
   end
 end
 
