@@ -21,6 +21,8 @@ version Specify::VERSION
 subcommand_option_handling :normal
 arguments :strict
 
+sessions = []
+
 # global options
 
 # desc 'Describe some switch here'
@@ -103,8 +105,8 @@ command [:database, :d] do |c|
       db = Readline.readline(': ', true)
       Specify::CLI.configure config, db
     else
-      args.each do |db|
-        Specify::CLI.configure config, db
+      args.each do |arg|
+        Specify::CLI.configure config, arg
       end
     end
   end
@@ -152,14 +154,17 @@ command [:stubs, :s] do |c|
 
   c.action do |global_options, options, args|
     count = args.pop.to_i
-    ASSIGN_ME = 'yup!'
     if options[:file]
       # load the file
     end
-    p ASSIGN_ME
-    params = Specify::CLI.wrap_args(global_options, args, options.compact)
 
-    Specify::CLI.make_stubs params, count
+    params = Specify::CLI.wrap_args(global_options, args, options.compact)
+    stub_generator = Specify::Service::StubGenerator.unwrap params
+
+    sessions << stub_generator.session
+
+    Specify::CLI.make_stubs stub_generator, params, count
+    p sessions
   end
 end
 
@@ -191,13 +196,14 @@ post do |global,command,options,args|
   # Post logic here
   # Use skips_post before a command to skip this
   # block on that command only
+  sessions.each { |session| session.close }
 end
 
 on_error do |exception|
   # Error logic here
   # return false to skip default error handling
 
-  # TODO: close session
+  sessions.each { |session| session.close }
   true
 end
 

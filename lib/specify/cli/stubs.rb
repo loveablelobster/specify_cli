@@ -10,15 +10,13 @@ module Specify
          .transform_keys { |key| key == 'locality' ? key.to_sym : key }
     end
 
-    def self.make_stubs(wrapped_args, count)
-      stub_generator = Specify::Service::StubGenerator.unwrap wrapped_args
-      stub_generator.database.transaction do
-        stub_generator.create count
+    def self.make_stubs(generator, wrapped_args, count)
+      generator.database.transaction do
+        generator.create count
       end
-      stub_generator.session.close
       puts 'Generated Catalog Numbers:'
       puts '--------------------------'
-      stub_generator.generated.each { |co| puts co.CatalogNumber }
+      generator.generated.each { |co| puts co.CatalogNumber }
     end
 
     def self.wrap_args(global_options, args, options)
