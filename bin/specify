@@ -113,7 +113,11 @@ command [:database, :d] do |c|
 end
 
 desc 'Creates stub records'
-long_desc ""
+long_desc "
+creates stube records;
+the [database] and [collection] args can be ommitted when specified in a YAML
+file
+"
 arg_name '[database][collection][count]'
 command [:stubs, :s] do |c|
   c.desc 'load stub data from file'
@@ -154,11 +158,13 @@ command [:stubs, :s] do |c|
 
   c.action do |global_options, options, args|
     count = args.pop.to_i
-    if options[:file]
-      # load the file
-    end
+    params = if options[:file]
+               file = File.expand_path(options[:file])
+               Psych.load_file(file)
+             else
+               Specify::CLI.wrap_args(global_options, args, options.compact)
+             end
 
-    params = Specify::CLI.wrap_args(global_options, args, options.compact)
     stub_generator = Specify::Service::StubGenerator.unwrap params
 
     sessions << stub_generator.session
