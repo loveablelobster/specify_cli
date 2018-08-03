@@ -3,6 +3,7 @@
 module Specify
   module CLI
     def self.arg_to_hash(arg)
+      return unless arg
       arg.split(';')
          .map { |pair| pair.split(':').map(&:strip) }
          .to_h

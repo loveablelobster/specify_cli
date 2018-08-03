@@ -152,11 +152,11 @@ command [:stubs, :s] do |c|
 
   c.action do |global_options, options, args|
     count = args.pop.to_i
-
+    ASSIGN_ME = 'yup!'
     if options[:file]
       # load the file
     end
-
+    p ASSIGN_ME
     params = Specify::CLI.wrap_args(global_options, args, options.compact)
 
     Specify::CLI.make_stubs params, count
@@ -196,6 +196,8 @@ end
 on_error do |exception|
   # Error logic here
   # return false to skip default error handling
+
+  # TODO: close session
   true
 end
 
