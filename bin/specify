@@ -29,18 +29,18 @@ sessions = []
 # switch [:s,:switch]
 #
 desc 'Host name for the database server'
-default_value 'localhost'
 arg_name '[hostname]'
+default_value 'localhost'
 flag %i[H host]
 
 desc 'Port for the database server'
-default_value '3306'
 arg_name '[port]'
+default_value '3306'
 flag %i[P port]
 
 desc 'MySQL/MariaDB user'
-default_value 'root'
 arg_name '[name]'
+default_value 'root'
 flag %i[U user]
 
 desc 'Password'
@@ -57,6 +57,7 @@ flag %i[u specify_user]
 
 desc 'Database File'
 arg_name '[yaml_file]'
+# default_value File.expand_path('~/.specify_dbs.rc.yaml')
 flag %i[c db_config]
 
 desc 'Adds a configuration file as ~/.specify.rc.yaml'
@@ -174,17 +175,58 @@ command [:stubs, :s] do |c|
 end
 
 desc 'Describe viewset here'
-arg_name 'Describe arguments to viewset here'
+long_desc "
+Uploads a viewset file to the database
+[collection] the collection the user is logged in to (can be omitted if the -b
+or -B options are used)
+'file' is the file to upload (must be .views.xml)
+valid args for --user_type: [manager]|[fullaccess]|[guest]|[limitedaccess]'
+--branch takes argument in format:
+ 'repository_name/database_name/collection_name/level'
+ will use
+"
+arg_name '[collection][file]'
 command [:viewset, :vs] do |c|
-  c.desc 'Describe a switch to config'
-  c.switch :s
+  c.desc 'current branch'
+  c.switch :b
 
-  c.desc 'Describe a flag to config'
-  c.default_value 'default'
-  c.flag :f
+  c.desc 'branch name'
+  c.arg_name '[repository_and_branch_name]'
+  c.flag %i[B branch]
+
+  c.desc 'upload for collection'
+  c.switch :c
+
+  c.desc 'upload for discipline'
+  c.switch :d
+
+  c.desc 'upload for user type'
+  c.arg_name '[name]'
+  c.flag %i[t user_type]
+
+  c.desc 'upload for user'
+  c.arg_name '[name]'
+  c.flag %i[u user]
+
   c.action do |global_options,options,args|
-    puts "viewset command ran"
-    puts "args - #{args.inspect}"
+    file = File.expand_path(args.pop)
+    collection = args.shift
+
+    params = { host: global_options[:host],
+               database: global_options[:database],
+               collection: collection,
+               specify_user: global_options[:specify_user],
+               config: global_options[:db_config] }
+
+    view_loader = if options[:b] || options[:B]
+                    Specify::Service::ViewLoader.from_branch options[:B]
+                  else
+                    raise 'collection required' unless collection
+                    params[:level] = Specify::CLI.level options
+                    Specify::Service::ViewLoader.new params
+                  end
+    sessions << view_loader.session
+    view_loader.import file
   end
 end
 
