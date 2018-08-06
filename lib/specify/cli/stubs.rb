@@ -27,7 +27,7 @@ module Specify
       params = {}
       stub_generator = {}
       stub_generator[:host] = global_options[:host]
-      stub_generator[:database] = args.shift
+      stub_generator[:database] = global_options[:database]
       stub_generator[:collection] = args.shift
       stub_generator[:specify_user] = global_options[:specify_user]
       stub_generator[:config] = global_options[:db_config]

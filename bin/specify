@@ -118,7 +118,7 @@ creates stube records;
 the [database] and [collection] args can be ommitted when specified in a YAML
 file
 "
-arg_name '[database][collection][count]'
+arg_name '[collection][count]'
 command [:stubs, :s] do |c|
   c.desc 'load stub data from file'
   c.arg_name '[yaml_file]'
