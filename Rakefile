@@ -8,7 +8,7 @@ Rake::RDocTask.new do |rd|
   rd.title = 'Your application title'
 end
 
-spec = eval(File.read('specify.gemspec'))
+spec = eval(File.read('specify_cli.gemspec'))
 
 Gem::PackageTask.new(spec) do |pkg|
 end

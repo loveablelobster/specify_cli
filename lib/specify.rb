@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'specify/version.rb'
+# require 'specify/version.rb'
 
 require 'date'
 require 'fileutils'

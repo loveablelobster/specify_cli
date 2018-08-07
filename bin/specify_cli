@@ -2,15 +2,15 @@
 # frozen_string_literal: true
 
 require 'gli'
+require 'specify'
 
 # TODO: Remove this begin/rescue before distributing your app
-begin
-  require 'specify'
-rescue LoadError
-  STDERR.puts 'In development, you need to use `bundle exec bin/specify` to'\
-              ' run your app'
-  exit 64
-end
+# begin
+# rescue LoadError
+#   STDERR.puts 'In development, you need to use `bundle exec bin/specify` to'\
+#               ' run your app'
+#   exit 64
+# end
 
 include GLI::App
 
