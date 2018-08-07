@@ -51,9 +51,16 @@ module Specify
         File.open(@file, 'w') do |file|
           file.write(Psych.dump(@params))
         end
+        true
       end
 
       private
+
+      def proceed?(message)
+        STDERR.puts message
+        STDERR.print "Configure? (Y/n)"
+        return true if /^[Yy](es)?/.match Readline.readline(': ')
+      end
 
       def require_input(message)
         STDERR.print message

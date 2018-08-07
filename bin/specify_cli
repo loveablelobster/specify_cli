@@ -67,67 +67,50 @@ The configuration file ~/.specify.rc.yaml...
 command [:config, :c] do |c|
 end
 
-desc 'Adds a database configuration file as ~/.specify_dbs.rc.yaml'
+desc 'Adds a database configuration to ~/.specify_dbs.rc.yaml'
 long_desc "
 The database configuration file ~/.specify_dbs.rc.yaml stores information about
- the databases.
+ the databases. Add information on a specific database using this command.
 "
 arg_name '[database]'
 command [:database, :d] do |c|
-  c.desc 'Overwrite an existing databse configuration file'
+  c.desc 'Overwrite an existing databse configuration'
   c.switch :force
 
-  c.desc 'Create an empty template'
-  c.flag :t, :template # FIXME: should have arg for path
-
-  c.desc 'Copy an existing database configuration file to~/.specify.rc'
-  c.flag :f, :file
   c.action do |global_options,options,args|
+    host = global_options[:host]
+    database = args.shift
 
-  p global_options[:host]
-  p args
-
-  puts 'load the file'
-  unless Specify::CLI.db_config?
-    puts 'create new config'
-    Specify::Configuration::Config.empty do |config|
-      puts 'do whatever is necessary'
+    unless Specify::CLI.db_config?
+      puts 'create new config'
+      Specify::Configuration::Config.empty do |config|
+        puts 'do whatever is necessary'
+      end
     end
+
+    # handle database config
+    db_config = Specify::Configuration::DBConfig.new host, database,
+                                                     Specify::DATABASES
+    exit 1 unless db_config.configure
   end
+end
 
-  puts 'handle database config'
-  db_config = Specify::Configuration::DBConfig.new global_options[:host],
-                                                   args.shift,
-                                                   Specify::DATABASES
+desc 'Maps a git repository name to a host'
+long_desc "
+Required for automatic target resolution in the viewset command.
+"
+arg_name '[repository_name]'
+command [:map_repository, :mr] do |c|
+  c.desc 'Overwrite an existing repository mapping'
+  c.switch :force
 
-  puts 'handle host repo mapping'
-
-#     puts "--template - #{options[:template].inspect}"
-#
-#     config = Specify::CLI.load_config
-#
-#     if options[:file]
-#       if config && !options[:force]
-#         STDERR.puts "file #{DATABASES} exists"
-#         STDERR.puts 'use the -o option (overwrite) if you want to overwrite it'
-#         exit 1
-#       end
-#       config = Psych.load_file(options[:file])
-#       Specify::CLI.save_config(config)
-#       puts 'file installed as ~/.specify.rc'
-#       exit 0
-#     end
-#
-#     if args.empty?
-#       # create a config file for a single Specify instance, ask for the db name
-#       print 'database name'
-#       db = Readline.readline(': ', true)
-#       Specify::CLI.configure config, db
-#     else
-#       args.each do |arg|
-#         Specify::CLI.configure config, arg
-#       end
-#     end
+  c.action do |global_options,options,args|
+    host = global_options[:host]
+  	# handle directory mapping
+    host_config = Specify::Configuration::HostConfig.new Specify::DATABASES
+    unless host_config.host? host
+      host_config.configure(host)
+    end
   end
 end
 

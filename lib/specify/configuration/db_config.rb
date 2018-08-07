@@ -9,10 +9,20 @@ module Specify
       def initialize(host, database, file = nil)
         super(file)
         @host = host
-        configure_host unless hosts[@host]
         @database = database
-        configure_database unless known?
         @port = hosts.dig(@host, :port) || 3306
+      end
+
+      def configure
+        if known?
+          STDERR.puts "#{database} on #{host} is already configured"
+          true
+        else
+          unless hosts[@host]
+            return unless configure_host
+          end
+          configure_database unless known?
+        end
       end
 
       def connection
@@ -39,27 +49,21 @@ module Specify
       private
 
       def configure_host
-        exit 1 unless proceed?(:host)
+        return unless proceed? "host #{host} not known"
         port = require_input 'port number (leave blank for default)'
         raise 'invalid port' unless port.nil? || port.to_i > 0
         add_host(host, port&.to_i)
-        save # should rather mark an ivar as changed
+        save
       end
 
       def configure_database
-        exit 1 unless proceed?(:database)
+        return unless proceed? "database #{database} not known"
         add_database database, host: host do |db|
           db[:db_user][:name] = require_input 'MySQL user name'
           db[:db_user][:password] = require_input 'password (blank for prompt)'
           db[:sp_user] = require_input 'Specify user (leave blank to skip)'
         end
         save
-      end
-
-      def proceed?(item)
-        STDERR.puts "#{item.to_s.capitalize} #{public_send(item)} is not known."
-        STDERR.puts "Configure? (Y/n)"
-        return true if /^[Yy](es)?/.match Readline.readline('> ')
       end
     end
   end
