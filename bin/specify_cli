@@ -31,21 +31,21 @@ sessions = []
 desc 'Host name for the database server'
 arg_name '[hostname]'
 default_value 'localhost'
-flag %i[H host]
+flag %i[h host]
 
 desc 'Port for the database server'
 arg_name '[port]'
 default_value '3306'
-flag %i[P port]
+flag %i[p port]
 
 desc 'MySQL/MariaDB user'
 arg_name '[name]'
 default_value 'root'
-flag %i[U user]
+flag %i[u user]
 
 desc 'Password'
 arg_name '[password]'
-flag %i[p password]
+flag %i[P password]
 
 desc 'Database'
 arg_name '[database]'
@@ -53,7 +53,7 @@ flag %i[D database]
 
 desc 'Specify User'
 arg_name '[specify_user_name]'
-flag %i[u specify_user]
+flag %i[U specify_user]
 
 desc 'Database File'
 arg_name '[yaml_file]'
@@ -84,32 +84,50 @@ command [:database, :d] do |c|
   c.flag :f, :file
   c.action do |global_options,options,args|
 
-    puts "--template - #{options[:template].inspect}"
+  p global_options[:host]
+  p args
 
-    config = Specify::CLI.load_config
-
-    if options[:file]
-      if config && !options[:force]
-        STDERR.puts "file #{DATABASES} exists"
-        STDERR.puts 'use the -o option (overwrite) if you want to overwrite it'
-        exit 1
-      end
-      config = Psych.load_file(options[:file])
-      Specify::CLI.save_config(config)
-      puts 'file installed as ~/.specify.rc'
-      exit 0
+  puts 'load the file'
+  unless Specify::CLI.db_config?
+    puts 'create new config'
+    Specify::Configuration::Config.empty do |config|
+      puts 'do whatever is necessary'
     end
+  end
 
-    if args.empty?
-      # create a config file for a single Specify instance, ask for the db name
-      print 'database name'
-      db = Readline.readline(': ', true)
-      Specify::CLI.configure config, db
-    else
-      args.each do |arg|
-        Specify::CLI.configure config, arg
-      end
-    end
+  puts 'handle database config'
+  db_config = Specify::Configuration::DBConfig.new global_options[:host],
+                                                   args.shift,
+                                                   Specify::DATABASES
+
+  puts 'handle host repo mapping'
+
+#     puts "--template - #{options[:template].inspect}"
+#
+#     config = Specify::CLI.load_config
+#
+#     if options[:file]
+#       if config && !options[:force]
+#         STDERR.puts "file #{DATABASES} exists"
+#         STDERR.puts 'use the -o option (overwrite) if you want to overwrite it'
+#         exit 1
+#       end
+#       config = Psych.load_file(options[:file])
+#       Specify::CLI.save_config(config)
+#       puts 'file installed as ~/.specify.rc'
+#       exit 0
+#     end
+#
+#     if args.empty?
+#       # create a config file for a single Specify instance, ask for the db name
+#       print 'database name'
+#       db = Readline.readline(': ', true)
+#       Specify::CLI.configure config, db
+#     else
+#       args.each do |arg|
+#         Specify::CLI.configure config, arg
+#       end
+#     end
   end
 end
 
@@ -174,7 +192,7 @@ command [:stubs, :s] do |c|
   end
 end
 
-desc 'Describe viewset here'
+desc 'Uploads a views file (.views.xml) to the database'
 long_desc "
 Uploads a viewset file to the database
 [collection] the collection the user is logged in to (can be omitted if the -b

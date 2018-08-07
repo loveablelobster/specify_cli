@@ -48,10 +48,19 @@ module Specify
       end
 
       def save
-
+        File.open(@file, 'w') do |file|
+          file.write(Psych.dump(@params))
+        end
       end
 
       private
+
+      def require_input(message)
+        STDERR.print message
+        answer = Readline.readline(': ')
+        return if answer.empty?
+        answer
+      end
 
       def db_template
         {
