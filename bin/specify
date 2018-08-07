@@ -14,7 +14,7 @@ end
 
 include GLI::App
 
-program_desc 'Manage Specify application resources from the command line'
+program_desc Specify::DESCRIPTION
 
 version Specify::VERSION
 

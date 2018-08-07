@@ -13,10 +13,10 @@ spec = Gem::Specification.new do |s|
 ")
   s.require_paths << 'lib'
   s.has_rdoc = true
-  s.extra_rdoc_files = ['README.rdoc','specify.rdoc']
-  s.rdoc_options << '--title' << 'specify' << '--main' << 'README.rdoc' << '-ri'
+  s.extra_rdoc_files = ['README.rdoc','specify_cli.rdoc']
+  s.rdoc_options << '--title' << 'specify_cli' << '--main' << 'README.rdoc' << '-ri'
   s.bindir = 'bin'
-  s.executables << 'specify'
+  s.executables << 'specify_cli'
   s.add_development_dependency('rake')
   s.add_development_dependency('rdoc')
   s.add_development_dependency('aruba')
