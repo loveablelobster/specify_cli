@@ -4,22 +4,26 @@ TEST_BRANCH = 'SPSPEC/TestCollection/user/specuser'
 # Tests for the
 module Specify
   RSpec.describe BranchParser do
+
+
     context 'when creating instances from branch names' do
       let :config do
         Pathname.new(Dir.pwd).join('spec', 'support', 'db.yml')
       end
 
-      let(:collection_level) { 'sp_resource/SPSPEC/TestCollection/collection' }
-      let(:discipline_level) { 'sp_resource/SPSPEC/TestCollection/discipline' }
-      let(:user_type_level) { 'sp_resource/SPSPEC/TestCollection/Manager' }
-      let(:user_level) { 'sp_resource/SPSPEC/TestCollection/user/specuser' }
+      let(:path) { 'sp_resource' }
+
+      let(:collection_level) { 'SPSPEC/TestCollection/collection' }
+      let(:discipline_level) { 'SPSPEC/TestCollection/discipline' }
+      let(:user_type_level) { 'SPSPEC/TestCollection/Manager' }
+      let(:user_level) { 'SPSPEC/TestCollection/user/specuser' }
 
       let :config do
         Pathname.new(Dir.pwd).join('spec', 'support', 'db.yml')
       end
 
       context 'when collection' do
-        subject { described_class.new collection_level, config }
+        subject { described_class.new path, collection_level, config }
 
         it do
           is_expected.to have_attributes host: 'localhost',
@@ -30,7 +34,7 @@ module Specify
       end
 
       context 'when discipline' do
-        subject { described_class.new discipline_level, config }
+        subject { described_class.new path, discipline_level, config }
 
         it do
           is_expected.to have_attributes host: 'localhost',
@@ -41,7 +45,7 @@ module Specify
       end
 
       context 'when user type' do
-        subject { described_class.new user_type_level, config }
+        subject { described_class.new path, user_type_level, config }
 
         it do
           is_expected.to have_attributes host: 'localhost',
@@ -52,7 +56,7 @@ module Specify
       end
 
       context 'when user' do
-        subject { described_class.new user_level, config }
+        subject { described_class.new path, user_level, config }
 
         it do
           is_expected.to have_attributes host: 'localhost',

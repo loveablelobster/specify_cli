@@ -36,13 +36,13 @@ module Specify
       # -> ViewLoader
       # Creates a new instance from a branch _name_.
       # _config_: a yaml file containing the database configuration.
-      def self.from_branch(name = nil, config: nil)
-        args = if name
-                 BranchParser.new(name, config)
+      def self.from_branch(path: nil, name: nil, config: nil)
+        parser = if name
+                 BranchParser.new(path, name, config)
                else
                  BranchParser.current_branch
                end
-        new args.to_h.merge(config: config)
+        new parser.to_h.merge(config: config)
       end
 
       # -> Model::User

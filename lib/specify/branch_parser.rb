@@ -8,11 +8,11 @@ module Specify
   class BranchParser
     attr_reader :collection, :config, :database, :host, :user
 
-    def initialize(name, config = nil)
+    def initialize(path, name, config = nil)
       @config = Configuration::HostConfig.new(config)
-      file_dir, @database, collection, @level, @user = *name.split('/')
+      @database, collection, @level, @user = *name.split('/')
       raise ArgumentError, BRANCH_ERROR + name unless collection && level
-      @host = @config.resolve_host file_dir
+      @host = @config.resolve_host path
       @collection = normalize_name collection
     end
 

@@ -228,7 +228,9 @@ command [:viewset, :vs] do |c|
                config: global_options[:db_config] }
 
     view_loader = if options[:b] || options[:B]
-                    Specify::Service::ViewLoader.from_branch options[:B]
+                    path = File.dirname(File.expand_path(file))
+                    Specify::Service::ViewLoader.from_branch path: path
+                                                             name: options[:B]
                   else
                     raise 'collection required' unless collection
                     params[:level] = Specify::CLI.level options

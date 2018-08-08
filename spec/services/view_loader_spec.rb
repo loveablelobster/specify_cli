@@ -8,11 +8,15 @@ module Specify
         Pathname.new(Dir.pwd).join('spec', 'support', 'db.yml')
       end
 
+      let(:path) { 'sp_resource' }
+
       describe '.from_branch(name, config)' do
         context 'when branch is discipline level' do
           subject do
-            bname = 'sp_resource/SPSPEC/TestCollection/discipline'
-            described_class.from_branch(bname, config: config).target
+            bname = 'SPSPEC/TestCollection/discipline'
+            described_class.from_branch(path: path,
+                                        name: bname,
+                                        config: config).target
           end
 
           it do
@@ -24,8 +28,10 @@ module Specify
 
         context 'when branch is collection level' do
           subject do
-            bname = 'sp_resource/SPSPEC/TestCollection/collection'
-            described_class.from_branch(bname, config: config).target
+            bname = 'SPSPEC/TestCollection/collection'
+            described_class.from_branch(path: path,
+                                        name: bname,
+                                        config: config).target
           end
 
           it do
@@ -37,8 +43,10 @@ module Specify
 
         context 'when branch is user type level' do
           subject do
-            bname = 'sp_resource/SPSPEC/TestCollection/Manager'
-            described_class.from_branch(bname, config: config).target
+            bname = 'SPSPEC/TestCollection/Manager'
+            described_class.from_branch(path: path,
+                                        name: bname,
+                                        config: config).target
           end
 
           it do
@@ -50,8 +58,10 @@ module Specify
 
         context 'when branch is user level' do
           subject do
-            bname = 'sp_resource/SPSPEC/TestCollection/user/specuser'
-            described_class.from_branch(bname, config: config).target
+            bname = 'SPSPEC/TestCollection/user/specuser'
+            described_class.from_branch(path: path,
+                                        name: bname,
+                                        config: config).target
           end
 
           it do
