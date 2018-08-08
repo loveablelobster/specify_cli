@@ -92,7 +92,16 @@ command [:database, :d] do |c|
 
     db_config = Specify::Configuration::DBConfig.new host, database,
                                                      Specify::DATABASES
-    exit 1 unless db_config.configure
+
+    if db_config.known?
+      STDERR.puts "#{database} on #{host} is already configured"
+      exit 0
+    else
+      unless db_config.hosts[host]
+        exit 1 unless db_config.configure_host
+      end
+      db_config.configure_database
+    end
   end
 end
 
@@ -229,8 +238,8 @@ command [:viewset, :vs] do |c|
 
     view_loader = if options[:b] || options[:B]
                     path = File.dirname(File.expand_path(file))
-                    Specify::Service::ViewLoader.from_branch path: path
-                                                             name: options[:B]
+                    Specify::Service::ViewLoader.from_branch path: path,
+                                                             name: options[:B],
                                                              config: config
                   else
                     raise 'collection required' unless collection

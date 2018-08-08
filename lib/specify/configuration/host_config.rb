@@ -17,9 +17,6 @@ module Specify
       end
 
       def map_host(host, dir)
-        p dir
-        p host
-
         raise "Directory '#{dir}' already mapped" if params[dir]
         params[dir] = host
         save

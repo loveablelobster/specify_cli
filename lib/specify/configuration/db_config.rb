@@ -13,18 +13,6 @@ module Specify
         @port = hosts.dig(@host, :port) || 3306
       end
 
-      def configure
-        if known?
-          STDERR.puts "#{database} on #{host} is already configured"
-          true
-        else
-          unless hosts[@host]
-            return unless configure_host
-          end
-          configure_database unless known?
-        end
-      end
-
       def connection
         { host: host,
           port: port,
@@ -45,8 +33,6 @@ module Specify
       def session_user
         params[:sp_user]
       end
-
-      private
 
       def configure_host
         return unless proceed? "host #{host} not known"
