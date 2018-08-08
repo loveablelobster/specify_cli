@@ -220,17 +220,18 @@ command [:viewset, :vs] do |c|
   c.action do |global_options,options,args|
     file = File.expand_path(args.pop)
     collection = args.shift
-
+    config = global_options[:db_config]
     params = { host: global_options[:host],
                database: global_options[:database],
                collection: collection,
                specify_user: global_options[:specify_user],
-               config: global_options[:db_config] }
+               config: config }
 
     view_loader = if options[:b] || options[:B]
                     path = File.dirname(File.expand_path(file))
                     Specify::Service::ViewLoader.from_branch path: path
                                                              name: options[:B]
+                                                             config: config
                   else
                     raise 'collection required' unless collection
                     params[:level] = Specify::CLI.level options
