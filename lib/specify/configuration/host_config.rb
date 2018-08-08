@@ -8,11 +8,18 @@ module Specify
         super(file)
       end
 
+      def dir?(dir)
+        params.key? dir
+      end
+
       def host?(host)
-        params.has_value? host
+        params.value? host
       end
 
       def map_host(host, dir)
+        p dir
+        p host
+
         raise "Directory '#{dir}' already mapped" if params[dir]
         params[dir] = host
         save

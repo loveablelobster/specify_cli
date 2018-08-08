@@ -88,7 +88,8 @@ command [:database, :d] do |c|
       end
     end
 
-    # handle database config
+    # TODO: implement the --force switch
+
     db_config = Specify::Configuration::DBConfig.new host, database,
                                                      Specify::DATABASES
     exit 1 unless db_config.configure
@@ -100,16 +101,23 @@ long_desc "
 Required for automatic target resolution in the viewset command.
 "
 arg_name '[repository_name]'
-command [:map_repository, :mr] do |c|
+command [:repository, :r] do |c|
   c.desc 'Overwrite an existing repository mapping'
   c.switch :force
 
+  c.desc 'Map the current directory/repository to the host'
+  c.switch %i[c current]
+
   c.action do |global_options,options,args|
     host = global_options[:host]
-  	# handle directory mapping
+    dir = options[:current] ? Dir.pwd : File.expand_path(args.shift)
+
+    # TODO: implement the --force switch
+
     host_config = Specify::Configuration::HostConfig.new Specify::DATABASES
-    unless host_config.host? host
-      host_config.configure(host)
+
+    unless host_config.dir? dir
+      host_config.map_host host, dir
     end
   end
 end
