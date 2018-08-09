@@ -4,14 +4,6 @@
 require 'gli'
 require 'specify'
 
-# TODO: Remove this begin/rescue before distributing your app
-# begin
-# rescue LoadError
-#   STDERR.puts 'In development, you need to use `bundle exec bin/specify` to'\
-#               ' run your app'
-#   exit 64
-# end
-
 include GLI::App
 
 program_desc Specify::DESCRIPTION
@@ -24,10 +16,6 @@ arguments :strict
 sessions = []
 
 # global options
-
-# desc 'Describe some switch here'
-# switch [:s,:switch]
-#
 desc 'Host name for the database server'
 arg_name '[hostname]'
 default_value 'localhost'
