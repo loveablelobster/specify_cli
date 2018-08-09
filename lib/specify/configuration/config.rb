@@ -18,6 +18,7 @@ module Specify
           @hosts = @params[:hosts]
         end
         yield(self) if block_given?
+        @saved = nil
       end
 
       def self.empty(&block)
@@ -27,6 +28,7 @@ module Specify
       def add_host(name, port = nil)
         raise "Host '#{name}' already configured" if hosts[name]
         hosts[name] = { port: port, databases: {} }
+        @saved = false
       end
 
       def add_database(name, host:)
@@ -36,6 +38,7 @@ module Specify
         end
         db = hosts[host][:databases][name] = db_template
         yield(db) if block_given?
+        @saved = false
       end
 
       def map_host(host, directory:)
@@ -51,23 +54,18 @@ module Specify
         File.open(@file, 'w') do |file|
           file.write(Psych.dump(@params))
         end
-        true
+        @saved = true
+      end
+
+      def saved?
+        @saved
+      end
+
+      def touch
+        @saved = false
       end
 
       private
-
-      def proceed?(message)
-        STDERR.puts message
-        STDERR.print "Configure? (Y/n)"
-        return true if /^[Yy](es)?/.match Readline.readline(': ')
-      end
-
-      def require_input(message)
-        STDERR.print message
-        answer = Readline.readline(': ')
-        return if answer.empty?
-        answer
-      end
 
       def db_template
         {

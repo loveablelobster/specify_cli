@@ -97,10 +97,10 @@ command [:database, :d] do |c|
       STDERR.puts "#{database} on #{host} is already configured"
       exit 0
     else
-      unless db_config.hosts[host]
-        exit 1 unless db_config.configure_host
+      unless db_config.host?
+        exit 1 unless Specify::CLI.configure_host(db_config)
       end
-      db_config.configure_database
+      Specify::CLI.configure_database db_config
     end
   end
 end

@@ -1,7 +1,3 @@
-# Create a copy of this file with your settings to
-#   ~/specify_dbs.rc.yaml
-# you can leave the password blank and will be prompted for it
-
 ---
 :dir_names:
   sp_resource: localhost
@@ -14,15 +10,3 @@
           :name: specmaster
           :password: masterpass
         :sp_user: specuser
-
-# dir_names:
-#   [RESOURCE_DIRECTORY_NAME]: [HOSTNAME]
-# hosts:
-#   [HOSTNAME]:
-#     databases:
-#       [DATABASE_NAME]:
-#         port: [PORT]
-#         db_user:
-#           name: [USERNAME]
-#           password: [PASSWORD]
-#         sp_user: [SPECIFY_USERNAME]
