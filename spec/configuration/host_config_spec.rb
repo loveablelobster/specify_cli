@@ -9,11 +9,33 @@ module Specify
         described_class.new(file)
       end
 
+      describe '#directory?(directory)' do
+        context 'when the directory is known' do
+          subject { config.directory? 'sp_resource' }
+
+          it { is_expected.to be_truthy }
+        end
+
+        context 'when the directory is not known' do
+          subject { config.directory? 'home' }
+
+          it { is_expected.to be_falsey }
+        end
+      end
+
+      describe '#map_directory(directory, host)' do
+        subject(:map_directory) { config.map_directory 'documents', 'cloudhost'}
+
+        it do
+        	expect { map_directory }
+        	  .to change(config, :params).to include 'documents' => 'cloudhost'
+        end
+      end
+
       describe '#params' do
         subject { config.params }
 
         it do
-          p subject
           is_expected.to include 'sp_resource' => 'localhost'
         end
       end

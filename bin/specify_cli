@@ -125,8 +125,9 @@ command [:repository, :r] do |c|
 
     host_config = Specify::Configuration::HostConfig.new Specify::DATABASES
 
-    unless host_config.dir? dir
-      host_config.map_host host, dir
+    unless host_config.directory? dir
+      host_config.map_directory dir, host
+      host_config.save
     end
   end
 end

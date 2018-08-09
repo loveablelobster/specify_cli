@@ -65,7 +65,7 @@ module Specify
       # Returns a Hash with the parameters for the current _host_ and _database_
       # from the configuration YAML file.
       def params
-        super.dig :hosts, @host, :databases, @database
+        super.dig:hosts, @host, :databases, @database
       end
 
       # Sets the _port_ number for the _host_.
