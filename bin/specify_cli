@@ -69,17 +69,13 @@ command [:database, :d] do |c|
     host = global_options[:host]
     database = args.shift
 
-    unless Specify::CLI.db_config?
-      puts 'create new config'
-      Specify::Configuration::Config.empty do |config|
-        puts 'do whatever is necessary'
-      end
-    end
+    file = global_options[:db_config] || Specify::DATABASES
+
+    Specify::CLI.db_config! file, global_options
 
     # TODO: implement the --force switch
 
-    db_config = Specify::Configuration::DBConfig.new host, database,
-                                                     Specify::DATABASES
+    db_config = Specify::Configuration::DBConfig.new host, database, file
 
     if db_config.known?
       STDERR.puts "#{database} on #{host} is already configured"
@@ -108,6 +104,10 @@ command [:repository, :r] do |c|
   c.action do |global_options,options,args|
     host = global_options[:host]
     dir = options[:current] ? Dir.pwd : File.expand_path(args.shift)
+
+    file = global_options[:db_config] || Specify::DATABASES
+
+    Specify::CLI.db_config! file, global_options
 
     # TODO: implement the --force switch
 

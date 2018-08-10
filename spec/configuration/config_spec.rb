@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'fileutils'
+
 # Tests for the
 module Specify
   module Configuration
@@ -42,6 +44,8 @@ module Specify
 
       describe '.empty' do
         subject { described_class.empty empty_file }
+
+        before { FileUtils.touch default_file }
 
         let(:default_file) { File.expand_path('~/.specify_dbs.rc.yaml') }
 

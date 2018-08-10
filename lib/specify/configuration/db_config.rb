@@ -156,11 +156,8 @@ module Specify
       # Updates parameters for the _host_.
       def update_host
         hosts[host][:port] = port if changed_port?
-        if known?
-          update_database
-        else
-          add_database database, host: host
-        end
+        add_database database, host: host unless known?
+        update_database
       end
 
       # Validates the port number
