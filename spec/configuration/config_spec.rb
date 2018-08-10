@@ -6,10 +6,14 @@ module Specify
     RSpec.describe Config do
       subject { described_class.new file }
 
-      let(:config) { described_class.empty }
+      let(:config) { described_class.empty empty_file }
 
       let :file do
         Pathname.new(Dir.pwd).join('spec', 'support', 'db.yml')
+      end
+
+      let :empty_file do
+        Pathname.new(Dir.pwd).join('spec', 'support', 'empty.yml')
       end
 
       let :file_dir_names do
@@ -24,7 +28,7 @@ module Specify
         databases = a_hash_including 'SPSPEC' => spspec
         localhost = a_hash_including port: 3306,
                                      databases: databases
-        hosts = a_hash_including 'localhost' => localhost
+        a_hash_including 'localhost' => localhost
       end
 
       let :hosts do
@@ -37,7 +41,9 @@ module Specify
       end
 
       describe '.empty' do
-        subject { described_class.empty }
+        subject { described_class.empty empty_file }
+
+        let(:default_file) { File.expand_path('~/.specify_dbs.rc.yaml') }
 
         let :params do
           a_hash_including dir_names: an_instance_of(Hash).and(be_empty),
@@ -46,10 +52,28 @@ module Specify
 
         it { is_expected.to have_attributes params: params }
 
+        context 'when passed no file but default file exists' do
+          subject(:make_empty)  { described_class.empty }
+
+          it do
+            error = "#{default_file} exists, won't overwrite"
+            expect { make_empty }.to raise_error error
+          end
+        end
+
+        context 'when passed the dafault file path and default file exists' do
+          subject(:make_empty) { described_class.empty default_file }
+
+          it do
+            error = "#{default_file} exists, won't overwrite"
+            expect { make_empty }.to raise_error error
+          end
+        end
+
         context 'when given block mapping dir_names' do
           subject do
-            described_class.empty do |config|
-              config.map_host 'localhost', directory: 'specify_dir'
+            described_class.empty(empty_file) do |config|
+              config.dir_names['specify_dir'] = 'localhost'
             end
           end
 
@@ -62,7 +86,7 @@ module Specify
 
         context 'when given block adding hosts' do
           subject do
-            described_class.empty do |config|
+            described_class.empty(empty_file) do |config|
               config.add_host 'localhost', 3600
             end
           end
@@ -74,7 +98,7 @@ module Specify
 
         context 'when given block adding databases' do
           subject do
-            described_class.empty do |config|
+            described_class.empty(empty_file) do |config|
               config.add_database 'SPSPEC', host: 'localhost' do |db|
                 db[:db_user][:name] = 'specmaster'
                 db[:db_user][:password] = 'masterpass'
@@ -134,7 +158,6 @@ module Specify
           a_hash_including 'SPSPEC' => spspec
         end
 
-
         context 'when the database is not configured for the host' do
           let :localhost_db do
             localhost = a_hash_including port: nil,
@@ -161,28 +184,81 @@ module Specify
         end
       end
 
-      describe '#map_host' do
-        subject :map_host do
-          config.map_host 'localhost', directory: 'specify_dir'
+      describe '#params' do
+        subject { described_class.new(file).params }
+
+        it do
+          is_expected.to be_a(Hash)
+            .and include(dir_names: file_dir_names,
+                         hosts: file_hosts)
+        end
+      end
+
+      describe '#save' do
+        subject(:save) { config.save }
+
+        let :dir_names do
+          a_hash_including 'specify_dir' => 'localhost'
         end
 
-        context 'when the directory is not mapped' do
-          it do
-            expect { map_host }
-              .to change(config, :dir_names)
-              .from(be_empty).to a_hash_including 'specify_dir' => 'localhost'
+        let :hosts do
+          db_user = a_hash_including name: 'specmaster',
+                                     password: 'masterpass'
+          spspec = a_hash_including db_user: db_user,
+                                    sp_user: 'specuser'
+          databases = a_hash_including 'SPSPEC' => spspec
+          localhost = a_hash_including databases: databases,
+                                       port: 3600
+          a_hash_including 'localhost' => localhost
+        end
+
+        before do
+          config.dir_names['specify_dir'] = 'localhost'
+          config.add_host 'localhost', 3600
+          config.add_database 'SPSPEC', host: 'localhost' do |db|
+            db[:db_user][:name] = 'specmaster'
+            db[:db_user][:password] = 'masterpass'
+            db[:sp_user] = 'specuser'
           end
         end
 
-        context 'when the directory is mapped' do
-          before { config.map_host 'production', directory: 'specify_dir' }
-
-          let(:e) { 'Directory \'specify_dir\' already mapped' }
-
-          it do
-        	  expect { map_host }.to raise_error e
-        	end
+        it do
+          expect { save }
+            .to change { Psych.load_file(empty_file) }
+            .to include hosts: hosts, dir_names: dir_names
         end
+
+        it do
+          expect { save }
+            .to change(config, :saved?).from(be_falsey).to be_truthy
+        end
+      end
+
+      describe '#saved?' do
+        subject { config.saved? }
+
+        context 'when the instance has not been modified' do
+          it { is_expected.to be_truthy }
+        end
+
+        context 'when the instance has been modified' do
+          before { config.touch }
+
+          it { is_expected.to be_falsey }
+        end
+      end
+
+      describe '#touch' do
+        subject(:touch) { config.touch }
+
+        it do
+          expect { touch }
+            .to change(config, :saved?).from(be_truthy).to be_falsey
+        end
+      end
+
+      after do
+        File.delete(empty_file) if File.exist?(empty_file)
       end
     end
   end

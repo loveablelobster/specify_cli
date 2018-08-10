@@ -6,6 +6,11 @@ module Specify
     class DBConfig < Config
       attr_reader :database, :user_name, :host, :port, :session_user
 
+      # -> Configuration::DBConfig
+      # Creates a new instance
+      # _host_: String, the name or IP of the MySQL/MariaDB host
+      # _database_: String, the name of the database
+      # _file_: the YAML file (path) containg the configuration
       def initialize(host, database, file = nil)
         super(file)
         @host = host

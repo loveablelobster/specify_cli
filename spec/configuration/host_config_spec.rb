@@ -24,11 +24,25 @@ module Specify
       end
 
       describe '#map_directory(directory, host)' do
-        subject(:map_directory) { config.map_directory 'documents', 'cloudhost'}
+        subject :map_directory do
+          config.map_directory 'documents', 'cloudhost'
+        end
 
-        it do
-        	expect { map_directory }
-        	  .to change(config, :params).to include 'documents' => 'cloudhost'
+        context 'when the directory is not mapped' do
+          it do
+            expect { map_directory }
+              .to change(config, :params).to include 'documents' => 'cloudhost'
+          end
+        end
+
+        context 'when the directory is mapped' do
+          before { config.map_directory 'documents', 'cloudhost' }
+
+          let(:e) { 'Directory \'documents\' already mapped' }
+
+          it do
+        	  expect { map_directory }.to raise_error e
+        	end
         end
       end
 
