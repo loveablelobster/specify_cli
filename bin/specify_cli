@@ -62,9 +62,6 @@ The database configuration file ~/.specify_dbs.rc.yaml stores information about
 "
 arg_name '[database]'
 command [:database, :d] do |c|
-  c.desc 'Overwrite an existing databse configuration'
-  c.switch :force
-
   c.action do |global_options,options,args|
     host = global_options[:host]
     database = args.shift
@@ -72,8 +69,6 @@ command [:database, :d] do |c|
     file = global_options[:db_config] || Specify::DATABASES
 
     Specify::CLI.db_config! file, global_options
-
-    # TODO: implement the --force switch
 
     db_config = Specify::Configuration::DBConfig.new host, database, file
 
@@ -95,9 +90,6 @@ Required for automatic target resolution in the viewset command.
 "
 arg_name '[repository_name]'
 command [:repository, :r] do |c|
-  c.desc 'Overwrite an existing repository mapping'
-  c.switch :force
-
   c.desc 'Map the current directory/repository to the host'
   c.switch %i[c current]
 
@@ -108,8 +100,6 @@ command [:repository, :r] do |c|
     file = global_options[:db_config] || Specify::DATABASES
 
     Specify::CLI.db_config! file, global_options
-
-    # TODO: implement the --force switch
 
     host_config = Specify::Configuration::HostConfig.new Specify::DATABASES
 
