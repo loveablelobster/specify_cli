@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Specify
-  VERSION = '0.0.1'
+  VERSION = '0.0.2'
   SUMMARY = 'A command line interface for Specify'
   DESCRIPTION = <<~HEREDOC
     Specify allows you to carry out certain tasks on a Specify database

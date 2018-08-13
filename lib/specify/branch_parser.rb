@@ -24,8 +24,8 @@ module Specify
         STDERR.puts stderr_str
         exit 1
       end
-      dir_and_branch = File.basename(Dir.pwd) + '/' + stdout_str.chomp
-      new(dir_and_branch, config)
+      branch = stdout_str.chomp
+      new(Dir.pwd, branch, config)
     end
 
     # Returns the BranchParser object's attributes as a hash.

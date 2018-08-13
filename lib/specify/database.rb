@@ -91,7 +91,9 @@ module Specify
     # Prompts the user for the _password_
     def prompt
       print 'password: '
-      STDIN.noecho(&:gets).chomp
+      password = STDIN.noecho(&:gets).chomp
+      puts
+      password
     end
   end
 end

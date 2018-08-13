@@ -22,6 +22,10 @@ require_relative 'specify/session'
 require_relative 'specify/user_type'
 require_relative 'specify/services'
 
+# FIXME: causes warnings, but is also required for call from bash script
+#        raises name error for VERSION and DESCRIPTION constants otherwise
+require_relative 'specify/version'
+
 # A module that provides functionaliy to manage Specify app resources.
 module Specify
   DATABASES = File.expand_path(Pathname.new('~/.specify_dbs.rc.yaml'))
