@@ -1,0 +1,123 @@
+.\" generated with Ronn/v0.7.3
+.\" http://github.com/rtomayko/ronn/tree/0.7.3
+.
+.TH "SPECIFY_CLI\.RB" "1" "August 2018" "" ""
+.
+.SH "NAME"
+\fBspecify_cli\.rb\fR \- A command line interface for Specify
+.
+.SH "SYNOPSIS"
+\fBspecify_cli\fR [\fB\-D\fR|\fB\-\-database\fR \fIname\fR] [\fB\-H\fR|\fB\-\-host\fR \fIname\fR] [\fB\-P\fR|\fB\-\-password\fR \fIpassword\fR] [\fB\-U\fR|\fB\-\-specify_user\fR \fIname\fR] [\fB\-c\fR|\fB\-\-db_config\fR \fIfile\fR] [\fB\-p\fR|\fB\-\-port\fR \fInumber\fR] [\fB\-u\fR|\fB\-\-user\fR \fIname\fR] \fIcommand\fR [\fIoptions\fR] [\fIargs\fR]
+.
+.SH "DESCRIPTION"
+\fBspecify_cli\fR is a tool that allows certain tasks in a Specify database to be carried out from the command line\. Specify is a management system for biological collections developed by the Specify Collections Consortium (http://www\.sustain\.specifysoftware\.org)\.
+.
+.P
+\fBspecify_cli\fR is an independent development that is not supported by the Specify Collections Consortium\. It operates directly on the MySQL/MariaDB backend used by Specify\. \fBUse at your own risk\fR\.
+.
+.P
+Tasks currently supported:
+.
+.IP "\(bu" 4
+upload of user interface form definitions (\fI\.views\.xml\fR files) to the database
+.
+.IP "\(bu" 4
+generation of collection object stub records
+.
+.IP "" 0
+.
+.SH "FILES"
+\fB~/\.specify_dbs\.rc\.yaml\fR is a YAML file that stores information about Specify databases and directories containing \fI\.views\.xml\fR files\. The file has the general structure:
+.
+.IP "" 4
+.
+.nf
+
+\-\-\-
+:dir_names:
+  <view_file_directory>: <hostname>
+  \.\.\.
+:hosts:
+  <hostname>:
+    :port: <port_number>
+    :databases:
+      <database_name>:
+        :db_user:
+          :name: <mysql_username>
+          :password: <password>
+        :sp_user: <specify_username>
+      \.\.\.
+    \.\.\.
+.
+.fi
+.
+.IP "" 0
+.
+.P
+The section \fBdir_names\fR contains directory\-host\-mappings\. A directory\-host\- mapping is a key\-value\-pair, where the key is the path of a directory on your hard drive, the value is a host name\. This is used to automatically resolve the correct host for a \fIviews\.xml\fR file based on the directory it is in\. Add mappings here by editing the file or using the \fBrepository\fR command\.
+.
+.P
+The section \fBhosts\fR contains settings for Specify databases by grouped by \fB<hostname>\fR\. For each host, the \fBport\fR and any \fBdatabases\fR can be configured in this file by editing it or by using the \fBdatabase\fR command\. The \fBdatabases\fR section contains connection settings for the individual databases by \fB<database_name>\fR\. The \fBdb_user\fR is the MySQL/MariaDB user used to connect to the database and will typically be the Specify \fImaster user\fR\. Leave \fBpassword\fR blank to be prompted for the password when you run the command (this will not work when triggered as a bash script from another application, e\.g\. a text editor)\. Apart from the \fBdb_user\fR \fBspecify_cli\fR also needs a Specify user (a user that Specify uses internally), which is provided under \fBsp_user\fR\. Every command (except the configuration commands \fBdatabase\fR and \fBrepository\fR) will start a session in Specify where the Specify user will be logged in to the collection\. Any records created or modified during this session will be marked as created by or modified by the \fBsp_user\fR\.
+.
+.SH "COMMANDS"
+.
+.IP "\(bu" 4
+\fBdatabase\fR(1) Add a database configuration\.
+.
+.IP "\(bu" 4
+\fBstubs\fR(1) Create stub records
+.
+.IP "\(bu" 4
+\fBrepository\fR(1) Map a git repository to a host for automatic target resolution\.
+.
+.IP "\(bu" 4
+\fBviewset\fR(1) Upload a view to the database\.
+.
+.IP "" 0
+.
+.SH "OPTIONS"
+.
+.TP
+\fB\-D\fR, \fB\-\-database\fR \fIname\fR
+The name of the Specify database to connect to\.
+.
+.TP
+\fB\-H\fR, \fB\-\-host\fR \fIname\fR
+The name or IP address of the host\.
+.
+.TP
+\fB\-P\fR, \fB\-\-password\fR \fIpassword\fR
+The password for the MySQL/MariaDB user\. Leave blank to be prompted\.
+.
+.TP
+\fB\-U\fR, \fB\-\-specify_user\fR \fIname\fR
+The name of the Specify user\.
+.
+.TP
+\fB\-c\fR, \fB\-\-db_config\fR \fIfile\fR
+A database configuration file (if other than the default \fB~/\.specify_dbs\.rc\.yaml\fR)
+.
+.TP
+\fB\-p\fR, \fB\-\-port\fR \fInumber\fR
+The port for the MySQL/MariaDB host\.
+.
+.TP
+\fB\-u\fR, \fB\-\-user\fR \fIname\fR
+The MySQL/MariaDB user name\.
+.
+.SH "EXAMPLES"
+.
+.SH "LICENSE"
+MIT License
+.
+.P
+Copyright (c) 2018 Martin Stein
+.
+.P
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+.
+.P
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software\.
+.
+.P
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT\. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE\.

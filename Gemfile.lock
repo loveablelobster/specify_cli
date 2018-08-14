@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    specify_cli (0.0.3)
+    specify_cli (0.0.4)
       gli (= 2.17.1)
       mysql2 (= 0.5.2)
       sequel (= 5.11.0)

@@ -1,25 +1,126 @@
-specify.rb(1) -- Manage Specify application resources from the command line
+specify_cli.rb(1) -- A command line interface for Specify
 ===============================================================================
 
 ## SYNOPSIS
 
-`specify.rb` <>
+`specify_cli` [**-D**|**--database** <name>]
+              [**-H**|**--host** <name>]
+              [**-P**|**--password** <password>]
+              [**-U**|**--specify_user** <name>]
+              [**-c**|**--db_config** <file>]
+              [**-p**|**--port** <number>]
+              [**-u**|**--user** <name>]
+              <command> [<options>] [<args>]
 
 ## DESCRIPTION
-**specify.rb** is a command-line tool to ...
+**specify_cli** is a tool that allows certain tasks in a Specify database to be
+carried out from the command line.
+Specify is a management system for biological collections developed by the
+Specify Collections Consortium (http://www.sustain.specifysoftware.org).
+
+**specify_cli** is an independent development that is not supported by the
+Specify Collections Consortium. It operates directly on the MySQL/MariaDB
+backend used by Specify. **Use at your own risk**.
+
+Tasks currently supported:
+
+* upload of user interface form definitions (*.views.xml* files) to the database
+* generation of collection object stub records
 
 ## FILES
 
-`~/.specify.rc` is used ...
+`~/.specify_dbs.rc.yaml` is a YAML file that stores information about
+Specify databases and directories containing *.views.xml* files.
+The file has the general structure:
 
+    ---
+    :dir_names:
+      <view_file_directory>: <hostname>
+      ...
+    :hosts:
+      <hostname>:
+        :port: <port_number>
+        :databases:
+          <database_name>:
+            :db_user:
+              :name: <mysql_username>
+              :password: <password>
+            :sp_user: <specify_username>
+          ...
+        ...
+
+The section `dir_names` contains directory-host-mappings. A directory-host-
+mapping is a key-value-pair, where the key is the path of a directory on your
+hard drive, the value is a host name. This is used to automatically resolve the
+correct host for a *views.xml* file based on the directory it is in. Add
+mappings here by editing the file or using the **repository** command.
+
+The section `hosts` contains settings for Specify databases by grouped by
+`<hostname>`. For each host, the `port` and any `databases` can be configured in
+this file by editing it or by using the **database** command. The `databases`
+section contains connection settings for the individual databases by
+`<database_name>`. The `db_user` is the MySQL/MariaDB user used to connect to
+the database and will typically be the Specify *master user*. Leave `password`
+blank to be prompted for the password when you run the command (this will not
+work when triggered as a bash script from another application, e.g. a text
+editor). Apart from the `db_user` `specify_cli` also needs a Specify user (a 
+user that Specify uses internally), which is provided under `sp_user`. Every 
+command (except the configuration commands **database** and **repository**) will
+start a session in Specify where the Specify user will be logged in to the 
+collection. Any records created or modified during this session will be marked
+as created by or modified by the `sp_user`.
+  
 ## COMMANDS
 
-* `config` `[-o]` `[-t]` `[database...]`
-  create a `~/.specify.rc` configuration file
-* `viewset`
+* `database`(1)
+    Add a database configuration.
+* `stubs`(1)
+    Create stub records 
+* `repository`(1)
+    Map a git repository to a host for automatic target resolution.
+* `viewset`(1)
+    Upload a view to the database.
 
 ## OPTIONS
+
+* `-D`, `--database` <name>:
+    The name of the Specify database to connect to.
+* `-H`, `--host` <name>:
+    The name or IP address of the host.
+* `-P`, `--password` <password>:
+    The password for the MySQL/MariaDB user. Leave blank to be prompted.
+* `-U`, `--specify_user` <name>:
+    The name of the Specify user.
+* `-c`, `--db_config` <file>:
+    A database configuration file (if other than the default
+    `~/.specify_dbs.rc.yaml`)
+* `-p`, `--port` <number>:
+    The port for the MySQL/MariaDB host.
+* `-u`, `--user` <name>:
+    The MySQL/MariaDB user name.
 
 ## EXAMPLES
 
 ## LICENSE
+
+MIT License
+
+Copyright (c) 2018 Martin Stein
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
