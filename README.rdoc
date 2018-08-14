@@ -1,6 +1,6 @@
-= specify
+= specify_cli
 
 Describe your project here
 
-:include:sp_resource.rdoc
+:include:specify_cli.rdoc
 

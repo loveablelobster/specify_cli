@@ -1,5 +1,5 @@
 = specify_cli
 
 Generate this with
-    sp_resource rdoc
+    specify_cli rdoc
 After you have described your command line interface
