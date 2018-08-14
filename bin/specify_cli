@@ -44,7 +44,7 @@ flag %i[U specify_user]
 
 desc 'YAML File with settings for database connections and directory mappings.'
 arg_name '[path]'
-# default_value File.expand_path('~/.specify_dbs.rc.yaml')
+default_value File.expand_path('~/.specify_dbs.rc.yaml')
 flag %i[c db_config]
 
 desc 'Adds a configuration file as ~/.specify.rc.yaml'
@@ -65,7 +65,7 @@ command [:database, :d] do |c|
     host = global_options[:host]
     database = args.shift
 
-    file = global_options[:db_config] || Specify::DATABASES
+    file = File.expand_path(global_options[:db_config])
 
     Specify::CLI.db_config! file, global_options
 
@@ -96,11 +96,11 @@ command [:repository, :r] do |c|
     host = global_options[:host]
     dir = options[:current] ? Dir.pwd : File.expand_path(args.shift)
 
-    file = global_options[:db_config] || Specify::DATABASES
+    file = File.expand_path(global_options[:db_config])
 
     Specify::CLI.db_config! file, global_options
 
-    host_config = Specify::Configuration::HostConfig.new Specify::DATABASES
+    host_config = Specify::Configuration::HostConfig.new file
 
     unless host_config.directory? dir
       host_config.map_directory dir, host

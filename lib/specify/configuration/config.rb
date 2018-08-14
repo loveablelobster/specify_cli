@@ -12,7 +12,7 @@ module Specify
       # <em>dir_names</em>: a Hash with directory names as keys, hosts as values
       # _hosts_: a Hash with host configurations
       def initialize(file = nil, dir_names: nil, hosts: nil)
-        @file = Pathname.new(file || DATABASES)
+        @file = Pathname.new(file)
         if dir_names || hosts
           @dir_names = dir_names
           @hosts = hosts
@@ -29,9 +29,9 @@ module Specify
       # -> Configuration::Config
       # Returns a new empty instance that can serve as a template.
       # _file_: the YAML file (path) containg the configuration
-      def self.empty(file = nil, &block)
-        if File.exist?(DATABASES) && (file.nil? || file == DATABASES)
-          raise "#{DATABASES} exists, won't overwrite"
+      def self.empty(file, &block)
+        if File.exist?(file)
+          raise "#{file} exists, won't overwrite"
         end
         config = new file, dir_names: {}, hosts: {}, &block
         config.save

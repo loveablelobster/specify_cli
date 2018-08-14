@@ -16,12 +16,8 @@ module Specify
       config.save
     end
 
-    def self.db_config?
-      File.exist?(DATABASES)
-    end
-
     def self.db_config!(file, global_options)
-      return if db_config? && !global_options[:db_config]
+      return if File.exist?(global_options[:db_config])
       STDERR.puts "Creating new config file #{file}"
       Specify::Configuration::Config.empty file do |config|
         config.add_host global_options[:host], global_options[:port]

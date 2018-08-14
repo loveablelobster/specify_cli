@@ -7,12 +7,7 @@ module Specify
       attr_reader :session, :user,
                   :agent, :collection, :discipline, :division
 
-      def initialize(host:,
-                     database:,
-                     collection:,
-                     specify_user: nil,
-                     config: nil)
-        config ||= DATABASES
+      def initialize(host:, database:, collection:, config:, specify_user: nil)
         @config = Configuration::DBConfig.new(host, database, config)
         @db = Database.new database, @config.connection
         session_user = specify_user || @config.session_user

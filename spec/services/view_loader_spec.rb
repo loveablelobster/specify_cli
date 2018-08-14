@@ -164,9 +164,21 @@ module Specify
           end
 
           context 'when file is not a .views.xml file' do
+            let :wrong_file do
+              Pathname.new(Dir.pwd).join('spec', 'support',
+                                     'viewsets', 'paleo.xml')
+            end
+
             it do
-              expect { view_loader.import('resource.xml') }
+              expect { view_loader.import(wrong_file) }
                 .to raise_error ArgumentError, FileError::VIEWS_FILE
+            end
+          end
+
+          context 'when file does not exist' do
+            it do
+              expect { view_loader.import('no_file.xml') }
+                .to raise_error ArgumentError, FileError::NO_FILE
             end
           end
 

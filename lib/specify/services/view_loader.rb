@@ -36,12 +36,12 @@ module Specify
       # -> ViewLoader
       # Creates a new instance from a branch _name_.
       # _config_: a yaml file containing the database configuration.
-      def self.from_branch(path: nil, name: nil, config: nil)
+      def self.from_branch(config:, path: nil, name: nil)
         parser = if name
-                 BranchParser.new(path, name, config)
-               else
-                 BranchParser.current_branch
-               end
+                   BranchParser.new(path, name, config)
+                 else
+                   BranchParser.current_branch config
+                 end
         new parser.to_h.merge(config: config)
       end
 
@@ -179,6 +179,7 @@ module Specify
       # -> File
       # Loads _file_.
       def views_file(file)
+        raise ArgumentError, FileError::NO_FILE unless File.exist?(file)
         path = Pathname.new file
         return File.open path if path.file? && path.fnmatch?('*.views.xml')
         raise ArgumentError, FileError::VIEWS_FILE

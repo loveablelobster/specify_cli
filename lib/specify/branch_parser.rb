@@ -8,16 +8,16 @@ module Specify
   class BranchParser
     attr_reader :collection, :config, :database, :host, :user
 
-    def initialize(path, name, config = nil)
+    def initialize(view_file_path, name, config = nil)
       @config = Configuration::HostConfig.new(config)
       @database, collection, @level, @user = *name.split('/')
       raise ArgumentError, BRANCH_ERROR + name unless collection && level
-      @host = @config.resolve_host path
+      @host = @config.resolve_host view_file_path
       @collection = normalize_name collection
     end
 
     # Creates a new instance of BranchParser from the current HEAD.
-    def self.current_branch(config = nil)
+    def self.current_branch(config)
       stdout_str, stderr_str, status = Open3.capture3(GIT_CURRENT_BRANCH)
       unless status.exitstatus.zero?
         STDERR.puts "There was an error running #{GIT_CURRENT_BRANCH}"

@@ -57,10 +57,10 @@ module Specify
         it { is_expected.to have_attributes params: params }
 
         context 'when passed no file but default file exists' do
-          subject(:make_empty)  { described_class.empty }
+          subject(:make_empty)  { described_class.empty file }
 
           it do
-            error = "#{default_file} exists, won't overwrite"
+            error = "#{file} exists, won't overwrite"
             expect { make_empty }.to raise_error error
           end
         end
