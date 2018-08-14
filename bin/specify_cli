@@ -47,18 +47,20 @@ arg_name '[path]'
 default_value File.expand_path('~/.specify_dbs.rc.yaml')
 flag %i[c db_config]
 
-desc 'Adds a configuration file as ~/.specify.rc.yaml'
-long_desc "
-The configuration file ~/.specify.rc.yaml...
-"
-command [:config, :c] do |c|
-end
-
-desc 'Adds a database configuration to ~/.specify_dbs.rc.yaml'
-long_desc "
-The database configuration file ~/.specify_dbs.rc.yaml stores information about
- the databases. Add information on a specific database using this command.
-"
+desc 'Add a database configuration.'
+long_desc <<~HEREDOC
+  The database configuration file ~/.specify_dbs.rc.yaml contains a 'hosts'
+  section with information about the Specify databases by host (host name, port,
+  database name, MySQL/MariaDB user name and password, Specify user name). Add
+  information to work with a specific database using this command. Use the global
+  options to specify host, port, MySQL/MariaDB user name and password, and
+  Specify user name.\n
+  The example below configures the database 'specify' on 'specify.example.org'
+  with the MySQL/MariaDB user 'root' (the password is not given, so when a
+  command is executed the user will be prompted; add the -p global option to
+  also store the password):\n
+  specify_cli -H specify.example.org -u root -U specifyuser database specify
+HEREDOC
 arg_name '[database]'
 command [:database, :d] do |c|
   c.action do |global_options, options, args|
@@ -83,10 +85,20 @@ command [:database, :d] do |c|
   end
 end
 
-desc 'Maps a git repository name to a host'
-long_desc "
-Required for automatic target resolution in the viewset command.
-"
+desc 'Map a git repository to a host for automatic target resolution.'
+long_desc <<~HEREDOC
+  The viewset command can automatically resolve targets (database, discipline,
+  collection, user type, user) based on branch names in a Git repository. To
+  allow working with multiple databases on different hosts, a repository needs
+  to be mapped to a host name. This is done by mapping the full path name of
+  the directory containing the Git repository to a host name. The repository
+  command will add such a mapping to the 'dir_names' section of the database
+  configuration file ~/.specify_dbs.rc.yaml. Use the global option --host to
+  specify the host name.\n
+  The example below maps a repository in '~/specify_forms/invertpaleo' to the
+  host 'specify.example.org':\n
+  specify_cli -H specify.example.org repository ~/specify_forms/invertpaleo
+HEREDOC
 arg_name '[repository_name]'
 command [:repository, :r] do |c|
   c.desc 'Map the current directory/repository to the host'
@@ -109,47 +121,79 @@ command [:repository, :r] do |c|
   end
 end
 
-desc 'Creates stub records'
-long_desc "
-creates stube records;
-the [database] and [collection] args can be ommitted when specified in a YAML
-file
-"
-arg_name '[collection][count]'
+desc 'Create stub records'
+long_desc <<~HEREDOC
+  The stubs command creates stub records in a collection, so that catalog
+  numbers can be printed to labels e.g. prior to mass digitizaton. The command
+  currently only works for collection objects, and will currently only work for
+  collections using a numeric catalog numbering scheme.\n
+  Generated catalog numbers are printed to stdout.\n
+  The number of stub records created is specified with the [count] argument.
+  The target collection is provided as the [collection] argument. Host and
+  database are provided using the global options --host and --database
+  respectively.
+  The command will generate a record set with all generated collection objects.
+  The record set will be owned by either the Specify user (as provided via the
+  global option --specify_user or in the database configuration file), or the
+  specify user provided with the --cataloger option. If no dataset name is
+  provided using the --dataset option, the default name will be 'stub record set
+  <TIMESTAMP>'.\n
+  Records can be created with the following basic information (provided using
+  the command options): cataloger, accession, geography/locality, taxon,
+  preparation.\n
+  Only existing accessions and preparation types can be assigned at present.\n
+  If geographic information is provided, but no locality name, the
+  default locality name will be 'not cataloged, see label'. This can be changed
+  using the --locality option. Geographic information should be passed in the
+  format 'Geographic Rank: Name; Geographic Subrank: Name; locality: name' where
+  locality is optional (if not given, the default locality name will be used)
+  (example: 'Country: United States, State: Kansas, County: Douglas County;
+  locality: Downtown Lawrence'). Only geographic names/ranks and locality names
+  that exist in the database will be accepted.\n
+  Taxon information is assigned as a determination. Only one determination can
+  be given to the stub records using the command. Taxon information is provided
+  in the format 'Taxon Rank: Name; Taxon Subrank: Name' (example: 'Phylum:
+  Arthropoda; Class: Trilobita; Order: Asaphida; Family: Asaphidae'). Only
+  taxonomic names that exist in the database will be accepted.\n
+  Alternatively to using the options, a YAML file with all required information
+  can be passed with the --file option. In that case, the [database] and
+  [collection] arguments can be ommitted.
+HEREDOC
+arg_name '[collection] [count]'
 command [:stubs, :s] do |c|
-  c.desc 'load stub data from file'
+  c.desc 'Load stub record information from a YAML file.'
   c.arg_name '[yaml_file]'
   c.flag %i[f file]
 
-  c.desc 'the cataloger'
+  c.desc 'Specify user appearing as cataloger and owner of the record set.'
   c.arg_name '[name]'
   c.flag %i[c cataloger]
 
-  c.desc 'dataset name'
+  c.desc 'Name of the datas set (record set) generated.'
   c.arg_name '[name]'
   c.flag %i[d dataset]
 
-  c.desc 'accession number'
+  c.desc 'Accession number for the accession to which the stub records belong.'
   c.arg_name '[accession_number]'
   c.flag %i[a accession]
 
-  c.desc 'geographic information (collecting data)'
-  c.arg_name '[geography]' # "Country: Denmark, State: ..."
+  c.desc 'Geographic and locality information for the stub records.'
+  c.arg_name '[geography]'
   c.flag %i[g geography]
 
-  c.desc 'default locality name'
+  c.desc 'Default locality name if geographic information has no locality.'
   c.arg_name '[name]'
   c.flag %i[l locality]
 
-  c.desc 'taxon (determination)'
+  c.desc 'Taxon to which stub records are determined.'
   c.arg_name 'taxon'
   c.flag %i[t taxon]
 
-  c.desc 'preparation type'
+  c.desc 'Preparation type for the stub records, if they have preparations.'
   c.arg_name '[name]'
   c.flag %i[p preptype]
 
-  c.desc 'preparation count'
+  c.desc 'Number of preparation items (requires --preptype to be set).'
   c.arg_name '[number]'
   c.flag %i[n prepcount]
 
@@ -170,37 +214,49 @@ command [:stubs, :s] do |c|
   end
 end
 
-desc 'Uploads a views file (.views.xml) to the database'
-long_desc "
-Uploads a viewset file to the database
-[collection] the collection the user is logged in to (can be omitted if the -b
-or -B options are used)
-'file' is the file to upload (must be .views.xml)
-valid args for --user_type: [manager]|[fullaccess]|[guest]|[limitedaccess]'
---branch takes argument in format:
- 'repository_name/database_name/collection_name/level'
- will use
-"
-arg_name '[collection][file]'
+desc 'Upload a view to the database.'
+long_desc <<~HEREDOC
+  The viewset command uploads a view definition file (.views.xml) to the
+  database. Viewset can be uploaded to either of the following levels:
+  discipline, collection, user type, user. Use the -c or -d switches to upload
+  to collection or discipline respectively. To upload for a specific user level,
+  use the --user_type command option and provide the user type name ('manager',
+  'fullaccess', 'limitedaccess', or 'guest'). To upload to user level, use the
+  --user command option and provide the Specify user name.\n
+  The [collection] argument is required unless the -b or -B command options are
+  used (the collection is needed to register a login session).\n
+  Provide information about the host, database, MySQL/MariaDB user and Specify
+  user with the global options.
+  The --branch command option allows to specify a branch name in the format
+  'repository_name/database_name/collection_name/level', from which all
+  necessary information about the target (host, database, collection, level) can
+  be parsed. This requires that the directory containing the view definition
+  file ([file] argument) is mapped to a host. If your present working directory
+  is mapped to a host and contains a Git repository and the current branch
+  conforms to the naming convention
+  'repository_name/database_name/collection_name/level', use the -b switch to
+  use th current branch instead of specifying the branch name with --branch.
+HEREDOC
+arg_name '[collection] [file]'
 command [:viewset, :vs] do |c|
-  c.desc 'current branch'
+  c.desc 'Use current branch to resolve target.'
   c.switch :b
 
-  c.desc 'branch name'
-  c.arg_name '[repository_and_branch_name]'
+  c.desc 'Resolve target from branch name.'
+  c.arg_name '[name]'
   c.flag %i[B branch]
 
-  c.desc 'upload for collection'
+  c.desc 'Upload to collection level.'
   c.switch :c
 
-  c.desc 'upload for discipline'
+  c.desc 'Upload to discipline level.'
   c.switch :d
 
-  c.desc 'upload for user type'
+  c.desc 'Upload to specific user type [name] in the collection.'
   c.arg_name '[name]'
   c.flag %i[t user_type]
 
-  c.desc 'upload for user'
+  c.desc 'Upload to specify user [name] in the collection.'
   c.arg_name '[name]'
   c.flag %i[u user]
 
