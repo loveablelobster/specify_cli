@@ -1,5 +1,0 @@
-= specify
-
-Generate this with
-    sp_resource rdoc
-After you have described your command line interface
