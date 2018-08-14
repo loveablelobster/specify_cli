@@ -18,7 +18,7 @@ module Specify
                      collection:,
                      specify_user: nil,
                      level: nil,
-                     config: nil)
+                     config:)
         super(host: host,
               database: database,
               collection: collection,

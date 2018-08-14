@@ -12,11 +12,11 @@ module Specify
                   :record_set,
                   :taxon
 
-      def initialize(host:,
+      def initialize(collection:,
+                     config:,
+                     host:,
                      database:,
-                     collection:,
-                     specify_user: nil,
-                     config: nil)
+                     specify_user: nil)
         super
         @accession = nil
         @cataloger = agent
@@ -43,6 +43,8 @@ module Specify
         new hash.delete(:stub_generator) do |stubs|
           hash.each do |key, value|
             setter = (key + '=').to_sym
+            puts "#{setter}#{value}"
+            next unless value
             stubs.public_send(setter, value)
           end
         end

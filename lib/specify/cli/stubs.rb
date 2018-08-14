@@ -10,9 +10,9 @@ module Specify
          .transform_keys { |key| key == 'locality' ? key.to_sym : key }
     end
 
-    def self.make_stubs(generator, wrapped_args, count)
+    def self.make_stubs(generator, count)
       STDERR.puts "started creating #{count} records"
-      STDERR.puts "cataloger: #{}"
+      STDERR.puts "cataloger: #{generator.cataloger}"
       generator.database.transaction do
         generator.create count
         STDERR.puts "creating: #{generator.generated.last.catalog_number}"
