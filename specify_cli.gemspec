@@ -4,6 +4,7 @@ spec = Gem::Specification.new do |s|
   s.name = 'specify_cli'
   s.version = Specify::VERSION
   s.author = 'Martin Stein'
+  s.licenses = ['MIT']
   s.email = 'loveablelobster@fastmail.fm'
   s.homepage = 'https://github.com/loveablelobster/specify_cli'
   s.platform = Gem::Platform::RUBY
