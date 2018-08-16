@@ -1,0 +1,92 @@
+.\" generated with Ronn/v0.7.3
+.\" http://github.com/rtomayko/ronn/tree/0.7.3
+.
+.TH "SPECIFY_CLI\-STUBSY" "1" "August 2018" "" ""
+.
+.SH "NAME"
+\fBspecify_cli\-stubsy\fR \- A command line interface for Specify
+.
+.SH "SYNOPSIS"
+\fBspecify_cli\fR [\fIglobal options\fR] \fBviewset\fR [\fIoptions\fR] \fIcollection\fR \fIfile\fR \fBspecify_cli\fR \fBviewset\fR \fB\-\-branch=\fR\fIname\fR \fIfile\fR \fBspecify_cli\fR \fBviewset\fR \fB\-b\fR \fIfile\fR
+.
+.SH "DESCRIPTION"
+The viewset command uploads a view definition file (\fI\.views\.xml\fR) to the database\. Viewsets can be uploaded to either of the following levels: \fIdiscipline\fR, \fIcollection\fR, \fIuser type\fR, or \fIuser\fR\.
+.
+.P
+Use the \fB`\-c\fR or \fB\-d\fR switches to upload to collection or discipline level respectively\.
+.
+.P
+To upload for a specific user type in a collection, use the \fB\-\-user_type\fR option and provide the user type name (\fImanager\fR, \fIfullaccess\fR, \fIlimitedaccess\fR, or \fIguest\fR)\.
+.
+.P
+To upload for a specific user level, use the \fB\-\-user\fR option and provide the Specify user name\.
+.
+.P
+The \fIcollection\fR argument is required unless the \fB\-b\fR or \fB\-B\fR options are used (the collection is needed to register a login session)\.
+.
+.P
+Provide information about the host, database, MySQL/MariaDB user and Specify user with the global options\.
+.
+.P
+The \fB\-\-branch\fR option allows to provide a Git branch name, from which all necessary information about the target (host, database, collection, level) can be parsed\. This requires that the directory containing the \fI\.views\.xml\fR file is mapped to a host, and that the branch name follows the naming convention \fBrepository_name/database_name/collection_name/level\fR\.
+.
+.P
+If your present working directory is mapped to a host and contains a Git repository and the current branch conforms to the naming convention, use the \fB\-b\fR switch to use the current branch instead of specifying the branch name with \fB\-\-branch\fR\.
+.
+.SH "FILES"
+The command requires a \fI\.views\.xml\fR as an argument\.
+.
+.SH "OPTIONS"
+.
+.TP
+\fB\-b\fR
+Use current branch to resolve target\.
+.
+.TP
+\fB\-B\fR, \fB\-\-branch\fR \fIname\fR
+Resolve target from branch name\.
+.
+.TP
+\fB\-c\fR
+Upload to collection level\.
+.
+.TP
+\fB\-d\fR
+Upload to discipline level\.
+.
+.TP
+\fB\-t\fR, \fB\-\-user_type\fR \fIname\fR
+Upload to specific user type [name] in the collection\.
+.
+.TP
+\fB\-u\fR, \fB\-\-user\fR \fIname\fR
+Upload to specify user \fIname\fR in the collection\.
+.
+.SH "EXAMPLES"
+Upload \fBinvertpaleo\.views\.xml\fR to discipline level for collection \fBTrilobites\fR in the database \fBSpecify\fR on localhost:
+.
+.IP "" 4
+.
+.nf
+
+$ specify_cli \-D Specify viewset \-d Trilobites invertpaleo\.views\.xml
+.
+.fi
+.
+.IP "" 0
+.
+.P
+Upload \fBinvertpaleo\.views\.xml\fR auto\-resolving target from current Git branch:
+.
+.IP "" 4
+.
+.nf
+
+$ specify_cli viewset \-b invertpaleo\.views\.xml
+.
+.fi
+.
+.IP "" 0
+.
+.SH "SPECIFY_CLI"
+Part of the specify_cli(1) suite

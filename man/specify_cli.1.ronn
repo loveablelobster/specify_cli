@@ -1,4 +1,4 @@
-specify_cli.rb(1) -- A command line interface for Specify
+specify_cli(1) -- A command line interface for Specify
 ===============================================================================
 
 ## SYNOPSIS
@@ -52,33 +52,32 @@ The file has the general structure:
 The section `dir_names` contains directory-host-mappings. A directory-host-
 mapping is a key-value-pair, where the key is the path of a directory on your
 hard drive, the value is a host name. This is used to automatically resolve the
-correct host for a *views.xml* file based on the directory it is in. Add
-mappings here by editing the file or using the **repository** command.
+correct host for a *.views.xml* file based on the directory it is in. Add
+mappings here by editing the file or using the **specify_cli-repository(1)**
+command.
 
 The section `hosts` contains settings for Specify databases by grouped by
 `<hostname>`. For each host, the `port` and any `databases` can be configured in
-this file by editing it or by using the **database** command. The `databases`
-section contains connection settings for the individual databases by
+this file by editing it or by using the **specify_cli-database(1)** command. The `databases` section contains connection settings for the individual databases by
 `<database_name>`. The `db_user` is the MySQL/MariaDB user used to connect to
 the database and will typically be the Specify *master user*. Leave `password`
 blank to be prompted for the password when you run the command (this will not
 work when triggered as a bash script from another application, e.g. a text
-editor). Apart from the `db_user` `specify_cli` also needs a Specify user (a 
-user that Specify uses internally), which is provided under `sp_user`. Every 
-command (except the configuration commands **database** and **repository**) will
-start a session in Specify where the Specify user will be logged in to the 
-collection. Any records created or modified during this session will be marked
-as created by or modified by the `sp_user`.
-  
+editor). Apart from the `db_user` `specify_cli` also needs a Specify user (a
+user that Specify uses internally), which is provided under `sp_user`. Every
+command (except the configuration commands **specify_cli-database(1)** and **specify_cli-repository(1)**) will start a session in Specify where the Specify
+user will be logged in to the collection. Any records created or modified during
+this session will be marked as created by or modified by the `sp_user`.
+
 ## COMMANDS
 
-* `database`(1)
+* `specify_cli-database`(1)
     Add a database configuration.
-* `stubs`(1)
-    Create stub records 
-* `repository`(1)
+* `specify_cli-stubs`(1)
+    Create stub records
+* `specify_cli-repository`(1)
     Map a git repository to a host for automatic target resolution.
-* `viewset`(1)
+* `specify_cli-viewset`(1)
     Upload a view to the database.
 
 ## OPTIONS
@@ -86,7 +85,7 @@ as created by or modified by the `sp_user`.
 * `-D`, `--database` <name>:
     The name of the Specify database to connect to.
 * `-H`, `--host` <name>:
-    The name or IP address of the host.
+    The name or IP address of the host. Default: `localhost`
 * `-P`, `--password` <password>:
     The password for the MySQL/MariaDB user. Leave blank to be prompted.
 * `-U`, `--specify_user` <name>:
@@ -100,6 +99,38 @@ as created by or modified by the `sp_user`.
     The MySQL/MariaDB user name.
 
 ## EXAMPLES
+
+Configure a database `Specify` on the host `specify.example.org`:
+
+    $ specify_cli --host=specify.example.org database specify
+
+Map the current directory to the host `specify.example.org`:
+
+    $ specify_cli --host=specify.example.org repository -c
+
+Map `~/specify_forms/invertpaleo` to `localhost`:
+
+    $ specify_cli repository ~/specify_forms/invertpaleo
+
+Create 10 blank stub records in the collection `Triloites` in the database
+`Specify` on localhost:
+
+    $ specify_cli -D Specify stubs Trilobites 10
+
+Create 10 stub records for herbarium sheets in the collection `Orchids` in the
+database `Specify` on localhost, determined to taxon `Orchidaceae`:
+
+    $ specify_cli -D Specify stubs --taxon='Family: Orchidaceae'\n
+        --preptype=Sheet --perpcount=1 Orchids 10
+
+Upload `invertpaleo.views.xml` to discipline level for collection `Trilobites`
+in the database `Specify` on localhost:
+
+    $ specify_cli -D Specify viewset -d Trilobites invertpaleo.views.xml
+
+Upload `invertpaleo.views.xml` auto-resolving target from current Git branch:
+
+    $ specify_cli viewset -b invertpaleo.views.xml
 
 ## LICENSE
 

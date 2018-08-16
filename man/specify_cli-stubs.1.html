@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv='content-type' value='text/html;charset=utf8'>
+  <meta name='generator' value='Ronn/v0.7.3 (http://github.com/rtomayko/ronn/tree/0.7.3)'>
+  <title>specify_cli-stubsy(1) - A command line interface for Specify</title>
+  <style type='text/css' media='all'>
+  /* style: man */
+  body#manpage {margin:0}
+  .mp {max-width:100ex;padding:0 9ex 1ex 4ex}
+  .mp p,.mp pre,.mp ul,.mp ol,.mp dl {margin:0 0 20px 0}
+  .mp h2 {margin:10px 0 0 0}
+  .mp > p,.mp > pre,.mp > ul,.mp > ol,.mp > dl {margin-left:8ex}
+  .mp h3 {margin:0 0 0 4ex}
+  .mp dt {margin:0;clear:left}
+  .mp dt.flush {float:left;width:8ex}
+  .mp dd {margin:0 0 0 9ex}
+  .mp h1,.mp h2,.mp h3,.mp h4 {clear:left}
+  .mp pre {margin-bottom:20px}
+  .mp pre+h2,.mp pre+h3 {margin-top:22px}
+  .mp h2+pre,.mp h3+pre {margin-top:5px}
+  .mp img {display:block;margin:auto}
+  .mp h1.man-title {display:none}
+  .mp,.mp code,.mp pre,.mp tt,.mp kbd,.mp samp,.mp h3,.mp h4 {font-family:monospace;font-size:14px;line-height:1.42857142857143}
+  .mp h2 {font-size:16px;line-height:1.25}
+  .mp h1 {font-size:20px;line-height:2}
+  .mp {text-align:justify;background:#fff}
+  .mp,.mp code,.mp pre,.mp pre code,.mp tt,.mp kbd,.mp samp {color:#131211}
+  .mp h1,.mp h2,.mp h3,.mp h4 {color:#030201}
+  .mp u {text-decoration:underline}
+  .mp code,.mp strong,.mp b {font-weight:bold;color:#131211}
+  .mp em,.mp var {font-style:italic;color:#232221;text-decoration:none}
+  .mp a,.mp a:link,.mp a:hover,.mp a code,.mp a pre,.mp a tt,.mp a kbd,.mp a samp {color:#0000ff}
+  .mp b.man-ref {font-weight:normal;color:#434241}
+  .mp pre {padding:0 4ex}
+  .mp pre code {font-weight:normal;color:#434241}
+  .mp h2+pre,h3+pre {padding-left:0}
+  ol.man-decor,ol.man-decor li {margin:3px 0 10px 0;padding:0;float:left;width:33%;list-style-type:none;text-transform:uppercase;color:#999;letter-spacing:1px}
+  ol.man-decor {width:100%}
+  ol.man-decor li.tl {text-align:left}
+  ol.man-decor li.tc {text-align:center;letter-spacing:4px}
+  ol.man-decor li.tr {text-align:right;float:right}
+  </style>
+</head>
+<!--
+  The following styles are deprecated and will be removed at some point:
+  div#man, div#man ol.man, div#man ol.head, div#man ol.man.
+
+  The .man-page, .man-decor, .man-head, .man-foot, .man-title, and
+  .man-navigation should be used instead.
+-->
+<body id='manpage'>
+  <div class='mp' id='man'>
+
+  <div class='man-navigation' style='display:none'>
+    <a href="#NAME">NAME</a>
+    <a href="#SYNOPSIS">SYNOPSIS</a>
+    <a href="#DESCRIPTION">DESCRIPTION</a>
+    <a href="#FILES">FILES</a>
+    <a href="#OPTIONS">OPTIONS</a>
+    <a href="#EXAMPLES">EXAMPLES</a>
+    <a href="#SPECIFY_CLI">SPECIFY_CLI</a>
+  </div>
+
+  <ol class='man-decor man-head man head'>
+    <li class='tl'>specify_cli-stubsy(1)</li>
+    <li class='tc'></li>
+    <li class='tr'>specify_cli-stubsy(1)</li>
+  </ol>
+
+  <h2 id="NAME">NAME</h2>
+<p class="man-name">
+  <code>specify_cli-stubsy</code> - <span class="man-whatis">A command line interface for Specify</span>
+</p>
+
+<h2 id="SYNOPSIS">SYNOPSIS</h2>
+
+<p><code>specify_cli</code> [<var>global options</var>] <code>stubs</code> [<var>options</var>] <var>collection</var> <var>count</var>
+<code>specify_cli</code> <code>stubs</code> <code>--file</code> <var>count</var></p>
+
+<h2 id="DESCRIPTION">DESCRIPTION</h2>
+
+<p>The stubs command creates stub records in a collection, so that catalog
+numbers can be printed to labels e.g. prior to mass digitizaton. The command
+currently only works for collection objects, and will currently only work for
+collections using the numeric catalog numbering scheme.</p>
+
+<p>Generated catalog numbers are printed to stdout.</p>
+
+<p>The number of stub records created is specified with the <em>count</em> argument.
+The target collection is provided as the <em>collection</em> argument. <em>Host</em> and
+<em>database</em> are provided using the global options <code>--host</code> and <code>--database</code>
+respectively.
+The command will generate a record set with all generated collection objects.
+The record set will be owned by either the <em>Specify user</em> (as provided via the
+global option <code>--specify_user</code> or in the database configuration file), or the
+<em>Specify user</em> provided with the <code>--cataloger</code> option. If no dataset name is
+provided using the <code>--dataset</code> option, the default name will be <code>stub record set
+&lt;TIMESTAMP></code>.</p>
+
+<p>Records can be created with the following basic information (provided using
+command options - see below): cataloger, accession, geography/locality, taxon,
+preparation.</p>
+
+<p>Only existing accessions and preparation types can be assigned at present.
+Unknown items will raise an error.</p>
+
+<p>If geographic information is provided, but no locality name, the
+default locality name will be <code>not cataloged, see label</code>. This can be changed
+using the <code>--locality</code> option. Geographic information should be passed in the
+format <code>Geographic Rank: Name; Geographic Subrank: Name; locality: name</code> where
+<em>locality</em> is optional (if not given, the default locality name will be used).
+Only geographic names/ranks and locality names that exist in the database will
+can be used (unknown item will raise an error).</p>
+
+<p>Taxon information is assigned as a determination. Only one determination can
+be given to a stub records using the command. Taxon information is provided
+in the format <code>Taxon Rank: Name; Taxon Subrank: Name</code>. Only taxonomic names that exist in the database will be accepted. Unknown items will raise an error.</p>
+
+<p>Alternatively to using the options, a YAML file with all required information
+can be passed with the <code>--file option</code>. In that case, the <em>database</em> and
+<em>collection</em> arguments can be ommitted.</p>
+
+<h2 id="FILES">FILES</h2>
+
+<p>YAML files with stub record information provided using the <code>--file</code> option
+should have the general structure:</p>
+
+<pre><code>---
+:stub_generator:
+  :host: &lt;hostname>
+  :database: &lt;database name>
+  :collection: &lt;collection name>
+  :config: &lt;database configuration file>
+dataset_name: &lt;record set name>
+accession: &lt;accession number>
+cataloger: &lt;specify user name>
+collecting_data:
+  &lt;1st rank>: &lt;name>
+  &lt;2nd rank>: &lt;name>
+  &lt;3rd rank>: &lt;name>
+  :locality: &lt;name>
+default_locality_name: &lt;name>
+determination:
+  &lt;rank>: &lt;name>
+preparation:
+  :type: &lt;preparation type>
+  :count: &lt;preparation count>
+</code></pre>
+
+<p>Items prefixed with <code>:</code> in the YAML will be deserialized as Ruby symbols and
+need to be prefixed with <code>:</code> in your file. Leave any unnecessary items out.
+The first section <code>:stub_generator</code> contains connection information. When
+<code>:config</code> is left out, <em>stubs</em> will use the config file provided with the global
+option <code>--db_config</code> or the default file <code>~/.specify_dbs.rc.yaml</code> if none
+provided. Likewise, <code>:host</code>, and <code>:database</code> can be provided using the global
+options <code>--host</code> and <code>--database</code> respectively.</p>
+
+<p>If you provide the <code>:locality</code> under <code>collecting data:</code>, this will have
+precedence over the <code>default_locality_name</code>, so the latter is redundant.</p>
+
+<h2 id="OPTIONS">OPTIONS</h2>
+
+<ul>
+<li><code>-f</code>, <code>--file</code> <var>file</var>:
+  Load stub record information from a YAML file.</li>
+<li><code>-c</code>, <code>--cataloger</code> <var>name</var>:
+  Specify user appearing as cataloger and owner of the record set.</li>
+<li><code>-d</code>, <code>--dataset</code> <var>name</var>:
+  Name of the datas set (record set) generated.</li>
+<li><code>-a</code>, <code>--accession</code> <var>accession_number</var>
+  Accession number for the accession to which the stub records belong.</li>
+<li><code>-g</code>, <code>--geography</code> <var>geography</var>
+  Geographic and locality information for the stub records. Format of
+  <var>geography</var>: <code>'Rank1: Name; Rank2: Name; locality: name'</code></li>
+<li><code>-l</code>, <code>--locality</code> <var>name</var>:
+  Default locality name if geographic information has no locality.</li>
+<li><code>-t</code>, <code>--taxon</code> <var>taxon</var>:
+  Taxon to which stub records are determined.  Format of <var>taxon</var>:
+  <code>'Rank1: Name; Rank2: Name; locality: name'</code></li>
+<li><code>-p</code>, <code>--preptype</code> <var>name</var>:
+  Preparation type for the stub records, if they have preparations.</li>
+<li><code>-n</code>, <code>--prepcount</code> <var>number</var>:
+  Number of preparation items (requires --preptype to be set).</li>
+</ul>
+
+
+<h2 id="EXAMPLES">EXAMPLES</h2>
+
+<p>Create 10 blank stub records in the collection <code>Triloites</code> in the database
+<code>Specify</code> on localhost:</p>
+
+<pre><code>$ specify_cli -D Specify stubs Trilobites 10
+</code></pre>
+
+<p>Create 10 stub records determined to <code>Asaphidae</code> in the collection <code>Triloites</code>
+in the database<code>Specify</code> on localhost:</p>
+
+<pre><code>$ specify_cli -D Specify stubs\n
+    --taxon='Class: Trilobita; Order: Asaphida; Family: Asaphidae'\n
+    Trilobites 10
+</code></pre>
+
+<p>Create 10 stub records for herbarium sheets in the collection <code>Orchids</code> in the
+database <code>Specify</code> on localhost, determined to taxon <code>Orchidaceae</code>:</p>
+
+<pre><code>$ specify_cli -D Specify stubs --taxon='Family: Orchidaceae'\n
+    --preptype=Sheet --perpcount=1 Orchids 10
+</code></pre>
+
+<p>Create 10 stub records for herbarium sheets in the collection <code>Orchids</code> in the
+database <code>Specify</code> on localhost, determined to taxon <code>Orchidaceae</code>, collected
+in <code>Downtown Lawrence</code>:</p>
+
+<pre><code>$ specify_cli -D Specify stubs --taxon='Family: Orchidaceae'\n
+    --geography='Country: United States, State: Kansas,\n
+    County: Douglas County; locality: Downtown Lawrence'
+    --preptype=Sheet --perpcount=1 Orchids 10
+</code></pre>
+
+<p>Create 10 stub records from a YAML file <code>stub_details.yaml</code>:</p>
+
+<pre><code>$ specify_cli stubs --file=stub_details.yaml 10
+</code></pre>
+
+<h2 id="SPECIFY_CLI">SPECIFY_CLI</h2>
+
+<p>Part of the <span class="man-ref">specify_cli<span class="s">(1)</span></span> suite</p>
+
+
+  <ol class='man-decor man-foot man foot'>
+    <li class='tl'></li>
+    <li class='tc'>August 2018</li>
+    <li class='tr'>specify_cli-stubsy(1)</li>
+  </ol>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,53 @@
+specify_cli-database(1) -- A command line interface for Specify
+===============================================================================
+
+## SYNOPSIS
+
+`specify_cli` [<global options>] `database` <name>
+
+## DESCRIPTION
+
+The database configuration file (default: *~/.specify\_dbs.rc.yaml*) has a
+`hosts` section which contains settings for Specify databases by grouped by
+*hostname*.
+
+Use the `database` command to add information for a specific database using this command.
+
+Use the specify\_cli global option `--host` to provide the host information and
+pass the *name* of the database to configure as an argument.
+
+The command will look up the *host* and *database* in the database configuration
+file and ask for necessary information to configure either. The command will
+not overwrite existing configurations. If you need to change information, edit
+the file.
+
+Information required to configure a *host* is the port number.
+
+Information required to configure a *database* is the MySQL/MariaDB user name
+and password. The user will be the typically be the Specify *master user* (or
+any user with equivalent permissions on the database) Leave the password blank
+to be prompted when working with commands that read the file (**specify_cli-stubs(1)**, **specify_cli-viewset(1)**). Apart from the
+MySQL/MariaDB user, `specify_cli` the command will also ask for a *specify user*
+name. Every command (except the configuration commands
+**specify_cli-database(1)** and **specify_cli-repository(1)**) will start a
+session in Specify where the Specify user will be logged in to the collection.
+Any records created or modified during this session will be marked as created by
+or modified by the *specify user*.
+
+## OPTIONS
+
+None.
+
+## EXAMPLES
+
+Configure a database `Specify` on the host `specify.example.org`:
+
+    $ specify_cli --host=specify.example.org database Specify
+
+Configure a database `SpecifyTest` on localhost:
+
+    $ specify_cli database SpecifyTest
+
+## SPECIFY_CLI
+
+Part of the specify_cli(1) suite

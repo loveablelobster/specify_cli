@@ -49,17 +49,8 @@ flag %i[c db_config]
 
 desc 'Add a database configuration.'
 long_desc <<~HEREDOC
-  The database configuration file ~/.specify_dbs.rc.yaml contains a 'hosts'
-  section with information about the Specify databases by host (host name, port,
-  database name, MySQL/MariaDB user name and password, Specify user name). Add
-  information to work with a specific database using this command. Use the global
-  options to specify host, port, MySQL/MariaDB user name and password, and
-  Specify user name.\n
-  The example below configures the database 'specify' on 'specify.example.org'
-  with the MySQL/MariaDB user 'root' (the password is not given, so when a
-  command is executed the user will be prompted; add the -p global option to
-  also store the password):\n
-  specify_cli -H specify.example.org -u root -U specifyuser database specify
+  Add information to work with a Specify database. Use the global option -H to
+  provide the host.
 HEREDOC
 arg_name '[database]'
 command [:database, :d] do |c|
@@ -87,17 +78,8 @@ end
 
 desc 'Map a git repository to a host for automatic target resolution.'
 long_desc <<~HEREDOC
-  The viewset command can automatically resolve targets (database, discipline,
-  collection, user type, user) based on branch names in a Git repository. To
-  allow working with multiple databases on different hosts, a repository needs
-  to be mapped to a host name. This is done by mapping the full path name of
-  the directory containing the Git repository to a host name. The repository
-  command will add such a mapping to the 'dir_names' section of the database
-  configuration file ~/.specify_dbs.rc.yaml. Use the global option --host to
-  specify the host name.\n
-  The example below maps a repository in '~/specify_forms/invertpaleo' to the
-  host 'specify.example.org':\n
-  specify_cli -H specify.example.org repository ~/specify_forms/invertpaleo
+  Maps the path of a directory containing a Git repository with Specify resource
+  files to a hostname.
 HEREDOC
 arg_name '[repository_name]'
 command [:repository, :r] do |c|
@@ -123,41 +105,9 @@ end
 
 desc 'Create stub records'
 long_desc <<~HEREDOC
-  The stubs command creates stub records in a collection, so that catalog
-  numbers can be printed to labels e.g. prior to mass digitizaton. The command
-  currently only works for collection objects, and will currently only work for
-  collections using a numeric catalog numbering scheme.\n
-  Generated catalog numbers are printed to stdout.\n
-  The number of stub records created is specified with the [count] argument.
-  The target collection is provided as the [collection] argument. Host and
-  database are provided using the global options --host and --database
-  respectively.
-  The command will generate a record set with all generated collection objects.
-  The record set will be owned by either the Specify user (as provided via the
-  global option --specify_user or in the database configuration file), or the
-  specify user provided with the --cataloger option. If no dataset name is
-  provided using the --dataset option, the default name will be 'stub record set
-  <TIMESTAMP>'.\n
-  Records can be created with the following basic information (provided using
-  the command options): cataloger, accession, geography/locality, taxon,
-  preparation.\n
-  Only existing accessions and preparation types can be assigned at present.\n
-  If geographic information is provided, but no locality name, the
-  default locality name will be 'not cataloged, see label'. This can be changed
-  using the --locality option. Geographic information should be passed in the
-  format 'Geographic Rank: Name; Geographic Subrank: Name; locality: name' where
-  locality is optional (if not given, the default locality name will be used)
-  (example: 'Country: United States, State: Kansas, County: Douglas County;
-  locality: Downtown Lawrence'). Only geographic names/ranks and locality names
-  that exist in the database will be accepted.\n
-  Taxon information is assigned as a determination. Only one determination can
-  be given to the stub records using the command. Taxon information is provided
-  in the format 'Taxon Rank: Name; Taxon Subrank: Name' (example: 'Phylum:
-  Arthropoda; Class: Trilobita; Order: Asaphida; Family: Asaphidae'). Only
-  taxonomic names that exist in the database will be accepted.\n
-  Alternatively to using the options, a YAML file with all required information
-  can be passed with the --file option. In that case, the [database] and
-  [collection] arguments can be ommitted.
+  The stubs command creates n stub records (where n is the number passed as the
+  [count] argument) in the collection passed as the [collection] argument.
+  Provide host, database, and connection information using global options.
 HEREDOC
 arg_name '[collection] [count]'
 command [:stubs, :s] do |c|
@@ -216,26 +166,9 @@ end
 
 desc 'Upload a view to the database.'
 long_desc <<~HEREDOC
-  The viewset command uploads a view definition file (.views.xml) to the
-  database. Viewset can be uploaded to either of the following levels:
-  discipline, collection, user type, user. Use the -c or -d switches to upload
-  to collection or discipline respectively. To upload for a specific user level,
-  use the --user_type command option and provide the user type name ('manager',
-  'fullaccess', 'limitedaccess', or 'guest'). To upload to user level, use the
-  --user command option and provide the Specify user name.\n
-  The [collection] argument is required unless the -b or -B command options are
-  used (the collection is needed to register a login session).\n
-  Provide information about the host, database, MySQL/MariaDB user and Specify
-  user with the global options.
-  The --branch command option allows to specify a branch name in the format
-  'repository_name/database_name/collection_name/level', from which all
-  necessary information about the target (host, database, collection, level) can
-  be parsed. This requires that the directory containing the view definition
-  file ([file] argument) is mapped to a host. If your present working directory
-  is mapped to a host and contains a Git repository and the current branch
-  conforms to the naming convention
-  'repository_name/database_name/collection_name/level', use the -b switch to
-  use th current branch instead of specifying the branch name with --branch.
+  Uploads a view definition file (.views.xml) to the database. Viewsets can be
+  uploaded to either of the following levels: discipline, collection, user type,
+  user.
 HEREDOC
 arg_name '[collection] [file]'
 command [:viewset, :vs] do |c|

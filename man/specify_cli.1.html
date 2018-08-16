@@ -3,7 +3,7 @@
 <head>
   <meta http-equiv='content-type' value='text/html;charset=utf8'>
   <meta name='generator' value='Ronn/v0.7.3 (http://github.com/rtomayko/ronn/tree/0.7.3)'>
-  <title>specify_cli.rb(1) - A command line interface for Specify</title>
+  <title>specify_cli(1) - A command line interface for Specify</title>
   <style type='text/css' media='all'>
   /* style: man */
   body#manpage {margin:0}
@@ -64,14 +64,14 @@
   </div>
 
   <ol class='man-decor man-head man head'>
-    <li class='tl'>specify_cli.rb(1)</li>
+    <li class='tl'>specify_cli(1)</li>
     <li class='tc'></li>
-    <li class='tr'>specify_cli.rb(1)</li>
+    <li class='tr'>specify_cli(1)</li>
   </ol>
 
   <h2 id="NAME">NAME</h2>
 <p class="man-name">
-  <code>specify_cli.rb</code> - <span class="man-whatis">A command line interface for Specify</span>
+  <code>specify_cli</code> - <span class="man-whatis">A command line interface for Specify</span>
 </p>
 
 <h2 id="SYNOPSIS">SYNOPSIS</h2>
@@ -130,34 +130,33 @@ The file has the general structure:</p>
 <p>The section <code>dir_names</code> contains directory-host-mappings. A directory-host-
 mapping is a key-value-pair, where the key is the path of a directory on your
 hard drive, the value is a host name. This is used to automatically resolve the
-correct host for a <em>views.xml</em> file based on the directory it is in. Add
-mappings here by editing the file or using the <strong>repository</strong> command.</p>
+correct host for a <em>.views.xml</em> file based on the directory it is in. Add
+mappings here by editing the file or using the <strong><span class="man-ref">specify_cli-repository<span class="s">(1)</span></span></strong>
+command.</p>
 
 <p>The section <code>hosts</code> contains settings for Specify databases by grouped by
 <code>&lt;hostname></code>. For each host, the <code>port</code> and any <code>databases</code> can be configured in
-this file by editing it or by using the <strong>database</strong> command. The <code>databases</code>
-section contains connection settings for the individual databases by
+this file by editing it or by using the <strong><span class="man-ref">specify_cli-database<span class="s">(1)</span></span></strong> command. The <code>databases</code> section contains connection settings for the individual databases by
 <code>&lt;database_name></code>. The <code>db_user</code> is the MySQL/MariaDB user used to connect to
 the database and will typically be the Specify <em>master user</em>. Leave <code>password</code>
 blank to be prompted for the password when you run the command (this will not
 work when triggered as a bash script from another application, e.g. a text
 editor). Apart from the <code>db_user</code> <code>specify_cli</code> also needs a Specify user (a
 user that Specify uses internally), which is provided under <code>sp_user</code>. Every
-command (except the configuration commands <strong>database</strong> and <strong>repository</strong>) will
-start a session in Specify where the Specify user will be logged in to the
-collection. Any records created or modified during this session will be marked
-as created by or modified by the <code>sp_user</code>.</p>
+command (except the configuration commands <strong><span class="man-ref">specify_cli-database<span class="s">(1)</span></span></strong> and <strong><span class="man-ref">specify_cli-repository<span class="s">(1)</span></span></strong>) will start a session in Specify where the Specify
+user will be logged in to the collection. Any records created or modified during
+this session will be marked as created by or modified by the <code>sp_user</code>.</p>
 
 <h2 id="COMMANDS">COMMANDS</h2>
 
 <ul>
-<li><code>database</code>(1)
+<li><code>specify_cli-database</code>(1)
   Add a database configuration.</li>
-<li><code>stubs</code>(1)
+<li><code>specify_cli-stubs</code>(1)
   Create stub records</li>
-<li><code>repository</code>(1)
+<li><code>specify_cli-repository</code>(1)
   Map a git repository to a host for automatic target resolution.</li>
-<li><code>viewset</code>(1)
+<li><code>specify_cli-viewset</code>(1)
   Upload a view to the database.</li>
 </ul>
 
@@ -166,7 +165,7 @@ as created by or modified by the <code>sp_user</code>.</p>
 
 <dl>
 <dt><code>-D</code>, <code>--database</code> <var>name</var></dt><dd>  The name of the Specify database to connect to.</dd>
-<dt><code>-H</code>, <code>--host</code> <var>name</var></dt><dd>  The name or IP address of the host.</dd>
+<dt><code>-H</code>, <code>--host</code> <var>name</var></dt><dd>  The name or IP address of the host. Default: <code>localhost</code></dd>
 <dt><code>-P</code>, <code>--password</code> <var>password</var></dt><dd>  The password for the MySQL/MariaDB user. Leave blank to be prompted.</dd>
 <dt><code>-U</code>, <code>--specify_user</code> <var>name</var></dt><dd>  The name of the Specify user.</dd>
 <dt><code>-c</code>, <code>--db_config</code> <var>file</var></dt><dd>  A database configuration file (if other than the default
@@ -177,6 +176,45 @@ as created by or modified by the <code>sp_user</code>.</p>
 
 
 <h2 id="EXAMPLES">EXAMPLES</h2>
+
+<p>Configure a database <code>Specify</code> on the host <code>specify.example.org</code>:</p>
+
+<pre><code>$ specify_cli --host=specify.example.org database specify
+</code></pre>
+
+<p>Map the current directory to the host <code>specify.example.org</code>:</p>
+
+<pre><code>$ specify_cli --host=specify.example.org repository -c
+</code></pre>
+
+<p>Map <code>~/specify_forms/invertpaleo</code> to <code>localhost</code>:</p>
+
+<pre><code>$ specify_cli repository ~/specify_forms/invertpaleo
+</code></pre>
+
+<p>Create 10 blank stub records in the collection <code>Triloites</code> in the database
+<code>Specify</code> on localhost:</p>
+
+<pre><code>$ specify_cli -D Specify stubs Trilobites 10
+</code></pre>
+
+<p>Create 10 stub records for herbarium sheets in the collection <code>Orchids</code> in the
+database <code>Specify</code> on localhost, determined to taxon <code>Orchidaceae</code>:</p>
+
+<pre><code>$ specify_cli -D Specify stubs --taxon='Family: Orchidaceae'\n
+    --preptype=Sheet --perpcount=1 Orchids 10
+</code></pre>
+
+<p>Upload <code>invertpaleo.views.xml</code> to discipline level for collection <code>Trilobites</code>
+in the database <code>Specify</code> on localhost:</p>
+
+<pre><code>$ specify_cli -D Specify viewset -d Trilobites invertpaleo.views.xml
+</code></pre>
+
+<p>Upload <code>invertpaleo.views.xml</code> auto-resolving target from current Git branch:</p>
+
+<pre><code>$ specify_cli viewset -b invertpaleo.views.xml
+</code></pre>
 
 <h2 id="LICENSE">LICENSE</h2>
 
@@ -206,7 +244,7 @@ SOFTWARE.</p>
   <ol class='man-decor man-foot man foot'>
     <li class='tl'></li>
     <li class='tc'>August 2018</li>
-    <li class='tr'>specify_cli.rb(1)</li>
+    <li class='tr'>specify_cli(1)</li>
   </ol>
 
   </div>

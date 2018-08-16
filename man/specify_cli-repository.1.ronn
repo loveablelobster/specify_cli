@@ -1,0 +1,42 @@
+specify_cli-repository(1) -- A command line interface for Specify
+===============================================================================
+
+## SYNOPSIS
+
+`specify_cli` [<global options>] `repository` <path>
+`specify_cli` [<global options>] `repository` `--c`
+
+## DESCRIPTION
+
+The database configuration file (default: *~/.specify\_dbs.rc.yaml*) has a
+`dir_names` section which contains mappings of paths for directories containing
+Specify resource files to hostnames.
+
+The **specify_cli-viewset(1)** command can automatically resolve targets
+(host, database, collection, level) based on branch names in a Git repository.
+To allow working with multiple databases on different hosts, a repository needs
+to be mapped to a host name. This is done by mapping the full path name of the directory to a hostname.
+
+The repository command will map the directory *path* passed as an argument to
+the host provided using the `-H` or `--host` global option.
+
+## OPTIONS
+
+* `-c`, `--current`:
+    Map the path of the current working directory.
+
+## EXAMPLES
+
+Map the directory `~/specify_forms/invertpaleo` to the host
+`specify.example.org`:
+
+    specify_cli -H specify.example.org repository\n
+        ~/specify_forms/invertpaleo
+
+Map the current directory to localhost:
+
+    specify_cli repository --current
+
+## SPECIFY_CLI
+
+Part of the specify_cli(1) suite

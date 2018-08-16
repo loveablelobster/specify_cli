@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv='content-type' value='text/html;charset=utf8'>
+  <meta name='generator' value='Ronn/v0.7.3 (http://github.com/rtomayko/ronn/tree/0.7.3)'>
+  <title>specify_cli-repository(1) - A command line interface for Specify</title>
+  <style type='text/css' media='all'>
+  /* style: man */
+  body#manpage {margin:0}
+  .mp {max-width:100ex;padding:0 9ex 1ex 4ex}
+  .mp p,.mp pre,.mp ul,.mp ol,.mp dl {margin:0 0 20px 0}
+  .mp h2 {margin:10px 0 0 0}
+  .mp > p,.mp > pre,.mp > ul,.mp > ol,.mp > dl {margin-left:8ex}
+  .mp h3 {margin:0 0 0 4ex}
+  .mp dt {margin:0;clear:left}
+  .mp dt.flush {float:left;width:8ex}
+  .mp dd {margin:0 0 0 9ex}
+  .mp h1,.mp h2,.mp h3,.mp h4 {clear:left}
+  .mp pre {margin-bottom:20px}
+  .mp pre+h2,.mp pre+h3 {margin-top:22px}
+  .mp h2+pre,.mp h3+pre {margin-top:5px}
+  .mp img {display:block;margin:auto}
+  .mp h1.man-title {display:none}
+  .mp,.mp code,.mp pre,.mp tt,.mp kbd,.mp samp,.mp h3,.mp h4 {font-family:monospace;font-size:14px;line-height:1.42857142857143}
+  .mp h2 {font-size:16px;line-height:1.25}
+  .mp h1 {font-size:20px;line-height:2}
+  .mp {text-align:justify;background:#fff}
+  .mp,.mp code,.mp pre,.mp pre code,.mp tt,.mp kbd,.mp samp {color:#131211}
+  .mp h1,.mp h2,.mp h3,.mp h4 {color:#030201}
+  .mp u {text-decoration:underline}
+  .mp code,.mp strong,.mp b {font-weight:bold;color:#131211}
+  .mp em,.mp var {font-style:italic;color:#232221;text-decoration:none}
+  .mp a,.mp a:link,.mp a:hover,.mp a code,.mp a pre,.mp a tt,.mp a kbd,.mp a samp {color:#0000ff}
+  .mp b.man-ref {font-weight:normal;color:#434241}
+  .mp pre {padding:0 4ex}
+  .mp pre code {font-weight:normal;color:#434241}
+  .mp h2+pre,h3+pre {padding-left:0}
+  ol.man-decor,ol.man-decor li {margin:3px 0 10px 0;padding:0;float:left;width:33%;list-style-type:none;text-transform:uppercase;color:#999;letter-spacing:1px}
+  ol.man-decor {width:100%}
+  ol.man-decor li.tl {text-align:left}
+  ol.man-decor li.tc {text-align:center;letter-spacing:4px}
+  ol.man-decor li.tr {text-align:right;float:right}
+  </style>
+</head>
+<!--
+  The following styles are deprecated and will be removed at some point:
+  div#man, div#man ol.man, div#man ol.head, div#man ol.man.
+
+  The .man-page, .man-decor, .man-head, .man-foot, .man-title, and
+  .man-navigation should be used instead.
+-->
+<body id='manpage'>
+  <div class='mp' id='man'>
+
+  <div class='man-navigation' style='display:none'>
+    <a href="#NAME">NAME</a>
+    <a href="#SYNOPSIS">SYNOPSIS</a>
+    <a href="#DESCRIPTION">DESCRIPTION</a>
+    <a href="#OPTIONS">OPTIONS</a>
+    <a href="#EXAMPLES">EXAMPLES</a>
+    <a href="#SPECIFY_CLI">SPECIFY_CLI</a>
+  </div>
+
+  <ol class='man-decor man-head man head'>
+    <li class='tl'>specify_cli-repository(1)</li>
+    <li class='tc'></li>
+    <li class='tr'>specify_cli-repository(1)</li>
+  </ol>
+
+  <h2 id="NAME">NAME</h2>
+<p class="man-name">
+  <code>specify_cli-repository</code> - <span class="man-whatis">A command line interface for Specify</span>
+</p>
+
+<h2 id="SYNOPSIS">SYNOPSIS</h2>
+
+<p><code>specify_cli</code> [<var>global options</var>] <code>repository</code> <var>path</var>
+<code>specify_cli</code> [<var>global options</var>] <code>repository</code> <code>--c</code></p>
+
+<h2 id="DESCRIPTION">DESCRIPTION</h2>
+
+<p>The database configuration file (default: <em>~/.specify_dbs.rc.yaml</em>) has a
+<code>dir_names</code> section which contains mappings of paths for directories containing
+Specify resource files to hostnames.</p>
+
+<p>The <strong><span class="man-ref">specify_cli-viewset<span class="s">(1)</span></span></strong> command can automatically resolve targets
+(host, database, collection, level) based on branch names in a Git repository.
+To allow working with multiple databases on different hosts, a repository needs
+to be mapped to a host name. This is done by mapping the full path name of the directory to a hostname.</p>
+
+<p>The repository command will map the directory <em>path</em> passed as an argument to
+the host provided using the <code>-H</code> or <code>--host</code> global option.</p>
+
+<h2 id="OPTIONS">OPTIONS</h2>
+
+<dl>
+<dt><code>-c</code>, <code>--current</code></dt><dd>  Map the path of the current working directory.</dd>
+</dl>
+
+
+<h2 id="EXAMPLES">EXAMPLES</h2>
+
+<p>Map the directory <code>~/specify_forms/invertpaleo</code> to the host
+<code>specify.example.org</code>:</p>
+
+<pre><code>specify_cli -H specify.example.org repository\n
+    ~/specify_forms/invertpaleo
+</code></pre>
+
+<p>Map the current directory to localhost:</p>
+
+<pre><code>specify_cli repository --current
+</code></pre>
+
+<h2 id="SPECIFY_CLI">SPECIFY_CLI</h2>
+
+<p>Part of the <span class="man-ref">specify_cli<span class="s">(1)</span></span> suite</p>
+
+
+  <ol class='man-decor man-foot man foot'>
+    <li class='tl'></li>
+    <li class='tc'>August 2018</li>
+    <li class='tr'>specify_cli-repository(1)</li>
+  </ol>
+
+  </div>
+</body>
+</html>

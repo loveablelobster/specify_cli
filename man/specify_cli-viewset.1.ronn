@@ -1,0 +1,72 @@
+specify_cli-stubsy(1) -- A command line interface for Specify
+===============================================================================
+
+## SYNOPSIS
+
+`specify_cli` [<global options>] `viewset` [<options>] <collection> <file>
+`specify_cli` `viewset` `--branch=`<name> <file>
+`specify_cli` `viewset` `-b` <file>
+
+## DESCRIPTION
+
+The viewset command uploads a view definition file (*.views.xml*) to the
+database. Viewsets can be uploaded to either of the following levels:
+*discipline*, *collection*, *user type*, or *user*.
+
+Use the ``-c` or `-d` switches to upload to collection or discipline level respectively.
+
+To upload for a specific user type in a collection, use the `--user_type` option
+and provide the user type name (*manager*, *fullaccess*, *limitedaccess*, or *guest*).
+
+To upload for a specific user level, use the `--user` option and provide the
+Specify user name.
+
+The <collection> argument is required unless the `-b` or `-B` options are
+used (the collection is needed to register a login session).
+
+Provide information about the host, database, MySQL/MariaDB user and Specify
+user with the global options.
+
+The `--branch` option allows to provide a Git branch name, from which all
+necessary information about the target (host, database, collection, level) can
+be parsed. This requires that the directory containing the *.views.xml* file is
+mapped to a host, and that the branch name follows the naming convention `repository_name/database_name/collection_name/level`.
+
+If your present working directory is mapped to a host and contains a Git
+repository and the current branch conforms to the naming convention, use the
+`-b` switch to use the current branch instead of specifying the branch name with
+`--branch`.
+
+## FILES
+
+The command requires a *.views.xml* as an argument.
+
+## OPTIONS
+
+* `-b`:
+    Use current branch to resolve target.
+* `-B`, `--branch` <name>:
+    Resolve target from branch name.
+* `-c`:
+    Upload to collection level.
+* `-d`:
+    Upload to discipline level.
+* `-t`, `--user_type` <name>:
+    Upload to specific user type [name] in the collection.
+* `-u`, `--user` <name>:
+    Upload to specify user <name> in the collection.
+
+## EXAMPLES
+
+Upload `invertpaleo.views.xml` to discipline level for collection `Trilobites`
+in the database `Specify` on localhost:
+
+    $ specify_cli -D Specify viewset -d Trilobites invertpaleo.views.xml
+
+Upload `invertpaleo.views.xml` auto-resolving target from current Git branch:
+
+    $ specify_cli viewset -b invertpaleo.views.xml
+
+## SPECIFY_CLI
+
+Part of the specify_cli(1) suite

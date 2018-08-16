@@ -1,0 +1,55 @@
+.\" generated with Ronn/v0.7.3
+.\" http://github.com/rtomayko/ronn/tree/0.7.3
+.
+.TH "SPECIFY_CLI\-REPOSITORY" "1" "August 2018" "" ""
+.
+.SH "NAME"
+\fBspecify_cli\-repository\fR \- A command line interface for Specify
+.
+.SH "SYNOPSIS"
+\fBspecify_cli\fR [\fIglobal options\fR] \fBrepository\fR \fIpath\fR \fBspecify_cli\fR [\fIglobal options\fR] \fBrepository\fR \fB\-\-c\fR
+.
+.SH "DESCRIPTION"
+The database configuration file (default: \fI~/\.specify_dbs\.rc\.yaml\fR) has a \fBdir_names\fR section which contains mappings of paths for directories containing Specify resource files to hostnames\.
+.
+.P
+The \fBspecify_cli\-viewset(1)\fR command can automatically resolve targets (host, database, collection, level) based on branch names in a Git repository\. To allow working with multiple databases on different hosts, a repository needs to be mapped to a host name\. This is done by mapping the full path name of the directory to a hostname\.
+.
+.P
+The repository command will map the directory \fIpath\fR passed as an argument to the host provided using the \fB\-H\fR or \fB\-\-host\fR global option\.
+.
+.SH "OPTIONS"
+.
+.TP
+\fB\-c\fR, \fB\-\-current\fR
+Map the path of the current working directory\.
+.
+.SH "EXAMPLES"
+Map the directory \fB~/specify_forms/invertpaleo\fR to the host \fBspecify\.example\.org\fR:
+.
+.IP "" 4
+.
+.nf
+
+specify_cli \-H specify\.example\.org repository\en
+    ~/specify_forms/invertpaleo
+.
+.fi
+.
+.IP "" 0
+.
+.P
+Map the current directory to localhost:
+.
+.IP "" 4
+.
+.nf
+
+specify_cli repository \-\-current
+.
+.fi
+.
+.IP "" 0
+.
+.SH "SPECIFY_CLI"
+Part of the specify_cli(1) suite

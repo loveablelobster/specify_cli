@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv='content-type' value='text/html;charset=utf8'>
+  <meta name='generator' value='Ronn/v0.7.3 (http://github.com/rtomayko/ronn/tree/0.7.3)'>
+  <title>specify_cli-stubsy(1) - A command line interface for Specify</title>
+  <style type='text/css' media='all'>
+  /* style: man */
+  body#manpage {margin:0}
+  .mp {max-width:100ex;padding:0 9ex 1ex 4ex}
+  .mp p,.mp pre,.mp ul,.mp ol,.mp dl {margin:0 0 20px 0}
+  .mp h2 {margin:10px 0 0 0}
+  .mp > p,.mp > pre,.mp > ul,.mp > ol,.mp > dl {margin-left:8ex}
+  .mp h3 {margin:0 0 0 4ex}
+  .mp dt {margin:0;clear:left}
+  .mp dt.flush {float:left;width:8ex}
+  .mp dd {margin:0 0 0 9ex}
+  .mp h1,.mp h2,.mp h3,.mp h4 {clear:left}
+  .mp pre {margin-bottom:20px}
+  .mp pre+h2,.mp pre+h3 {margin-top:22px}
+  .mp h2+pre,.mp h3+pre {margin-top:5px}
+  .mp img {display:block;margin:auto}
+  .mp h1.man-title {display:none}
+  .mp,.mp code,.mp pre,.mp tt,.mp kbd,.mp samp,.mp h3,.mp h4 {font-family:monospace;font-size:14px;line-height:1.42857142857143}
+  .mp h2 {font-size:16px;line-height:1.25}
+  .mp h1 {font-size:20px;line-height:2}
+  .mp {text-align:justify;background:#fff}
+  .mp,.mp code,.mp pre,.mp pre code,.mp tt,.mp kbd,.mp samp {color:#131211}
+  .mp h1,.mp h2,.mp h3,.mp h4 {color:#030201}
+  .mp u {text-decoration:underline}
+  .mp code,.mp strong,.mp b {font-weight:bold;color:#131211}
+  .mp em,.mp var {font-style:italic;color:#232221;text-decoration:none}
+  .mp a,.mp a:link,.mp a:hover,.mp a code,.mp a pre,.mp a tt,.mp a kbd,.mp a samp {color:#0000ff}
+  .mp b.man-ref {font-weight:normal;color:#434241}
+  .mp pre {padding:0 4ex}
+  .mp pre code {font-weight:normal;color:#434241}
+  .mp h2+pre,h3+pre {padding-left:0}
+  ol.man-decor,ol.man-decor li {margin:3px 0 10px 0;padding:0;float:left;width:33%;list-style-type:none;text-transform:uppercase;color:#999;letter-spacing:1px}
+  ol.man-decor {width:100%}
+  ol.man-decor li.tl {text-align:left}
+  ol.man-decor li.tc {text-align:center;letter-spacing:4px}
+  ol.man-decor li.tr {text-align:right;float:right}
+  </style>
+</head>
+<!--
+  The following styles are deprecated and will be removed at some point:
+  div#man, div#man ol.man, div#man ol.head, div#man ol.man.
+
+  The .man-page, .man-decor, .man-head, .man-foot, .man-title, and
+  .man-navigation should be used instead.
+-->
+<body id='manpage'>
+  <div class='mp' id='man'>
+
+  <div class='man-navigation' style='display:none'>
+    <a href="#NAME">NAME</a>
+    <a href="#SYNOPSIS">SYNOPSIS</a>
+    <a href="#DESCRIPTION">DESCRIPTION</a>
+    <a href="#FILES">FILES</a>
+    <a href="#OPTIONS">OPTIONS</a>
+    <a href="#EXAMPLES">EXAMPLES</a>
+    <a href="#SPECIFY_CLI">SPECIFY_CLI</a>
+  </div>
+
+  <ol class='man-decor man-head man head'>
+    <li class='tl'>specify_cli-stubsy(1)</li>
+    <li class='tc'></li>
+    <li class='tr'>specify_cli-stubsy(1)</li>
+  </ol>
+
+  <h2 id="NAME">NAME</h2>
+<p class="man-name">
+  <code>specify_cli-stubsy</code> - <span class="man-whatis">A command line interface for Specify</span>
+</p>
+
+<h2 id="SYNOPSIS">SYNOPSIS</h2>
+
+<p><code>specify_cli</code> [<var>global options</var>] <code>viewset</code> [<var>options</var>] <var>collection</var> <var>file</var>
+<code>specify_cli</code> <code>viewset</code> <code>--branch=</code><var>name</var> <var>file</var>
+<code>specify_cli</code> <code>viewset</code> <code>-b</code> <var>file</var></p>
+
+<h2 id="DESCRIPTION">DESCRIPTION</h2>
+
+<p>The viewset command uploads a view definition file (<em>.views.xml</em>) to the
+database. Viewsets can be uploaded to either of the following levels:
+<em>discipline</em>, <em>collection</em>, <em>user type</em>, or <em>user</em>.</p>
+
+<p>Use the <code>`-c</code> or <code>-d</code> switches to upload to collection or discipline level respectively.</p>
+
+<p>To upload for a specific user type in a collection, use the <code>--user_type</code> option
+and provide the user type name (<em>manager</em>, <em>fullaccess</em>, <em>limitedaccess</em>, or <em>guest</em>).</p>
+
+<p>To upload for a specific user level, use the <code>--user</code> option and provide the
+Specify user name.</p>
+
+<p>The <var>collection</var> argument is required unless the <code>-b</code> or <code>-B</code> options are
+used (the collection is needed to register a login session).</p>
+
+<p>Provide information about the host, database, MySQL/MariaDB user and Specify
+user with the global options.</p>
+
+<p>The <code>--branch</code> option allows to provide a Git branch name, from which all
+necessary information about the target (host, database, collection, level) can
+be parsed. This requires that the directory containing the <em>.views.xml</em> file is
+mapped to a host, and that the branch name follows the naming convention <code>repository_name/database_name/collection_name/level</code>.</p>
+
+<p>If your present working directory is mapped to a host and contains a Git
+repository and the current branch conforms to the naming convention, use the
+<code>-b</code> switch to use the current branch instead of specifying the branch name with
+<code>--branch</code>.</p>
+
+<h2 id="FILES">FILES</h2>
+
+<p>The command requires a <em>.views.xml</em> as an argument.</p>
+
+<h2 id="OPTIONS">OPTIONS</h2>
+
+<dl>
+<dt class="flush"><code>-b</code></dt><dd>  Use current branch to resolve target.</dd>
+<dt><code>-B</code>, <code>--branch</code> <var>name</var></dt><dd>  Resolve target from branch name.</dd>
+<dt class="flush"><code>-c</code></dt><dd>  Upload to collection level.</dd>
+<dt class="flush"><code>-d</code></dt><dd>  Upload to discipline level.</dd>
+<dt><code>-t</code>, <code>--user_type</code> <var>name</var></dt><dd>  Upload to specific user type [name] in the collection.</dd>
+<dt><code>-u</code>, <code>--user</code> <var>name</var></dt><dd>  Upload to specify user <var>name</var> in the collection.</dd>
+</dl>
+
+
+<h2 id="EXAMPLES">EXAMPLES</h2>
+
+<p>Upload <code>invertpaleo.views.xml</code> to discipline level for collection <code>Trilobites</code>
+in the database <code>Specify</code> on localhost:</p>
+
+<pre><code>$ specify_cli -D Specify viewset -d Trilobites invertpaleo.views.xml
+</code></pre>
+
+<p>Upload <code>invertpaleo.views.xml</code> auto-resolving target from current Git branch:</p>
+
+<pre><code>$ specify_cli viewset -b invertpaleo.views.xml
+</code></pre>
+
+<h2 id="SPECIFY_CLI">SPECIFY_CLI</h2>
+
+<p>Part of the <span class="man-ref">specify_cli<span class="s">(1)</span></span> suite</p>
+
+
+  <ol class='man-decor man-foot man foot'>
+    <li class='tl'></li>
+    <li class='tc'>August 2018</li>
+    <li class='tr'>specify_cli-stubsy(1)</li>
+  </ol>
+
+  </div>
+</body>
+</html>

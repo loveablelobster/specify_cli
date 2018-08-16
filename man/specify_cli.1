@@ -1,10 +1,10 @@
 .\" generated with Ronn/v0.7.3
 .\" http://github.com/rtomayko/ronn/tree/0.7.3
 .
-.TH "SPECIFY_CLI\.RB" "1" "August 2018" "" ""
+.TH "SPECIFY_CLI" "1" "August 2018" "" ""
 .
 .SH "NAME"
-\fBspecify_cli\.rb\fR \- A command line interface for Specify
+\fBspecify_cli\fR \- A command line interface for Specify
 .
 .SH "SYNOPSIS"
 \fBspecify_cli\fR [\fB\-D\fR|\fB\-\-database\fR \fIname\fR] [\fB\-H\fR|\fB\-\-host\fR \fIname\fR] [\fB\-P\fR|\fB\-\-password\fR \fIpassword\fR] [\fB\-U\fR|\fB\-\-specify_user\fR \fIname\fR] [\fB\-c\fR|\fB\-\-db_config\fR \fIfile\fR] [\fB\-p\fR|\fB\-\-port\fR \fInumber\fR] [\fB\-u\fR|\fB\-\-user\fR \fIname\fR] \fIcommand\fR [\fIoptions\fR] [\fIargs\fR]
@@ -54,24 +54,24 @@ generation of collection object stub records
 .IP "" 0
 .
 .P
-The section \fBdir_names\fR contains directory\-host\-mappings\. A directory\-host\- mapping is a key\-value\-pair, where the key is the path of a directory on your hard drive, the value is a host name\. This is used to automatically resolve the correct host for a \fIviews\.xml\fR file based on the directory it is in\. Add mappings here by editing the file or using the \fBrepository\fR command\.
+The section \fBdir_names\fR contains directory\-host\-mappings\. A directory\-host\- mapping is a key\-value\-pair, where the key is the path of a directory on your hard drive, the value is a host name\. This is used to automatically resolve the correct host for a \fI\.views\.xml\fR file based on the directory it is in\. Add mappings here by editing the file or using the \fBspecify_cli\-repository(1)\fR command\.
 .
 .P
-The section \fBhosts\fR contains settings for Specify databases by grouped by \fB<hostname>\fR\. For each host, the \fBport\fR and any \fBdatabases\fR can be configured in this file by editing it or by using the \fBdatabase\fR command\. The \fBdatabases\fR section contains connection settings for the individual databases by \fB<database_name>\fR\. The \fBdb_user\fR is the MySQL/MariaDB user used to connect to the database and will typically be the Specify \fImaster user\fR\. Leave \fBpassword\fR blank to be prompted for the password when you run the command (this will not work when triggered as a bash script from another application, e\.g\. a text editor)\. Apart from the \fBdb_user\fR \fBspecify_cli\fR also needs a Specify user (a user that Specify uses internally), which is provided under \fBsp_user\fR\. Every command (except the configuration commands \fBdatabase\fR and \fBrepository\fR) will start a session in Specify where the Specify user will be logged in to the collection\. Any records created or modified during this session will be marked as created by or modified by the \fBsp_user\fR\.
+The section \fBhosts\fR contains settings for Specify databases by grouped by \fB<hostname>\fR\. For each host, the \fBport\fR and any \fBdatabases\fR can be configured in this file by editing it or by using the \fBspecify_cli\-database(1)\fR command\. The \fBdatabases\fR section contains connection settings for the individual databases by \fB<database_name>\fR\. The \fBdb_user\fR is the MySQL/MariaDB user used to connect to the database and will typically be the Specify \fImaster user\fR\. Leave \fBpassword\fR blank to be prompted for the password when you run the command (this will not work when triggered as a bash script from another application, e\.g\. a text editor)\. Apart from the \fBdb_user\fR \fBspecify_cli\fR also needs a Specify user (a user that Specify uses internally), which is provided under \fBsp_user\fR\. Every command (except the configuration commands \fBspecify_cli\-database(1)\fR and \fBspecify_cli\-repository(1)\fR) will start a session in Specify where the Specify user will be logged in to the collection\. Any records created or modified during this session will be marked as created by or modified by the \fBsp_user\fR\.
 .
 .SH "COMMANDS"
 .
 .IP "\(bu" 4
-\fBdatabase\fR(1) Add a database configuration\.
+\fBspecify_cli\-database\fR(1) Add a database configuration\.
 .
 .IP "\(bu" 4
-\fBstubs\fR(1) Create stub records
+\fBspecify_cli\-stubs\fR(1) Create stub records
 .
 .IP "\(bu" 4
-\fBrepository\fR(1) Map a git repository to a host for automatic target resolution\.
+\fBspecify_cli\-repository\fR(1) Map a git repository to a host for automatic target resolution\.
 .
 .IP "\(bu" 4
-\fBviewset\fR(1) Upload a view to the database\.
+\fBspecify_cli\-viewset\fR(1) Upload a view to the database\.
 .
 .IP "" 0
 .
@@ -83,7 +83,7 @@ The name of the Specify database to connect to\.
 .
 .TP
 \fB\-H\fR, \fB\-\-host\fR \fIname\fR
-The name or IP address of the host\.
+The name or IP address of the host\. Default: \fBlocalhost\fR
 .
 .TP
 \fB\-P\fR, \fB\-\-password\fR \fIpassword\fR
@@ -106,6 +106,96 @@ The port for the MySQL/MariaDB host\.
 The MySQL/MariaDB user name\.
 .
 .SH "EXAMPLES"
+Configure a database \fBSpecify\fR on the host \fBspecify\.example\.org\fR:
+.
+.IP "" 4
+.
+.nf
+
+$ specify_cli \-\-host=specify\.example\.org database specify
+.
+.fi
+.
+.IP "" 0
+.
+.P
+Map the current directory to the host \fBspecify\.example\.org\fR:
+.
+.IP "" 4
+.
+.nf
+
+$ specify_cli \-\-host=specify\.example\.org repository \-c
+.
+.fi
+.
+.IP "" 0
+.
+.P
+Map \fB~/specify_forms/invertpaleo\fR to \fBlocalhost\fR:
+.
+.IP "" 4
+.
+.nf
+
+$ specify_cli repository ~/specify_forms/invertpaleo
+.
+.fi
+.
+.IP "" 0
+.
+.P
+Create 10 blank stub records in the collection \fBTriloites\fR in the database \fBSpecify\fR on localhost:
+.
+.IP "" 4
+.
+.nf
+
+$ specify_cli \-D Specify stubs Trilobites 10
+.
+.fi
+.
+.IP "" 0
+.
+.P
+Create 10 stub records for herbarium sheets in the collection \fBOrchids\fR in the database \fBSpecify\fR on localhost, determined to taxon \fBOrchidaceae\fR:
+.
+.IP "" 4
+.
+.nf
+
+$ specify_cli \-D Specify stubs \-\-taxon=\'Family: Orchidaceae\'\en
+    \-\-preptype=Sheet \-\-perpcount=1 Orchids 10
+.
+.fi
+.
+.IP "" 0
+.
+.P
+Upload \fBinvertpaleo\.views\.xml\fR to discipline level for collection \fBTrilobites\fR in the database \fBSpecify\fR on localhost:
+.
+.IP "" 4
+.
+.nf
+
+$ specify_cli \-D Specify viewset \-d Trilobites invertpaleo\.views\.xml
+.
+.fi
+.
+.IP "" 0
+.
+.P
+Upload \fBinvertpaleo\.views\.xml\fR auto\-resolving target from current Git branch:
+.
+.IP "" 4
+.
+.nf
+
+$ specify_cli viewset \-b invertpaleo\.views\.xml
+.
+.fi
+.
+.IP "" 0
 .
 .SH "LICENSE"
 MIT License

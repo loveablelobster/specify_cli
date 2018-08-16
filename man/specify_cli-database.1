@@ -1,0 +1,60 @@
+.\" generated with Ronn/v0.7.3
+.\" http://github.com/rtomayko/ronn/tree/0.7.3
+.
+.TH "SPECIFY_CLI\-DATABASE" "1" "August 2018" "" ""
+.
+.SH "NAME"
+\fBspecify_cli\-database\fR \- A command line interface for Specify
+.
+.SH "SYNOPSIS"
+\fBspecify_cli\fR [\fIglobal options\fR] \fBdatabase\fR \fIname\fR
+.
+.SH "DESCRIPTION"
+The database configuration file (default: \fI~/\.specify_dbs\.rc\.yaml\fR) has a \fBhosts\fR section which contains settings for Specify databases by grouped by \fIhostname\fR\.
+.
+.P
+Use the \fBdatabase\fR command to add information for a specific database using this command\.
+.
+.P
+Use the specify_cli global option \fB\-\-host\fR to provide the host information and pass the \fIname\fR of the database to configure as an argument\.
+.
+.P
+The command will look up the \fIhost\fR and \fIdatabase\fR in the database configuration file and ask for necessary information to configure either\. The command will not overwrite existing configurations\. If you need to change information, edit the file\.
+.
+.P
+Information required to configure a \fIhost\fR is the port number\.
+.
+.P
+Information required to configure a \fIdatabase\fR is the MySQL/MariaDB user name and password\. The user will be the typically be the Specify \fImaster user\fR (or any user with equivalent permissions on the database) Leave the password blank to be prompted when working with commands that read the file (\fBspecify_cli\-stubs(1)\fR, \fBspecify_cli\-viewset(1)\fR)\. Apart from the MySQL/MariaDB user, \fBspecify_cli\fR the command will also ask for a \fIspecify user\fR name\. Every command (except the configuration commands \fBspecify_cli\-database(1)\fR and \fBspecify_cli\-repository(1)\fR) will start a session in Specify where the Specify user will be logged in to the collection\. Any records created or modified during this session will be marked as created by or modified by the \fIspecify user\fR\.
+.
+.SH "OPTIONS"
+None\.
+.
+.SH "EXAMPLES"
+Configure a database \fBSpecify\fR on the host \fBspecify\.example\.org\fR:
+.
+.IP "" 4
+.
+.nf
+
+$ specify_cli \-\-host=specify\.example\.org database Specify
+.
+.fi
+.
+.IP "" 0
+.
+.P
+Configure a database \fBSpecifyTest\fR on localhost:
+.
+.IP "" 4
+.
+.nf
+
+$ specify_cli database SpecifyTest
+.
+.fi
+.
+.IP "" 0
+.
+.SH "SPECIFY_CLI"
+Part of the specify_cli(1) suite

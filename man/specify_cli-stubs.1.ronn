@@ -1,0 +1,147 @@
+specify_cli-stubsy(1) -- A command line interface for Specify
+===============================================================================
+
+## SYNOPSIS
+
+`specify_cli` [<global options>] `stubs` [<options>] <collection> <count>
+`specify_cli` `stubs` `--file` <count>
+
+## DESCRIPTION
+
+The stubs command creates stub records in a collection, so that catalog
+numbers can be printed to labels e.g. prior to mass digitizaton. The command
+currently only works for collection objects, and will currently only work for
+collections using the numeric catalog numbering scheme.
+
+Generated catalog numbers are printed to stdout.
+
+The number of stub records created is specified with the *count* argument.
+The target collection is provided as the *collection* argument. *Host* and
+*database* are provided using the global options `--host` and `--database`
+respectively.
+The command will generate a record set with all generated collection objects.
+The record set will be owned by either the *Specify user* (as provided via the
+global option `--specify_user` or in the database configuration file), or the
+*Specify user* provided with the `--cataloger` option. If no dataset name is
+provided using the `--dataset` option, the default name will be `stub record set
+<TIMESTAMP>`.
+
+Records can be created with the following basic information (provided using
+command options - see below): cataloger, accession, geography/locality, taxon,
+preparation.
+
+Only existing accessions and preparation types can be assigned at present.
+Unknown items will raise an error.
+
+If geographic information is provided, but no locality name, the
+default locality name will be `not cataloged, see label`. This can be changed
+using the `--locality` option. Geographic information should be passed in the
+format `Geographic Rank: Name; Geographic Subrank: Name; locality: name` where
+*locality* is optional (if not given, the default locality name will be used).
+Only geographic names/ranks and locality names that exist in the database will
+can be used (unknown item will raise an error).
+
+Taxon information is assigned as a determination. Only one determination can
+be given to a stub records using the command. Taxon information is provided
+in the format `Taxon Rank: Name; Taxon Subrank: Name`. Only taxonomic names that exist in the database will be accepted. Unknown items will raise an error.
+
+Alternatively to using the options, a YAML file with all required information
+can be passed with the `--file option`. In that case, the *database* and
+*collection* arguments can be ommitted.
+
+## FILES
+
+YAML files with stub record information provided using the `--file` option
+should have the general structure:
+
+    ---
+    :stub_generator:
+      :host: <hostname>
+      :database: <database name>
+      :collection: <collection name>
+      :config: <database configuration file>
+    dataset_name: <record set name>
+    accession: <accession number>
+    cataloger: <specify user name>
+    collecting_data:
+      <1st rank>: <name>
+      <2nd rank>: <name>
+      <3rd rank>: <name>
+      :locality: <name>
+    default_locality_name: <name>
+    determination:
+      <rank>: <name>
+    preparation:
+      :type: <preparation type>
+      :count: <preparation count>
+
+Items prefixed with `:` in the YAML will be deserialized as Ruby symbols and
+need to be prefixed with `:` in your file. Leave any unnecessary items out.
+The first section `:stub_generator` contains connection information. When
+`:config` is left out, *stubs* will use the config file provided with the global
+option `--db_config` or the default file `~/.specify_dbs.rc.yaml` if none
+provided. Likewise, `:host`, and `:database` can be provided using the global
+options `--host` and `--database` respectively.
+
+If you provide the `:locality` under `collecting data:`, this will have
+precedence over the `default_locality_name`, so the latter is redundant.
+
+## OPTIONS
+
+* `-f`, `--file` <file>:
+    Load stub record information from a YAML file.
+* `-c`, `--cataloger` <name>:
+    Specify user appearing as cataloger and owner of the record set.
+* `-d`, `--dataset` <name>:
+    Name of the datas set (record set) generated.
+* `-a`, `--accession` <accession_number>
+    Accession number for the accession to which the stub records belong.
+* `-g`, `--geography` <geography>
+    Geographic and locality information for the stub records. Format of
+    <geography>: `'Rank1: Name; Rank2: Name; locality: name'`
+* `-l`, `--locality` <name>:
+    Default locality name if geographic information has no locality.
+* `-t`, `--taxon` <taxon>:
+    Taxon to which stub records are determined.  Format of <taxon>:
+    `'Rank1: Name; Rank2: Name; locality: name'`
+* `-p`, `--preptype` <name>:
+    Preparation type for the stub records, if they have preparations.
+* `-n`, `--prepcount` <number>:
+    Number of preparation items (requires --preptype to be set).
+
+## EXAMPLES
+
+Create 10 blank stub records in the collection `Triloites` in the database
+`Specify` on localhost:
+
+    $ specify_cli -D Specify stubs Trilobites 10
+
+Create 10 stub records determined to `Asaphidae` in the collection `Triloites`
+in the database`Specify` on localhost:
+
+    $ specify_cli -D Specify stubs\n
+        --taxon='Class: Trilobita; Order: Asaphida; Family: Asaphidae'\n
+        Trilobites 10
+
+Create 10 stub records for herbarium sheets in the collection `Orchids` in the
+database `Specify` on localhost, determined to taxon `Orchidaceae`:
+
+    $ specify_cli -D Specify stubs --taxon='Family: Orchidaceae'\n
+        --preptype=Sheet --perpcount=1 Orchids 10
+
+Create 10 stub records for herbarium sheets in the collection `Orchids` in the
+database `Specify` on localhost, determined to taxon `Orchidaceae`, collected
+in `Downtown Lawrence`:
+
+    $ specify_cli -D Specify stubs --taxon='Family: Orchidaceae'\n
+        --geography='Country: United States, State: Kansas,\n
+        County: Douglas County; locality: Downtown Lawrence'
+        --preptype=Sheet --perpcount=1 Orchids 10
+
+Create 10 stub records from a YAML file `stub_details.yaml`:
+
+    $ specify_cli stubs --file=stub_details.yaml 10
+
+## SPECIFY_CLI
+
+Part of the specify_cli(1) suite
