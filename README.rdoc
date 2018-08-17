@@ -1,6 +1,6 @@
 = specify_cli - A command line interface for Specify
 
-Author:: Martin Stein (mailto:loveablelobster@fastmail.fm)
+Author:: Martin Stein
 Copyright:: Copyright (c) 2018 by Martin Stein
 License:: Distributes under the MIT License, see LICENSE.txt in the source
           distribution
@@ -15,7 +15,12 @@ Currently supported tasks:
 == Install
 
 Install:
-    gem install specify_cli
+
+Build with
+
+    rake package
+
+Then install the gem.
 
 == Use
 
