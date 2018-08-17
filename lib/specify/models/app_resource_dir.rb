@@ -22,6 +22,12 @@ module Specify
         self.TimestampCreated = Time.now
         super
       end
+
+      # Returns a String that is the discipline type
+      # (same as Specify::Model::Discipline#name)
+      def discipline_type
+        self.DisciplineType
+      end
     end
   end
 end

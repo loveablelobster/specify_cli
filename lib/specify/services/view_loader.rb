@@ -69,6 +69,19 @@ module Specify
         "#{self} database: #{@db.database}, target: #{@target}"
       end
 
+      # Loads the _views.xml_ +file+ and stores it as a SQL blob in the
+      # Specify::Model::ViewSetObject for the #target.
+      def import(file)
+        view_set = @target.view_set(collection) ||
+                   create_view_set(file)
+        view_set.import(views_file(file))
+      end
+
+      # Returns +true+ if the view is personal, +false+ otherwise.
+      def personal?
+        @target.is_a?(Model::User) ? true : false
+      end
+
       # Sets the target for the instance. +level+ must be +:discipline+,
       # +:collection+, or a Hash with the key :user_type and a valid
       # Specify::UserType#name as value or the key +:user+ and an existing
@@ -86,52 +99,38 @@ module Specify
                   end
       end
 
-      # Persists the contents of _file_ in the database.
-      def import(file)
-        view_set = @target.view_set(collection) ||
-                   create_view_set(file)
-        view_set.import(views_file(file))
-      end
-
-      # Returns the Model::Collection for the _collection_ association of
-      # Model::AppResourceDir.
+      # Returns the Specify::Model::Collection that _views.xml_ files will be
+      # uploaded to (all supported upload levels except +:disciplin+ are
+      # scoped to a collection. Will be #collection or +nil+.
       def view_collection
         collection unless @target.is_a? Model::Discipline
       end
 
-      # Returns the Model::Discipline for the _discipline_ association of
-      # Model::AppResourceDir.
+      # Returns the Specify::Model::Discipline that _views.xml_ files will be
+      # uploaded to.
       def view_discipline
         discipline
       end
 
-      # Returns the value for the _IsPersonal_ attribute of
-      # Model::AppResourceDir.
-      # +true+ if the view is personal, +false+ otherwise.
-      def view_is_personal
-        @target.is_a?(Model::User) ? true : false
-      end
-
-      # Returns the value for the _level_ attribute of Model::ViewSetObject.
-      # +2+ if the view is for a colletion, +0+ otherwise.
+      # Returns +2+ if the view is for a collection, +0+ otherwise.
       def view_level
         @target.is_a?(Model::Collection) ? 2 : 0
       end
 
-      # Returns the value for the _DisciplineType_ attribute of
-      # Model::AppResourceDir.
+      # Returns the Specify::Model::Discipline#name, which is the
+      # Specify::Model::AppResourceDir#discipline_type.
       def view_type
-        view_discipline.Name
+        view_discipline.name
       end
 
-      # Returns the Model::User for the _user_ association of
-      # Model::AppResourceDir; the user who uploaded the view unless the view is
-      # a personal view for another user.
+      # Returns the Specify::Model::User that _views.xml_ files will be
+      # uploaded to. Same as #session Specify::Session#user unless the view is
+      # for a different user.
       def view_user
         @target.is_a?(Model::User) ? @target : @session.user
       end
 
-      # Returns the value for the _UserType_ attribute of Model::AppResourceDir.
+      # Returns a String with a valid Specify::UserType#name for #target.
       def view_user_type
         case @target
         when UserType
@@ -143,21 +142,17 @@ module Specify
 
       private
 
-      # Creates a new Model::AppResourceDir instance for _target_ and sets
-      # _target_'s _view_set_dir_.
       def create_view_dir
         vals = { created_by: agent,
                  DisciplineType: view_type,
                  UserType: view_user_type,
-                 IsPersonal: view_is_personal,
+                 IsPersonal: personal?,
                  collection: view_collection,
                  discipline: view_discipline,
                  user: view_user }
         @target.view_set_dir = @target.add_app_resource_dir(vals)
       end
 
-      # Creates a new Model::ViewSetObject and associated Model::AppResourceData
-      # instance.
       def create_view_set(file)
         vals = { Level: view_level,
                  FileName: file,
@@ -171,7 +166,6 @@ module Specify
         view_set.save
       end
 
-      # Loads _file_.
       def views_file(file)
         raise ArgumentError, FileError::NO_FILE unless File.exist?(file)
         path = Pathname.new file

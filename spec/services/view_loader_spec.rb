@@ -276,8 +276,8 @@ module Specify
         end
       end
 
-      describe '#view_is_personal' do
-        subject { view_loader.view_is_personal }
+      describe '#personal?' do
+        subject { view_loader.personal? }
 
         let :view_loader do
           described_class.new host: 'localhost',
