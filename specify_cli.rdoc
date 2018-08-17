@@ -1,5 +1,35 @@
-= specify_cli
+= specify_cli - A command line interface for Specify
 
-Generate this with
-    specify_cli rdoc
-After you have described your command line interface
+Author:: Martin Stein (mailto:loveablelobster@fastmail.fm)
+Copyright:: Copyright (c) 2018 by Martin Stein
+License:: Distributes under the MIT License, see LICENSE.txt in the source
+          distribution
+
+specify_cli is a tool that allows certain tasks in a Specify database
+(http://www.sustain.specifysoftware.org) to be carried out from the command
+line.
+Currently supported tasks:
+- upload of views to the database
+- generation of stub records
+
+== Install
+
+Install:
+    gem install specify_cli
+
+== Use
+
+For more help:
+
+    specify_cli --help
+    gem man specify_cli
+
+== For developers
+
+Install bundler:
+
+    gem install bundler
+    
+Install development dependencies
+
+    bundle install

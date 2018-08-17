@@ -1,6 +1,2 @@
-= specify_cli
-
-Describe your project here
-
 :include:specify_cli.rdoc
 

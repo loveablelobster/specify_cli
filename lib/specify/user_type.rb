@@ -4,6 +4,9 @@ module Specify
   # A class that represents a lvel for upload of views.
   class UserType
     attr_writer :view_set_dir
+
+    # A String, must be either 'manager', 'fullaccess', 'limitedaccess', or
+    # 'guest'
     attr_reader :name
 
     # -> UserType

@@ -2,17 +2,53 @@
 
 module Specify
   module Service
-    # A class that uploads view files.
+    # ViewLoaders will upload _.views.xml_ files to the Specify database.
     class ViewLoader < Service
+      # The target to which the ViewLoader uploads _.views.xml_ files; an
+      # instance of Specify::Model::Discipline, Specify::Model::Collection,
+      # Specify::UserType, or Specify::Model::User
       attr_reader :target
-      # Creates a new instance.
-      # _host_: the host for the database to which views are uploaded.
-      # _database_: the database to which views are uploaded.
-      # _collection_: the collection for the session and the target.
-      # _level_: the level at which the view will be uploaded (+:discipline+,
-      #          +:collection+, <tt>{ user_type: String }</tt>, or
-      #          <tt>{ user: String }.
-      # _config_: a yaml file containing the database configuration.
+
+      # Creates a new instance from a branch +name+, if +name+ conforms to the
+      # naming convention <em>database_name/collection_name/level</em>, where
+      # _level_ is _discipline_, _collection_, _manager_, _fullaccess_,
+      # _limitedaccess_, or _guest_), or _user/username_.
+      #
+      # +path+ is the filepath for the view file to be uploaded.
+      #
+      # +config+ is the yaml file containing the database configuration.
+      def self.from_branch(config:, path: nil, name: nil)
+        parser = if name
+                   BranchParser.new(path, name, config)
+                 else
+                   BranchParser.current_branch config
+                 end
+        new parser.to_h.merge(config: config)
+      end
+
+      # Returns the Specify::Model::User instance for +hash+ if +hash+ has the
+      # key +:user+ and the value for that key is an existing
+      # Specify::Model::User#name.
+      def self.user_target(hash)
+        return unless hash.key? :user
+        Model::User.first(Name: hash[:user])
+      end
+
+      # Returns the Specify::UserType for +hash+ if hash has the key
+      # +user_type+, and the value for that key is a valid
+      # Specify::UserType#name.
+      def self.user_type_target(hash)
+        return unless hash.key? :user_type
+        UserType.new(hash[:user_type])
+      end
+
+      # Returns a new ViewLoader.
+      #
+      # +level+ is the level to which the _.views.xml_ file will be uploaded.
+      # valid values are _:discipline_, _:collection_,
+      # <tt>{ :user_type => String }</tt> (String Symbol must be a valid
+      # Specify::UserType#name) or <tt>{ :user => String }</tt> (where String
+      # must be an existing Specify::Model::User#user name).
       def initialize(host:,
                      database:,
                      collection:,
@@ -28,41 +64,11 @@ module Specify
         self.target = level
       end
 
-      # Returns a string containing a human-readable representation of Session.
+      # Creates a string representation of +self+.
       def inspect
         "#{self} database: #{@db.database}, target: #{@target}"
       end
 
-      # -> ViewLoader
-      # Creates a new instance from a branch _name_.
-      # _config_: a yaml file containing the database configuration.
-      def self.from_branch(config:, path: nil, name: nil)
-        parser = if name
-                   BranchParser.new(path, name, config)
-                 else
-                   BranchParser.current_branch config
-                 end
-        new parser.to_h.merge(config: config)
-      end
-
-      # -> Model::User
-      # Returns the Model::User instance for _hash_.
-      # _hash_: <tt>{ user: String }</tt> where _String_ is the user name.
-      def self.user_target(hash)
-        return unless hash.key? :user
-        Model::User.first(Name: hash[:user])
-      end
-
-      # -> UserType
-      # Returns the UserType for _hash_.
-      # _hash_: <tt>{ user_type: String }</tt> where Symbol is :fullaccess,
-      #         :guest, :limitedaccess, :manager.
-      def self.user_type_target(hash)
-        return unless hash.key? :user_type
-        UserType.new(hash[:user_type])
-      end
-
-      # -> Object
       # Sets the target for the instance.
       # _level_: symbol (+:collection+ or +:discipline+) or Hash
       #          { :user_type => String } for UserType where _String_ is the
@@ -81,7 +87,6 @@ module Specify
                   end
       end
 
-      # -> Object
       # Persists the contents of _file_ in the database.
       def import(file)
         view_set = @target.view_set(collection) ||
@@ -89,21 +94,18 @@ module Specify
         view_set.import(views_file(file))
       end
 
-      # -> Model::Collection or nil
       # Returns the Model::Collection for the _collection_ association of
       # Model::AppResourceDir.
       def view_collection
         collection unless @target.is_a? Model::Discipline
       end
 
-      # -> Model::Discipline
       # Returns the Model::Discipline for the _discipline_ association of
       # Model::AppResourceDir.
       def view_discipline
         discipline
       end
 
-      # -> +true+ or +false+
       # Returns the value for the _IsPersonal_ attribute of
       # Model::AppResourceDir.
       # +true+ if the view is personal, +false+ otherwise.
@@ -111,21 +113,18 @@ module Specify
         @target.is_a?(Model::User) ? true : false
       end
 
-      # -> Integer
       # Returns the value for the _level_ attribute of Model::ViewSetObject.
       # +2+ if the view is for a colletion, +0+ otherwise.
       def view_level
         @target.is_a?(Model::Collection) ? 2 : 0
       end
 
-      # -> String
       # Returns the value for the _DisciplineType_ attribute of
       # Model::AppResourceDir.
       def view_type
         view_discipline.Name
       end
 
-      # -> Model::User
       # Returns the Model::User for the _user_ association of
       # Model::AppResourceDir; the user who uploaded the view unless the view is
       # a personal view for another user.
@@ -133,7 +132,6 @@ module Specify
         @target.is_a?(Model::User) ? @target : @session.user
       end
 
-      # -> String
       # Returns the value for the _UserType_ attribute of Model::AppResourceDir.
       def view_user_type
         case @target
@@ -146,7 +144,6 @@ module Specify
 
       private
 
-      # -> Model::AppResourceDir
       # Creates a new Model::AppResourceDir instance for _target_ and sets
       # _target_'s _view_set_dir_.
       def create_view_dir
@@ -160,7 +157,6 @@ module Specify
         @target.view_set_dir = @target.add_app_resource_dir(vals)
       end
 
-      # -> Model::ViewSetObject
       # Creates a new Model::ViewSetObject and associated Model::AppResourceData
       # instance.
       def create_view_set(file)
@@ -176,7 +172,6 @@ module Specify
         view_set.save
       end
 
-      # -> File
       # Loads _file_.
       def views_file(file)
         raise ArgumentError, FileError::NO_FILE unless File.exist?(file)

@@ -2,7 +2,8 @@
 
 module Specify
   module Model
-    # Sequel::Model class for view set objects.
+    # ViewSetObjects represent Specify user forms (views). The actual views are
+    # _.views.xml_ files that are stored as _blobs_ in the database.
     class ViewSetObject < Sequel::Model(:spviewsetobj)
       many_to_one :app_resource_dir,
                   class: 'Specify::Model::AppResourceDir',
@@ -29,7 +30,6 @@ module Specify
         super
       end
 
-      # -> Model::ViewSetObject
       # Persists _file_ as a blob the database.
       def import(file)
         app_resource_data.import file

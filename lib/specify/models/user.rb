@@ -66,6 +66,11 @@ module Specify
         agents_dataset.first(division: division)
       end
 
+      # Returns a String with the Specify username.
+      def name
+        self.Name
+      end
+
       # -> Hash
       # Registers a new login in _collection_ with the database.
       # _collection_: a Model::Collection
