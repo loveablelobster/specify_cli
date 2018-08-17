@@ -69,11 +69,10 @@ module Specify
         "#{self} database: #{@db.database}, target: #{@target}"
       end
 
-      # Sets the target for the instance.
-      # _level_: symbol (+:collection+ or +:discipline+) or Hash
-      #          { :user_type => String } for UserType where _String_ is the
-      #          UserType _name_.
-      #          { :user => String } for User, where _String_ is the user name.
+      # Sets the target for the instance. +level+ must be +:discipline+,
+      # +:collection+, or a Hash with the key :user_type and a valid
+      # Specify::UserType#name as value or the key +:user+ and an existing
+      # Specify::Model::User#name.
       def target=(level)
         return unless level
         @target = case level
