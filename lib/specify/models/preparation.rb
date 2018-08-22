@@ -28,6 +28,10 @@ module Specify
         self.TimestampModified = Time.now
         super
       end
+
+      def count
+        self.CountAmt
+      end
     end
   end
 end

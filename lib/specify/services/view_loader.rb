@@ -2,7 +2,7 @@
 
 module Specify
   module Service
-    # ViewLoaders will upload _.views.xml_ files to the Specify database.
+    # ViewLoaders will upload _.views.xml_ files to a Specify::Database.
     class ViewLoader < Service
       # The target to which the ViewLoader uploads _.views.xml_ files; an
       # instance of Specify::Model::Discipline, Specify::Model::Collection,
@@ -16,7 +16,7 @@ module Specify
       #
       # +path+ is the filepath for the view file to be uploaded.
       #
-      # +config+ is the yaml file containing the database configuration.
+      # +config+ is the YAML file containing the database configuration.
       def self.from_branch(config:, path: nil, name: nil)
         parser = if name
                    BranchParser.new(path, name, config)
@@ -24,22 +24,6 @@ module Specify
                    BranchParser.current_branch config
                  end
         new parser.to_h.merge(config: config)
-      end
-
-      # Returns the Specify::Model::User instance for +hash+ if +hash+ has the
-      # key +:user+ and the value for that key is an existing
-      # Specify::Model::User#name.
-      def self.user_target(hash)
-        return unless hash.key? :user
-        Model::User.first(Name: hash[:user])
-      end
-
-      # Returns the Specify::UserType for +hash+ if hash has the key
-      # +user_type+, and the value for that key is a valid
-      # Specify::UserType#name.
-      def self.user_type_target(hash)
-        return unless hash.key? :user_type
-        UserType.new(hash[:user_type])
       end
 
       # Returns a new ViewLoader.
@@ -62,6 +46,22 @@ module Specify
               config: config)
         @target = nil
         self.target = level
+      end
+
+      # Returns the Specify::Model::User instance for +hash+ if +hash+ has the
+      # key +:user+ and the value for that key is an existing
+      # Specify::Model::User#name.
+      def self.user_target(hash)
+        return unless hash.key? :user
+        Model::User.first(Name: hash[:user])
+      end
+
+      # Returns the Specify::UserType for +hash+ if hash has the key
+      # +user_type+, and the value for that key is a valid
+      # Specify::UserType#name.
+      def self.user_type_target(hash)
+        return unless hash.key? :user_type
+        UserType.new(hash[:user_type])
       end
 
       # Creates a string representation of +self+.

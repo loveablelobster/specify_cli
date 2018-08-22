@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Specify
-  # A class to work with Specify number formats.
+  # NumberFormats represent auto numbering formatters in a Specify::Database.
   class NumberFormat
     attr_accessor :incrementer_length
 

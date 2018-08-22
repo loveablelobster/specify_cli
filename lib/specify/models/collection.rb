@@ -38,6 +38,11 @@ module Specify
         "#{self} name: #{self.CollectionName}"
       end
 
+      #
+      def name
+        self.CollectionName
+      end
+
       # Returns the ViewSetObject.
       # The argument is only for ducktyping/overloading.
       def view_set(_collection = nil)

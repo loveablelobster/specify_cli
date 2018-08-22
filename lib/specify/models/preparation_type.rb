@@ -25,6 +25,10 @@ module Specify
         # TODO: set modified_by
         super
       end
+
+      def name
+        self.Name
+      end
     end
   end
 end

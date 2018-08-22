@@ -3,13 +3,37 @@
 require 'observer'
 
 module Specify
-  #
+  # A Session is responsible for logging an existing Specify::Model::User in and
+  # out of a Specify::Model::Collection. Session objects are used to set the
+  # #created_by and #modified_by attributes for any record created or updated to
+  # the session #user.
   class Session
     include Observable
 
-    attr_reader :active, :collection, :discipline, :division, :user
+    # +true+ if the session is open (the #user is logged in), +false+ otherwise.
+    attr_reader :active
 
-    # Creates an instance.
+    # The Specify::Model::Collection that #user is logged in to during
+    # the life span of the session.
+    attr_reader :collection
+
+    # The Specify::Model::Discipline that #user is logged in to during
+    # the life span of the session.
+    attr_reader :discipline
+
+    # The Specify::Model::Division that #collection and #discipline belong to.
+    attr_reader :division
+
+    # The Specify::Model::User that is logged in to #collection during the
+    # session.
+    attr_reader :user
+
+    # Returns a new Session.
+    #
+    # +user+ is a String with an existing Specify::Model::User#name.
+    #
+    # +collection+ is a String with and existing
+    # Specify::Model::Collection#name.
     def initialize(user, collection)
       @user = Model::User.first(Name: user)
       @collection = Model::Collection.first(CollectionName: collection)
@@ -18,15 +42,13 @@ module Specify
       @active = false
     end
 
-    # -> String
-    # Returns a string containing a human-readable representation of Session.
+    # Creates a string representation of +self+.
     def inspect
       "#{self} specify user: #{@user}"\
       ", collection: #{@collection}, open: #{@active}"
     end
 
-    # -> Session
-    # Closes the Session; logs the instance's _user_ out.
+    # Closes this session, logs #user out of #collection.
     def close
       @user.log_out
       @active = false
@@ -35,24 +57,19 @@ module Specify
       self
     end
 
-    # -> Session
-    # Opens the Session; logs the instance's _user_ in to the instance's
-    # _collection_.
+    # Opens this session, logs #user in to #collection.
     def open
       @user.log_in(@collection)
       @active = true
       self
     end
 
-    # -> +true+ or +false+
-    # Returns +true+ if the Session is open.
+    # Returns +true+ if this session is currently open.
     def open?
       @active
     end
 
-    # -> Model::Agent
-    # Returns the Model::Agent for the Model::User in the Model::Division that
-    # _@collection_ belongs to.
+    # Returns the Specify::Model::Agent for #user in #division.
     def session_agent
       user.logged_in_agent
     end

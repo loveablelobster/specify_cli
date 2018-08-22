@@ -5,7 +5,8 @@ require_relative 'services/stub_generator'
 require_relative 'services/view_loader'
 
 module Specify
-  # TODO: describe me
+  # The Service module contains classes that will carry out tasks on a
+  # Specify::Database. Service classes are subclasses of Service::Service.
   module Service
     ACCESSION_NOT_FOUND_ERROR = 'Accession not found: '
     USER_NOT_FOUND_ERROR = 'User not found: '

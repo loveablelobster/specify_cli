@@ -25,6 +25,10 @@ module Specify
         # TODO: set modified_by
         super
       end
+
+      def number
+        self.AccessionNumber
+      end
     end
   end
 end

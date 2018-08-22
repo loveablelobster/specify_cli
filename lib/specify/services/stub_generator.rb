@@ -2,16 +2,121 @@
 
 module Specify
   module Service
-    # A class that generates collection object stub records in a collection.
+    # A StubGenerator creates Specify::Model::CollectionObject stub records
+    # (mostly empty records with a minmum of information) in collection in a
+    # Specify::Database.
     class StubGenerator < Service
-      attr_accessor :default_locality_name, :dataset_name
+      # An existing Specify::Model::Accession.
+      attr_reader :accession
 
-      attr_reader :accession, :cataloger,
-                  :collecting_geography, :collecting_locality,
-                  :preparation_count, :preparation_type,
-                  :record_set,
-                  :taxon
+      # An existing Specify::Model::Agent.
+      attr_reader :cataloger
 
+      # An existing Specify::Model::GeographicName.
+      attr_reader :collecting_geography
+
+      # An existing Specify::Model::Locality.
+      attr_reader :collecting_locality
+
+      # String; the name for the #record_set that will be created for the
+      # generated Specify::Model::CollectionObject records.
+      attr_accessor :dataset_name
+
+      # String; the name of the Specify::Model::Locality that will be created if
+      # no existing Specify::Model::Locality is passed via #collecting_data=.
+      attr_accessor :default_locality_name
+
+      # Integer. See Specify::Model::Preparation#count.
+      attr_reader :preparation_count
+
+      # An existing Specify::Model::PreparationType.
+      attr_reader :preparation_type
+
+      # A Specify::Model::RecordSet.
+      attr_reader :record_set
+
+      # An existing Specify::Model::Taxon.
+      attr_reader :taxon
+
+      # Returns a new StubGenerator with attributes from a YAML +file+.
+      #
+      # +file+ should have the structure:
+      #     ---
+      #     :stub_generator:
+      #       :host: <hostname>
+      #       :database: <database name>
+      #       :collection: <collection name>
+      #       :config: <database configuration file>
+      #     dataset_name: <record set name>
+      #     accession: <accession number>
+      #     cataloger: <specify user name>
+      #     collecting_data:
+      #       <1st rank>: <name>
+      #       <2nd rank>: <name>
+      #       <3rd rank>: <name>
+      #       :locality: <name>
+      #     default_locality_name: <name>
+      #     determination:
+      #       <1st rank>: <name>
+      #       <2nd rank>: <name>
+      #       <3rd rank>: <name>
+      #     preparation:
+      #       :type: <preparation type>
+      #       :count: <preparation count>
+      #
+      # Items prefixed with +:+ in the example above will be deserialized as
+      # Ruby symbols and need to be prefixed with +:+ in the file. Leave out any
+      # items that are not to be set. The section +:stub_generator:+ is
+      # required.
+      def self.load_yaml(file)
+        unwrap Psych.load_file(file)
+      end
+
+      # Returns a new StubGenerator with attributes from +hash+.
+      #
+      # +hash+ should have the structure
+      # {
+      #   stub_generator: {
+      #     host: <hostname>,
+      #     database: <database name>,
+      #     collection: <collection name>,
+      #     config: <database configuration file>
+      #   },
+      #   dataset_name => <record set name>,
+      #   accession => <accession number>,
+      #   cataloger => <specify user name>,
+      #   collecting_data => {
+      #     <1st rank> => <name>,
+      #     <2nd rank> => <name>,
+      #     <3rd rank> => <name>,
+      #     locality: <name>
+      #   },
+      #   default_locality_name => <name>,
+      #   determination => {
+      #     <1st rank> => <name>,
+      #     <2nd rank> => <name>,
+      #     <3rd rank> => <name>
+      #   },
+      #   preparation => {
+      #     type: <preparation type>,
+      #     count: <preparation count>
+      #   }
+      # }
+      # Items that are symbols in the example above need to be symbols in the
+      # +hash+ passed. Leave out any items that are not to be set. The key
+      # +:stub_generator+ is required.
+      def self.unwrap(hash)
+        new hash.delete(:stub_generator) do |stubs|
+          hash.each do |key, value|
+            setter = (key + '=').to_sym
+            puts "#{setter}#{value}"
+            next unless value
+            stubs.public_send(setter, value)
+          end
+        end
+      end
+
+      # Returns a new StubGenerator.
       def initialize(collection:,
                      config:,
                      host:,
@@ -31,49 +136,33 @@ module Specify
         yield(self) if block_given?
       end
 
-      #
-      def self.load_yaml(file)
-        unwrap Psych.load_file(file)
-      end
-
-      # -> StubGenerator
-      # Loads a YAML _file_ and creates an instance according to specifications
-      # in the file.
-      def self.unwrap(hash)
-        new hash.delete(:stub_generator) do |stubs|
-          hash.each do |key, value|
-            setter = (key + '=').to_sym
-            puts "#{setter}#{value}"
-            next unless value
-            stubs.public_send(setter, value)
-          end
-        end
-      end
-      # -> Model::Accession
-      # Sets the instance's _accession_ to the Model::Accession with the passed
-      # <em>accession_number</em> (String).
+      # Sets #accession to the Specify::Model::Accession with +accession_number+
       def accession=(accession_number)
         @accession = division.accessions_dataset
                              .first AccessionNumber: accession_number
         raise ACCESSION_NOT_FOUND_ERROR + accession_number unless accession
       end
 
-      # -> Model::Agent
-      # Sets the instance's _cataloger_ to the Model::Agent representing the
-      # Model::User in the instance's _division_.
-      # <em>user_name</em>: String
+      # Sets #cataloger to the Specify::Model::Agent representing the
+      # Specify::Model::User with +user_name+ in #division.
       def cataloger=(user_name)
         cataloger_user = Model::User.first(Name: user_name)
         raise USER_NOT_FOUND_ERROR + user_name unless cataloger_user
         @cataloger = cataloger_user.agents_dataset.first division: division
       end
 
-      # -> Model::Locality
-      # Sets the instance's <em>collecting_geography</em> and
-      # <em>collecting_locality</em>.
-      # _geography_: Hash
-      #              { 'Administrative division name' => 'Geographic name',
-      #                locality: 'Locality name' }
+      # Sets #collecting_geography and #collecting_locality.
+      #
+      # +vals+ is a Hash with the structure <tt>{ 'rank' => 'name',
+      # :locality => 'name' }</tt> where +rank+ is an existing
+      # Specify::Model::AdministrativeDivision#name, +name+ an existing
+      # Specify::Model::GeographicName#name with that rank. +:locality+ is not a
+      # geographic rank and must be given as a symbol. When traversing a tree
+      # hierarchy, give key value paris in descencing order of rank:
+      #   { 'Country' => 'United States',
+      #     'State' => 'Kansas',
+      #     'County' => 'Douglas County',
+      #     :locality => 'Freestate Brewery' }
       def collecting_data=(vals)
         locality = vals.delete :locality
         unless vals.empty?
@@ -88,18 +177,18 @@ module Specify
         raise LOCALITY_NOT_FOUND_ERROR + locality unless collecting_locality
       end
 
-      # -> Model::Locality
-      # Returns the <em>collecting_locality</em>, or the
-      # <em>default_locality</em> if <em>collecting_locality</em> is not set
-      # but <em>collecting_geography</em> is; creates <em>default_locality</em>
-      # if it does not exist in _localities_ dataset.
+      # Returns #collecting_locality or #default_locality if
+      # #collecting_locality is +nil+ but #collecting_geography is not;
+      # Will create the Specify::Model::GeographicName for #default_locality
+      # if it does not exist in #localities.
       def collecting_locality!
         return collecting_locality if collecting_locality
         return unless collecting_geography
         default_locality!
       end
 
-      # Creates Model::CollectionObject instances and persists them.
+      # Creates +count+ records for Specify::Model::CollectionObject with the
+      # attributes of +self+.
       def create(count)
         @record_set = collection.add_record_set Name: dataset_name,
                                                 user: cataloger.user
@@ -109,15 +198,14 @@ module Specify
         end
       end
 
-      # -> Model::Locality
-      # Returns the default locality.
+      # Returns the Specify::Model::GeographicName for #default locality if it
+      # exists.
       def default_locality
         find_locality default_locality_name
       end
 
-      # -> Model::Locality
-      # Returns the default locality; creates it if it does not exist in
-      # _localities_ dataset.
+      # Returns the Specify::Model::GeographicName for #default locality.
+      # Creates the record if it does not exist in #localities.
       def default_locality!
         return default_locality if default_locality
         default_locality ||
@@ -125,50 +213,50 @@ module Specify
                                   geographic_name: collecting_geography)
       end
 
-      # -> Model::Taxon
-      # Sets the taxon to which stub records will be determined.
-      # _taxon_: Hash { 'Rank name' => 'Taxon name' }
+      # Sets #taxon, to which stub records will be determined.
+      # +vals+ is a Hash with the structure <tt>{ 'rank' => 'name' }</tt> where
+      # +rank+ is an existing Specify::Model::Rank#name, +name+ an existing
+      # Specify::Model::Taxon#name with that rank. When traversing a tree
+      # hierarchy, give key value paris in descencing order of rank:
+      #   { 'Phylum' => 'Arthropoda',
+      #     'Class' => 'Trilobita',
+      #     'Order' => 'Asaphida',
+      #     'Family' => 'Asaphidae' }
       def determination=(vals)
         @taxon = taxonomy.search_tree vals
         raise TAXON_NOT_FOUND_ERROR + vals.to_s unless taxon
       end
 
-      # -> Model::Locality
-      # Returns the Specify::Model::Locality for <em>locality_name</em> from
-      # the instance's _discipline_'s locality dataset or the instance's
-      # <em>collecting_geography</em>'s locality dataset.
+      # Returns the Specify::Model::Locality for +locality_name+ in #localities.
       def find_locality(locality_name)
         locality_matches = localities.where LocalityName: locality_name
         raise Model::AMBIGUOUS_MATCH_ERROR if locality_matches.count > 1
         locality_matches.first
       end
 
-      # ->
+      # Returns the Specify::Model::CollectionObject records in #record_set
+      # (the records created by #create).
       def generated
         record_set&.collection_objects
       end
 
-      # -> Model::Geography
-      # Returns the Specify::Model::Geography instance for the instance's
-      # _discipline_.
+      # Returns the Specify::Model::Geography for #discipline.
       def geography
         discipline.geography
       end
 
-      # -> Sequel::Dataset
-      # Returns a Sequel::Dataset for the instances's
-      # <em>collecting_geography</em> if it has one, otherwise for the
-      # instance's _division_.
+      # Returns a Sequel::Dataset of Specify::Model::Locality records in
+      # #collecting_geography or #division if #collecting_geography is +nil+.
       def localities
         @collecting_geography&.localities_dataset ||
           discipline.localities_dataset
       end
 
-      # -> Array
-      # Sets the instance's <em>preparation_type</em> and
-      # <em>preparation_count</em>
-      # <em>prep_type</em>: String
-      # _count_: Integer
+      # Sets #preparation_type and #preparation_count. +type+ must be an
+      # existing Specify::Model::PreparationType#name. +count+ should be an
+      # Integer.
+      #
+      # Returns an array with the #preparation_type and #preparation_count.
       def preparation=(type:, count: nil)
         @preparation_type = collection.preparation_types_dataset
                                       .first Name: type
@@ -177,6 +265,7 @@ module Specify
         [preparation_type, preparation_count].compact
       end
 
+      # Returns the Specify::Model::Taxonomy for #discipline.
       def taxonomy
         discipline.taxonomy
       end

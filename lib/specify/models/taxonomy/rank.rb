@@ -12,6 +12,10 @@ module Specify
         self.TimestampModified = Time.now
         super
       end
+
+      def name
+        self.Name
+      end
     end
   end
 end

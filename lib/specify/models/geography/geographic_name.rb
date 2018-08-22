@@ -34,6 +34,10 @@ module Specify
         "id: #{self.GeographyID}; Full Name: '#{self.FullName}'"
       end
 
+      def name
+        self.Name
+      end
+
       def children?
         !children.empty?
       end
