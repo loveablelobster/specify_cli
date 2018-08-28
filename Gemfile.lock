@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     specify_cli (0.0.4)
-      gli (= 2.17.1)
+      gli (= 2.17.2)
       mysql2 (= 0.5.2)
       sequel (= 5.11.0)
 
@@ -44,7 +44,7 @@ GEM
     ffi (1.9.25)
     gem-man (0.3.0)
     gherkin (5.1.0)
-    gli (2.17.1)
+    gli (2.17.2)
     hpricot (0.8.6)
     jaro_winkler (1.5.1)
     method_source (0.9.0)

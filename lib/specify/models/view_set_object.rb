@@ -3,8 +3,11 @@
 module Specify
   module Model
     # ViewSetObjects represent Specify user forms (views). The actual views are
-    # _.views.xml_ files that are stored as _blobs_ in the database.
+    # _.views.xml_ files that are stored as blobs in the database.
     class ViewSetObject < Sequel::Model(:spviewsetobj)
+      include Createable
+      include Updateable
+
       many_to_one :app_resource_dir,
                   class: 'Specify::Model::AppResourceDir',
                   key: :SpAppResourceDirID
@@ -18,19 +21,7 @@ module Specify
                   class: 'Specify::Model::Agent',
                   key: :ModifiedByAgentID
 
-      def before_create
-        self.Version = 0
-        self.TimestampCreated = Time.now
-        super
-      end
-
-      def before_update
-        self.Version += 1
-        self.TimestampModified = Time.now
-        super
-      end
-
-      # Persists _file_ as a blob the database.
+      # Persists +file+ (a _.views.xml_ file) as a blob in the database.
       def import(file)
         app_resource_data.import file
         app_resource_dir[:Version] += 1

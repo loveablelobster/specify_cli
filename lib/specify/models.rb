@@ -19,6 +19,7 @@ require_relative 'models/auto_numbering_scheme'
 require_relative 'models/collecting_event'
 require_relative 'models/collection'
 require_relative 'models/collection_object'
+require_relative 'models/createable'
 require_relative 'models/determination'
 require_relative 'models/discipline'
 require_relative 'models/division'
@@ -30,11 +31,12 @@ require_relative 'models/preparation_type'
 require_relative 'models/record_set'
 require_relative 'models/record_set_item'
 require_relative 'models/taxonomy'
+require_relative 'models/updateable'
 require_relative 'models/user'
 require_relative 'models/view_set_object'
 
 module Specify
-  # A module that contains Sequel::Model classes for the Spceify schema.
+  # Model contains Sequel::Model classes for the _Specify_ schema.
   module Model
     AMBIGUOUS_MATCH_ERROR = 'Ambiguous results during search'
   end
