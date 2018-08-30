@@ -2,7 +2,7 @@
 
 module Specify
   # :nodoc:
-  VERSION = '0.0.4'
+  VERSION = '0.0.5'
 
   # :nodoc:
   SUMMARY = 'A command line interface for Specify'

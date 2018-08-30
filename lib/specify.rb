@@ -32,11 +32,13 @@ module Specify
 
   BRANCH_ERROR = 'Branch name not parsable: '
 
+  # FileError is a module that contains errors for file operations.
   module FileError
     VIEWS_FILE = 'Files must be .views.xml files'
     NO_FILE = "File not found"
   end
 
+  # LoginError is a module that contains errors for User logins.
   module LoginError
     INCONSISTENT_LOGIN = 'User is already logged in to a different collection'
   end
