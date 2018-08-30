@@ -2,21 +2,13 @@
 
 module Specify
   module Model
-    #
+    # CommonNames are vernacular names for a Specify::Model::Taxon.
     class CommonName < Sequel::Model(:commonnametx)
-      many_to_one :taxon, key: :TaxonID
+      include Createable
+      include Updateable
 
-      def before_create
-        self.Version = 0
-        self.TimestampCreated = Time.now
-        super
-      end
-
-      def before_update
-        self.Version += 1
-        self.TimestampModified = Time.now
-        super
-      end
+      many_to_one :taxon,
+                  key: :TaxonID
     end
   end
 end

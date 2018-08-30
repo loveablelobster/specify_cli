@@ -2,6 +2,8 @@
 
 module Specify
   module CLI
+    # Parses the _level_ for the Specify::Service::ViewLoader to upload
+    # _.vioews.xml_ files to from the command +options+.
     def self.level(options)
       if options[:d]
         :discipline

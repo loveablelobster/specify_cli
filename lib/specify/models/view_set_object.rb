@@ -24,8 +24,6 @@ module Specify
       # Persists +file+ (a _.views.xml_ file) as a blob in the database.
       def import(file)
         app_resource_data.import file
-        app_resource_dir[:Version] += 1
-        app_resource_dir[:TimestampModified] = Time.now
         app_resource_dir.save
         save
       end

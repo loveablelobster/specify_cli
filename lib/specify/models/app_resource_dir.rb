@@ -2,11 +2,27 @@
 
 module Specify
   module Model
+    # AppResourceDirs associate instances of Specify::Model::ViewSetObject
+    # or AppResource (not implemented) with other Specify::Model classes,
+    # such as Specify::Model::Collection, Specify::Model::Discipline, or
+    # Specify::Model::User, as well as the abstract/custom Specify::UserType,
+    # and are used to locate a relevant ViewSetObject or AppResource for a
+    # given instance of one of these classes.
     #
+    # Resources (ViewSetObjects or AppResurces) are usually _XML_ files used
+    # by the _Specify_ application. The files are stored in the AppResourceDirs
+    # associated #view_set_object's or AppResource (not implemented)
+    # Specify::Model::AppResourceData.
     class AppResourceDir < Sequel::Model(:spappresourcedir)
-      many_to_one :discipline, key: :DisciplineID
-      many_to_one :collection, key: :CollectionID#, graph_join_type: :left
-      many_to_one :user, key: :SpecifyUserID
+      include Createable
+      include Updateable
+
+      many_to_one :discipline,
+                  key: :DisciplineID
+      many_to_one :collection,
+                  key: :CollectionID
+      many_to_one :user,
+                  key: :SpecifyUserID
       one_to_one :view_set_object,
                  class: 'Specify::Model::ViewSetObject',
                  key: :SpAppResourceDirID
@@ -17,20 +33,11 @@ module Specify
                   class: 'Specify::Model::Agent',
                   key: :ModifiedByAgentID
 
-      def before_create
-        self.Version = 0
-        self.TimestampCreated = Time.now
-        super
-      end
-
-      # Returns a String that is the discipline type
-      # (same as Specify::Model::Discipline#name)
+      # Returns a String that is the discipline type (same as
+      # Specify::Model::Discipline#name) +self+ belongs to.
       def discipline_type
-        self.DisciplineType
+        self[:DisciplineType]
       end
     end
   end
 end
-
-#   DisciplineType (varchar) : 'Invertebrate Zoology' find xml where that is defined
-#   UserType (varchar) : 'manager' find xml where that is defined

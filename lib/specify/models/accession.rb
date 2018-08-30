@@ -2,32 +2,31 @@
 
 module Specify
   module Model
+    # Accessions are _interactions_ that represent the formal transferral of
+    # ownership of one or more #collection_objects (instances of
+    # Specify::Model::CollectionObjects).
     #
+    # An Accession belongs to a #division (an instance of
+    # Specify::Model::Division).
     class Accession < Sequel::Model(:accession)
-      many_to_one :division, key: :DivisionID
+      include Createable
+      include Updateable
+
+      many_to_one :division,
+                  key: :DivisionID
       many_to_one :created_by,
                   class: 'Specify::Model::Agent',
                   key: :CreatedByAgentID
       many_to_one :modified_by,
                   class: 'Specify::Model::Agent',
                   key: :ModifiedByAgentID
+      one_to_many :collection_objects,
+                  key: :AccessionID
 
-      def before_create
-        self.Version = 0
-        self.TimestampCreated = Time.now
-        # TODO: set created_by
-        super
-      end
-
-      def before_update
-        self.Version += 1
-        self.TimestampModified = Time.now
-        # TODO: set modified_by
-        super
-      end
-
+      # Returns a String with the accession number (a number under which all
+      # information relating to an accession is filed).
       def number
-        self.AccessionNumber
+        self[:AccessionNumber]
       end
     end
   end

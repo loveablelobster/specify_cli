@@ -1,16 +1,60 @@
 # frozen_string_literal: true
 
 module Specify
-  # A class that represents a Specify database.
+  # Databases represent _Specify_ database.
   class Database
+    # The Sequel::Database instance for the current connection.
     attr_accessor :connection
-    attr_reader :database, :host, :port, :user, :sessions
 
-    # Creates a new instance.
-    # _database_: the name of the MySQL database to connect to
-    # _host_: the host name or IP
-    # _user_: the MySQL user
-    # _password_: the password
+    # The name of the _Specify_ database.
+    attr_reader :database
+
+    # The name of the MySQL/MariaDB host for the _Specify_ database.
+    attr_reader :host
+
+    # The port for the MySQL/MariaDB server for the _Specify_ database.
+    attr_reader :port
+
+    # An Array of Specify::Session instances currently registered (and open).
+    attr_reader :sessions
+
+    # The MySQL/MariaDB user for the database. This is typically the _Specify_
+    # <em>master user</em>.
+    attr_reader :user
+
+    # Creates a new Database from +config_file+ file (a _YAML_ file).
+    #
+    # +config_file+ should have the structure:
+    #     ---
+    #     :hosts:
+    #       <hostname>:
+    #         :port: <port_number>
+    #         :databases:
+    #           <database_name>:
+    #             :db_user:
+    #               :name: <mysql_username>
+    #               :password: <password>
+    #             :sp_user: <specify_username>
+    #
+    # Items prefices with +:+ will be deserialized as symbols. Leave
+    # +:password:+ blank to be prompted.
+    #
+    # +host+: the name of the MySQL/MariaDB host for the database.
+    # +database+: the name of the MySQL/MariaDB database.
+    def self.load_config(host, database, config_file = nil)
+      config = Configuration::DBConfig.new(host, database, config_file)
+      new(database, config.connection)
+    end
+
+    # Returns a new Database for the +database+ (the name of the database) on
+    # +host+.
+    #
+    # +port+: the port for the MySQL/MariaDB server for the database.
+    #
+    # +user+: the MySQL/MariaDB user (typically the _Specify_
+    # <em>master user</em>).
+    #
+    # +password+: the password for the MySQL/MariaDB user.
     def initialize(database,
                    host: 'localhost',
                    port: 3306,
@@ -27,15 +71,6 @@ module Specify
       yield(self) if block_given?
     end
 
-    # Creates a new instance from a config file.
-    # Default config file is '/usr/local/etc/sp_view_loader/db.yml'
-    # _database_: the name of the database
-    # _config_file_: the path to the file
-    def self.load_config(host, database, config_file = nil)
-      config = Configuration::DBConfig.new(host, database, config_file)
-      new(database, config.connection)
-    end
-
     # Adds a new Session to the sessions pool.
     def <<(session)
       session.open
@@ -44,18 +79,19 @@ module Specify
     end
 
     # Closes all sessions.
-    # FIXME: should probably also close database connection
     def close
       return if sessions.empty?
       sessions.each do |session|
         session.close
         session.delete_observer self
       end
-      # connection.disconnect
+      # TODO: should close database connection
     end
 
-    # Returns the Sequel::Database object for the database. Establishes a
-    # connection and creates the object if it does not already exist.
+    # Establishes a connection and creates the object if it does not already
+    # exist. Loads all Specify::Model classes.
+    #
+    # Returns the Sequel::Database object for the database.
     def connect
       return connection if connection
       @connection = Sequel.connect adapter: :mysql2,
@@ -68,17 +104,17 @@ module Specify
       connection
     end
 
-    # Returns a string containing a human-readable representation of Database.
+    # Creates a string representation of +self+.
     def inspect
       "#{self} database: #{@database}, host: #{@host}, port: #{@port}"\
       ", user: #{@user}, connected: #{connection ? true : false}"
     end
 
-    # Deletes a closed session from the sessions pool
-    def update(session)
-      sessions.delete session
-    end
-
+    # Createas a new Session for +user+ (String, an existing
+    # Specify::Model::User#name) in +collection+ (String, an existing
+    # Specify::Model::Collection#name) and adds it to the #sessions pool.
+    #
+    # Returns the new Session.
     def start_session(user, collection)
       connect
       session = Session.new user, collection
@@ -86,9 +122,14 @@ module Specify
       session
     end
 
+    # Deletes a +session+ (a Session) from the sessions pool when +session+
+    # has been closed.
+    def update(session)
+      sessions.delete session
+    end
+
     private
 
-    # Prompts the user for the _password_
     def prompt
       print 'password: '
       password = STDIN.noecho(&:gets).chomp

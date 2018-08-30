@@ -2,10 +2,18 @@
 
 module Specify
   module Model
+    # Agents represent entities (people or organizations).
     #
+    # An Agent represents a Specify::Model::User in a Specify::Model::Division;
+    # that agent will be associated with every record creation and modification
+    # carried out by the user in the database.
     class Agent < Sequel::Model(:agent)
-      many_to_one :user, key: :SpecifyUserID
-      many_to_one :division, key: :DivisionID
+      include Updateable
+
+      many_to_one :user,
+                  key: :SpecifyUserID
+      many_to_one :division,
+                  key: :DivisionID
 
       one_to_many :created_accessions,
                   class: 'Specify::Model::Accession',
@@ -98,29 +106,30 @@ module Specify
                   class: 'Specify::Model::ViewSetObject',
                   key: :ModifiedByAgentID
 
-      def before_save
-        self.Version += 1
-        self.TimestampModified = Time.now
-        super
-      end
-
+      # Returns a String that is the first name of a person.
       def first_name
-        self.FirstName
+        self[:FirstName]
       end
 
-      def last_name
-        self.LastName
-      end
-
-      def middle_name
-        self.MiddleInitial
-      end
-
+      # Returns a String of attributes concatanated according to the
+      # +formatter+.
       def full_name(formatter = nil)
         formatter ||= "#{last_name}, #{first_name} #{middle_name}"
         formatter.strip
       end
 
+      # Returns a String that is the last name of a person or the name of an
+      # organization.
+      def last_name
+        self[:LastName]
+      end
+
+      # Returns a String that is the middle name of a person.
+      def middle_name
+        self[:MiddleInitial]
+      end
+
+      # Creates a string representation of +self+.
       def to_s
         full_name
       end

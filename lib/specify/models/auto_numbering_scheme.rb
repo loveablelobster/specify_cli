@@ -2,8 +2,22 @@
 
 module Specify
   module Model
-    # Sequel::Model for Specify auto numbering schemes.
+    # AutoNumberingSchemes represent automatically incrementable numbers
+    # (serial numbers such as catalog numbers or accession numbers).
+    #
+    # An AutoNumberingScheme is scoped to one or more #collections
+    # (instances of Specify::Model::Collection) in the case of catalog numbers,
+    # one or more #divisions (instances of Specify::Model::Division) in the case
+    # of accession numbers. Serial numbers (_incrementers_) will be incremented
+    # across that scope.
+    #
+    # An AutoNumberingScheme has a #number_format (an instance of
+    # Specify::NumberFormat) that determines the format of the number
+    # (auto-numbers in _Specify_ are strings).
     class AutoNumberingScheme < Sequel::Model(:autonumberingscheme)
+      include Createable
+      include Updateable
+
       many_to_one :created_by,
                   class: 'Specify::Model::Agent',
                   key: :CreatedByAgentID
@@ -23,42 +37,26 @@ module Specify
                    right_key: :DivisionID,
                    join_table: :autonumsch_div
 
-      def before_create
-        self.Version = 0
-        self.TimestampCreated = Time.now
-        # TODO: set created_by
-        super
-      end
-
-      def before_update
-        self.Version += 1
-        self.TimestampModified = Time.now
-        # TODO: set modified_by
-        super
-      end
-
-      # -> true or false
-      # Returns true if the AutoNumberingScheme is for catalog numbers
+      # Returns +true+ if +self+ applies to catalog numbers.
       def catalog_number?
         scheme_model == CollectionObject && scheme_type == :catalog_number
       end
 
-      # -> String
-      # Returns the next available number formatted according to the scheme.
+      # Returns the next available serial number in the scope of the scheme,
+      # formatted according to the #number_format.
       def increment
         @number_format ||= number_format
         @number_format.create(@number_format.incrementer(max) + 1)
       end
 
-      # -> String
-      # Returns the currently highest number in the scheme.
+      # Returns the currently highest number within the scope of self.
+      # Currently only supports catalog numbers.
       def max
         raise 'not implemented' unless catalog_number?
         collections.map(&:highest_catalog_number).compact.max
       end
 
-      # -> Specify::NumberFormat
-      # Returns a NumberFormat instance for the AutoNumberingScheme.
+      # Returns the Specify::NumberFormat instance for the +self+.
       def number_format
         # TODO: get proper number format from xml
         case self.FormatName
@@ -67,9 +65,9 @@ module Specify
         end
       end
 
-      # -> Class
-      # Returns the model class using the numbering scheme
-      # (e.g. Specify::Model::CollectionObject).
+      # Returns the model class the numbering scheme applies to;
+      # Specify::Model::CollectionObject for catalog numbers,
+      # Specify::Model::Accession for accession numbers.
       def scheme_model
         case self.TableNumber
         when 1
@@ -79,8 +77,8 @@ module Specify
         end
       end
 
-      # -> Symbol
-      # Returns the kind of numbering scheme (e.g. :catalog_number).
+      # Returns a symbol for the type of numbering scheme
+      # (+:catalog_number+, +accession_number+, or +:custom+).
       def scheme_type
         case self.SchemeName
         when 'Catalog Numbering Scheme'

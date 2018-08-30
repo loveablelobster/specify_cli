@@ -2,19 +2,29 @@
 
 module Specify
   module Model
-    # Sequel::Model for taxonomic ranks.
+    # Rank is the _rank_ class for the Specify::Model::Taxonomy _tree_. A
+    # Rank holds information about a formal Linnean classification rank in
+    # a <em>taxonomic tree</em>.
+    #
+    # A Rank has a _parent_ (another instance of Rank) unless it is the root
+    # rank of the _tree_ and can have one _child_ (another instance of Rank).
     class Rank < Sequel::Model(:taxontreedefitem)
-      many_to_one :taxonomy, key: :TaxonTreeDefID
-      one_to_many :taxa, key: :TaxonTreeDefItemID
+      include Updateable
 
-      def before_update
-        self.Version += 1
-        self.TimestampModified = Time.now
-        super
-      end
+      many_to_one :taxonomy,
+                  key: :TaxonTreeDefID
+      one_to_many :taxa,
+                  key: :TaxonTreeDefItemID
+      one_to_one :child,
+                 class: self,
+                 key: :ParentItemID
+      many_to_one :parent, class: self,
+                  key: :ParentItemID
 
+      # Returns a String with the name of the formal Linnean classification
+      # rank.
       def name
-        self.Name
+        self[:Name]
       end
     end
   end

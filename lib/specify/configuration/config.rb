@@ -2,15 +2,54 @@
 
 module Specify
   module Configuration
-    # A class that wraps a yml .rc file
+    # Configurations wrap a database configuaratin file (_.rc.yaml_ file).
+    #
+    # Configuration is the superclass of the DBConfig and HostConfig classes.
     class Config
-      attr_reader :dir_names, :hosts
+      # A Hash containing the directory-host-mapping parameters for the
+      # HostConfig subclass.
+      attr_reader :dir_names
 
-      # -> Configuration::Config
-      # Creates a new instance
-      # _file_: the YAML file (path) containg the configuration
-      # <em>dir_names</em>: a Hash with directory names as keys, hosts as values
-      # _hosts_: a Hash with host configurations
+      # A Hash containing the database parameters for the DBConfig subclass.
+      attr_reader :hosts
+
+      # Returns a new empty Config for +file+ that can serve as a template.
+      #
+      # +file+: the YAML file containg the configuration
+      def self.empty(file, &block)
+        if File.exist?(file)
+          raise "#{file} exists, won't overwrite"
+        end
+        config = new file, dir_names: {}, hosts: {}, &block
+        config.save
+        config
+      end
+
+      # Returns a new Config for +file+ (a YAML file containg the
+      # configuration).
+      #
+      # <tt>dir_names</tt>: a Hash with directory names as keys, host names as
+      # values.
+      #
+      # +hosts+: a Hash with host configurations. The hash should have the
+      # structure:
+      #   {
+      #     :hosts => {
+      #       'hostname' => {
+      #         :port => Integer,
+      #         :databases => {
+      #           'database name' => {
+      #             :db_user => {
+      #               :name => 'mysql_user_name',
+      #               :password => 'password'
+      #             },
+      #             :sp_user => 'specify_user_name'
+      #           }
+      #         }
+      #       }
+      #     }
+      #   }
+      # Leave +:password+ out to be prompted.
       def initialize(file = nil, dir_names: nil, hosts: nil)
         @file = Pathname.new(file)
         if dir_names || hosts
@@ -26,33 +65,8 @@ module Specify
         @saved = nil
       end
 
-      # -> Configuration::Config
-      # Returns a new empty instance that can serve as a template.
-      # _file_: the YAML file (path) containg the configuration
-      def self.empty(file, &block)
-        if File.exist?(file)
-          raise "#{file} exists, won't overwrite"
-        end
-        config = new file, dir_names: {}, hosts: {}, &block
-        config.save
-        config
-      end
-
-      # Adds a host configuration hash
-      # <tt>{ _hostname_ => { port: _portnumber_, databases: {} } }</tt>
-      # _name_: String, the host name
-      # _port_: Interger, the port number
-      def add_host(name, port = nil)
-        raise "Host '#{name}' already configured" if hosts[name]
-        hosts[name] = { port: port, databases: {} }
-        @saved = false
-      end
-
-      # Adds a database configuration hash to the host configuration's
-      # +databases+ key:
-      # <tt>_databasename_ => { db_user: { name: _nil_, password: _nil_ } }</tt>
-      # _name_: String, the database name
-      # _host_: String, the name of the MySQL/MariaDB host for the database
+      # Adds a configuration for the database with +name+ to the +host+
+      # configuration.
       def add_database(name, host:)
         add_host(host) unless hosts[host]
         if hosts.dig host, :databases, name
@@ -63,14 +77,19 @@ module Specify
         @saved = false
       end
 
-      # -> Hash
+      # Adds a configuration for the host with +name+.
+      def add_host(name, port = nil)
+        raise "Host '#{name}' already configured" if hosts[name]
+        hosts[name] = { port: port, databases: {} }
+        @saved = false
+      end
+
       # Returns a Hash with the contents of the configuration YAML file.
       def params
         { dir_names: @dir_names, hosts: @hosts }
       end
 
-      # -> +true+
-      # Saves the current contens fo _params_ to the YAML configuration _file_.
+      # Saves the current state to the YAML configuration file.
       def save
         File.open(@file, 'w') do |file|
           file.write(Psych.dump(@params))
@@ -78,13 +97,12 @@ module Specify
         @saved = true
       end
 
-      # -> +true+ or +false+
       # Returns +false+ if the instance has been modified since the last save.
       def saved?
         @saved
       end
 
-      # Sets the _saved_ state to +false+
+      # Marks the instance as modified.
       def touch
         @saved = false
       end

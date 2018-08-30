@@ -2,10 +2,17 @@
 
 module Specify
   module Model
-    #
+    # PreparationTypes, are categopries of Specify::Model::Preparation.
+    # A PreparationType providess a controlled vocabulary for available types of
+    # preparations, where the element in the controlled vocabulary is the #name.
     class PreparationType < Sequel::Model(:preptype)
-      many_to_one :collection, key: :CollectionID
-      one_to_many :preparations, key: :PrepTypeID
+      include Createable
+      include Updateable
+
+      many_to_one :collection,
+                  key: :CollectionID
+      one_to_many :preparations,
+                  key: :PrepTypeID
       many_to_one :created_by,
                   class: 'Specify::Model::Agent',
                   key: :CreatedByAgentID
@@ -13,21 +20,10 @@ module Specify
                   class: 'Specify::Model::Agent',
                   key: :ModifiedByAgentID
 
-      def before_create
-        self.Version = 0
-        self.TimestampCreated = Time.now
-        super
-      end
-
-      def before_update
-        self.Version += 1
-        self.TimestampModified = Time.now
-        # TODO: set modified_by
-        super
-      end
-
+      # Returns a String with the name of +self+ (a short name that is an
+      # element of a controlled vocabulary).
       def name
-        self.Name
+        self[:Name]
       end
     end
   end

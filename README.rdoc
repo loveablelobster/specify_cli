@@ -1,4 +1,4 @@
-= specify_cli - A command line interface for Specify
+= specify_cli - A command line interface for _Specify_
 
 Author:: Martin Stein
 Copyright:: Copyright (c) 2018 by Martin Stein

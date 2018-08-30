@@ -2,7 +2,15 @@
 
 module Specify
   module Model
+    # AppResourceData hold data the _Specify_ application uses (usually in the
+    # form of _XML_ files that are stored as blobs).
+    #
+    # An AppResourceData belongs to a #viewsetobj (an instance of
+    # Specify::Model::ViewSetObject) or AppResource (not implemented).
     class AppResourceData < Sequel::Model(:spappresourcedata)
+      include Createable
+      include Updateable
+
       many_to_one :viewsetobj,
                   class: 'Specify::Model::ViewSetObject',
                   key: :SpViewSetObjID
@@ -13,18 +21,8 @@ module Specify
                   class: 'Specify::Model::Agent',
                   key: :ModifiedByAgentID
 
-      def before_create
-        self.Version = 0
-        self.TimestampCreated = Time.now
-        super
-      end
-
-      def before_update
-        self.Version += 1
-        self.TimestampModified = Time.now
-        super
-      end
-
+      # Stores the contents of +data_file+ (typically an _.xml_ file) as a
+      # blob in the database.
       def import(data_file)
         self.data = Sequel.blob(File.read(data_file))
         save

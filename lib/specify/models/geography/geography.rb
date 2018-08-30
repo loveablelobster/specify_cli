@@ -2,23 +2,22 @@
 
 module Specify
   module Model
-    # Sequel::Model for geographies (geography trees).
+    # Geography is the _tree_ class for the <em>geographic tree</em>.
+    # Geographies hold all Specify::Model::AdministrativeDivision and
+    # Specify::Model::GeographicName instances belonging to a geography used by
+    # a Specify::Model::Discipline.
     class Geography < Sequel::Model(:geographytreedef)
       include TreeQueryable
+      include Updateable
 
-      one_to_many :disciplines, key: :GeographyTreeDefID
+      one_to_many :disciplines,
+                  key: :GeographyTreeDefID
       one_to_many :ranks,
                   class: 'Specify::Model::AdministrativeDivision',
                   key: :GeographyTreeDefID
       one_to_many :names,
                   class: 'Specify::Model::GeographicName',
                   key: :GeographyTreeDefID
-
-      def before_update
-        self.Version += 1
-        self.TimestampModified = Time.now
-        super
-      end
     end
   end
 end

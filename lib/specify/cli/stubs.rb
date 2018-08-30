@@ -2,6 +2,11 @@
 
 module Specify
   module CLI
+    # Transforms +arg+ (a String passed as a command line argument) containing
+    # hierarchical information (such as geographic or taxonomic) into a
+    # structured Hash that can be used to set the
+    # Specify::Service::StubGenerator#collecting_data= or
+    # Specify::Service::StubGenerator#determination=.
     def self.arg_to_hash(arg)
       return unless arg
       arg.split(';')
@@ -10,6 +15,9 @@ module Specify
          .transform_keys { |key| key == 'locality' ? key.to_sym : key }
     end
 
+    # Creates stub records with +generator+ (a Specify::Service::StubGenerator).
+    #
+    # +count+: the number of stub records to be created.
     def self.make_stubs(generator, count)
       STDERR.puts "started creating #{count} records"
       STDERR.puts "cataloger: #{generator.cataloger}"
@@ -23,6 +31,8 @@ module Specify
       generator.generated.each { |co| puts co.CatalogNumber }
     end
 
+    # Returns a Hash for intialization of a Specify::Service::StubGenerator
+    # from +global_options+, +args+, and command +options+.
     def self.wrap_args(global_options, args, options)
       params = {}
       stub_generator = {}
@@ -35,6 +45,8 @@ module Specify
       params.merge stub_parameters(options)
     end
 
+    # Parses the parameters for stub records to created by a
+    # Specify::Service::StubGenerator from the command +options+.
     def self.stub_parameters(options)
       params = { 'dataset_name' => options[:dataset],
                  'cataloger' => options[:cataloger],

@@ -1,1 +1,1 @@
-= specify_cli - A command line interface for Specify
+= specify_cli - A command line interface for _Specify_

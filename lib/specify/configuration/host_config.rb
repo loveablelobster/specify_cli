@@ -2,37 +2,33 @@
 
 module Specify
   module Configuration
-    # A class that maps file directories to hosts
+    # HostConfigs are configurations that map file directories to host names.
     class HostConfig < Config
-      attr_reader :directory_map
-
+      # Retutrns a new HostConfig for +file+ (a YAML file).
       def initialize(file = nil)
         super(file)
         @saved = true
       end
 
-      # -> +true+ or +false+
-      # Returns +true+ if _directory_ is mapped.
+      # Returns +true+ if +directory+ is mapped to a host name.
       def directory?(directory)
         params.key? directory
       end
 
-      # Maps _directory_ to _host_.
+      # Maps +directory+ to +host+.
       def map_directory(directory, host)
         raise "Directory '#{directory}' already mapped" if params[directory]
         params[directory] = host
         touch
       end
 
-      # -> Hash
       # Returns a Hash with the parameters for the current directory mappings
       # from the configuration YAML file.
       def params
         super.fetch :dir_names
       end
 
-      # -> String
-      # Returns the host name that is mapped to _directory_
+      # Returns the host name that is mapped to +directory+
       def resolve_host(directory)
         params.fetch directory
       end
