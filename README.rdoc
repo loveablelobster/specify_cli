@@ -16,11 +16,7 @@ Currently supported tasks:
 
 Install:
 
-Build with
-
-    rake package
-
-Then install the gem.
+    gem install specify_cli
 
 == Use
 
