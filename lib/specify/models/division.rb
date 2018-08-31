@@ -21,6 +21,8 @@ module Specify
                    join_table: :autonumsch_div
       one_to_many :accessions,
                   key: :DivisionID
+      one_to_many :disciplines,
+                  key: :DivisionID
     end
   end
 end

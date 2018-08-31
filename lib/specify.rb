@@ -3,6 +3,8 @@
 # require 'specify/version.rb'
 
 require 'date'
+require 'faraday'
+require 'faraday_middleware'
 require 'fileutils'
 require 'io/console'
 require 'mysql2'
@@ -14,6 +16,7 @@ require 'securerandom'
 require 'sequel'
 
 require_relative 'specify/branch_parser'
+require_relative 'specify/catalogue_of_life'
 require_relative 'specify/cli'
 require_relative 'specify/configuration'
 require_relative 'specify/database'
