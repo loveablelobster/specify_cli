@@ -58,16 +58,25 @@ module Specify
 
       #
       def get
-        response = @conn.get do |req|
+        @conn.get do |req|
           req.url 'col/webservice?'
-          req.params['format'] = content_type.to_s
-          req.params['response'] = response
-          req.params['id'] = id if id
-          req.params['name'] = name if name
-          req.params['rank'] = rank if rank
-          req.params['extinct'] = extinct if extinct
+          params.each { |key, value| req.params[key] = value }
         end
-        response.body['results']
+      end
+
+      def params
+        {
+          'format' => content_type.to_s,
+          'response' => response.to_s,
+          'id' => id,
+          'name' => name,
+          'rank' => rank,
+          'extinct' => extinct
+        }.compact
+      end
+
+      def results
+        get.body['results']
       end
 
       def to_s

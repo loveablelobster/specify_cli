@@ -15,7 +15,26 @@ module Specify
         subject { crayfish.get }
 
         it do
-        	p subject
+          p subject
+        end
+      end
+
+      describe '#params' do
+        subject(:params) { crayfish.params }
+
+        it do
+          expect(params).to include 'format' => 'json',
+                                    'response' => 'full',
+                                    'name' => 'Astacus astacus',
+                                    'rank' => 'species'
+        end
+      end
+
+      describe '#results' do
+        subject { crayfish.results }
+
+        it do
+          p subject
         end
       end
     end
