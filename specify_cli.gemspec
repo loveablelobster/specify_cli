@@ -21,7 +21,9 @@ spec = Gem::Specification.new do |s|
   s.add_development_dependency('rake')
   s.add_development_dependency('rdoc')
   s.add_development_dependency('aruba')
-  s.add_runtime_dependency('gli','2.17.2')
-  s.add_runtime_dependency('mysql2','0.5.2')
-  s.add_runtime_dependency('sequel','5.11.0')
+  s.add_runtime_dependency('faraday', '~> 0.15')
+  s.add_runtime_dependency('faraday_middleware', '~> 0.12')
+  s.add_runtime_dependency('gli','~> 2.17')
+  s.add_runtime_dependency('mysql2','~> 0.5')
+  s.add_runtime_dependency('sequel','~> 5')
 end
