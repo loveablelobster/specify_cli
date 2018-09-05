@@ -1,0 +1,236 @@
+---
+:valid_species:
+  id: '526387756aa5574c4879c6cc114248fd'
+  name: 'Astacus astacus'
+  rank: 'Species'
+  name_status: 'accepted name'
+  genus: 'Astacus'
+  subgenus: ''
+  species: 'astacus'
+  infraspecies_marker: ''
+  infraspecies: ''
+  author: '(Linnaeus, 1758)'
+  record_scrutiny_date:
+    scrutiny: '31-May-2005'
+  online_resource: 'http://www.itis.gov/servlet/SingleRpt/SingleRpt?search_topic=TSN&search_value=97333'
+  is_extinct: 'false'
+  source_database: 'ITIS Regional: The Integrated Taxonomic Information System'
+  source_database_url: 'http://www.itis.gov;\nhttp://www.cbif.gc.ca/acp/eng/itis/search (Canada)'
+  bibliographic_citation: 'Tom Orrell (custodian), Dave Nicolson (ed). (2018). ITIS Regional: The Integrated Taxonomic Information System (version Jun 2017). In: Roskov Y., Orrell T., Nicolson D., Bailly N., Kirk P.M., Bourgoin T., DeWalt R.E., Decock W., De Wever A., Nieukerken E. van, Zarucchi J., Penev L., eds. (2018). Species 2000 & ITIS Catalogue of Life, 31st July 2018. Digital resource at www.catalogueoflife.org/col. Species 2000: Naturalis, Leiden, the Netherlands. ISSN 2405-8858.'
+  name_html: '<i>Astacus astacus</i> (Linnaeus, 1758)'
+  url: 'http://www.catalogueoflife.org/col/details/species/id/526387756aa5574c4879c6cc114248fd'
+  distribution: ''
+  references:
+    -
+      author:
+      year: '1996'
+      title:
+      source: 'NODC Taxonomic Code'
+    -
+      author: 'Lundberg, Ulrich'
+      year: '2004'
+      title: 'Behavioural elements of the noble crayfish, Astacus astacus (Linnaeus, 1758)'
+      source: 'Crustaceana, vol. 77, no. 2'
+  classification:
+    -
+      id: '5ede24b0534ebd5e1f552d5b9f874a6a'
+      name: 'Animalia'
+      rank: 'Kingdom'
+      name_html: 'Animalia'
+      url: 'http://www.catalogueoflife.org/col/browse/tree/id/5ede24b0534ebd5e1f552d5b9f874a6a'
+    -
+      id: '89ac18bfcf1654a9662a600ba06bb494'
+      name: 'Arthropoda'
+      rank: 'Phylum'
+      name_html: 'Arthropoda'
+      url: 'http://www.catalogueoflife.org/col/browse/tree/id/89ac18bfcf1654a9662a600ba06bb494'
+    -
+      id: '86858bfbd5b0846611871d8eb3e25db1'
+      name: 'Malacostraca'
+      rank: 'Class'
+      name_html: 'Malacostraca'
+      url: 'http://www.catalogueoflife.org/col/browse/tree/id/86858bfbd5b0846611871d8eb3e25db1'
+    -
+      id: '1008e23f49cf95fb6c80631ab5505d14'
+      name: 'Decapoda'
+      rank: 'Order'
+      name_html: 'Decapoda'
+      url: 'http://www.catalogueoflife.org/col/browse/tree/id/1008e23f49cf95fb6c80631ab5505d14'
+    -
+      id: 'f7e33c38480f906dd432fd88b13fe73a'
+      name: 'Astacoidea'
+      rank: 'Superfamily'
+      name_html: 'Astacoidea'
+      url: 'http://www.catalogueoflife.org/col/browse/tree/id/f7e33c38480f906dd432fd88b13fe73a'
+    -
+      id: '2369699114e1f4c241019caf7f0ce43c'
+      name: 'Astacidae'
+      rank: 'Family'
+      name_html: 'Astacidae'
+      url: 'http://www.catalogueoflife.org/col/browse/tree/id/2369699114e1f4c241019caf7f0ce43c'
+    -
+      id: 'cf32418e84a35b0f3825a8825c3c967c'
+      name: 'Astacus'
+      rank: 'Genus'
+      name_html: '<i>Astacus</i>'
+      url: 'http://www.catalogueoflife.org/col/browse/tree/id/cf32418e84a35b0f3825a8825c3c967c'
+  child_taxa: []
+  synonyms: []
+  common_names: []
+:valid_genus:
+  id: 'cf32418e84a35b0f3825a8825c3c967c'
+  name: 'Astacus'
+  rank: 'Genus'
+  name_status: 'accepted name'
+  name_html: '<i>Astacus</i>'
+  url: 'http://www.catalogueoflife.org/col/browse/tree/id/cf32418e84a35b0f3825a8825c3c967c'
+  is_extinct: 'false'
+  classification:
+    -
+      id: '5ede24b0534ebd5e1f552d5b9f874a6a'
+      name: 'Animalia'
+      rank: 'Kingdom'
+      name_html: 'Animalia'
+      url: 'http://www.catalogueoflife.org/col/browse/tree/id/5ede24b0534ebd5e1f552d5b9f874a6a'
+    -
+      id: '89ac18bfcf1654a9662a600ba06bb494'
+      name: 'Arthropoda'
+      rank: 'Phylum'
+      name_html: 'Arthropoda'
+      url: 'http://www.catalogueoflife.org/col/browse/tree/id/89ac18bfcf1654a9662a600ba06bb494'
+    -
+      id: '86858bfbd5b0846611871d8eb3e25db1'
+      name: 'Malacostraca'
+      rank: 'Class'
+      name_html: 'Malacostraca'
+      url: 'http://www.catalogueoflife.org/col/browse/tree/id/86858bfbd5b0846611871d8eb3e25db1'
+    -
+      id: '1008e23f49cf95fb6c80631ab5505d14'
+      name: 'Decapoda'
+      rank: 'Order'
+      name_html: 'Decapoda'
+      url: 'http://www.catalogueoflife.org/col/browse/tree/id/1008e23f49cf95fb6c80631ab5505d14'
+    -
+      id: 'f7e33c38480f906dd432fd88b13fe73a'
+      name: 'Astacoidea'
+      rank: 'Superfamily'
+      name_html: 'Astacoidea'
+      url: 'http://www.catalogueoflife.org/col/browse/tree/id/f7e33c38480f906dd432fd88b13fe73a'
+    -
+      id: '2369699114e1f4c241019caf7f0ce43c'
+      name: 'Astacidae'
+      rank: 'Family'
+      name_html: 'Astacidae'
+      url: 'http://www.catalogueoflife.org/col/browse/tree/id/2369699114e1f4c241019caf7f0ce43c'
+  child_taxa:
+    -
+      id: '526387756aa5574c4879c6cc114248fd'
+      name: 'Astacus astacus'
+      rank: 'Species'
+      name_html: '<i>Astacus astacus</i> (Linnaeus, 1758)'
+      url: 'http://www.catalogueoflife.org/col/details/species/id/526387756aa5574c4879c6cc114248fd'
+      is_extinct: 'false'
+    -
+      id: '8d133bcc525ea8e040d6858ed52625bd'
+      name: 'Astacus edwardsi'
+      rank: 'Species'
+      name_html: '<i>Astacus edwardsi</i> Van Straelen, 1928'
+      url: 'http://www.catalogueoflife.org/col/details/species/id/8d133bcc525ea8e040d6858ed52625bd'
+      is_extinct: 'true'
+    -
+      id: '386243cced4e42f3a15453c8ffad5dc4'
+      name: 'Astacus laevissimus'
+      rank: 'Species'
+      name_html: '<i>Astacus laevissimus</i> Fritsch and Kafka, 1887'
+      url: 'http://www.catalogueoflife.org/col/details/species/id/386243cced4e42f3a15453c8ffad5dc4'
+      is_extinct: 'true'
+    -
+      id: '54fe3bc380732201105cdde261a855d5'
+      name: 'Astacus longimanus'
+      rank: 'Species'
+      name_html: '<i>Astacus longimanus</i> Sowerby, 1826'
+      url: 'http://www.catalogueoflife.org/col/details/species/id/54fe3bc380732201105cdde261a855d5'
+      is_extinct: 'true'
+    -
+      id: 'ed2a9af088ea52cc1907f2b552602a48'
+      name: 'Astacus multicavatus'
+      rank: 'Species'
+      name_html: '<i>Astacus multicavatus</i> Bell, 1863'
+      url: 'http://www.catalogueoflife.org/col/details/species/id/ed2a9af088ea52cc1907f2b552602a48'
+      is_extinct: 'true'
+    -
+      id: '3d050be53ecfb6c9a33d8069532e43e4'
+      name: 'Astacus pallipes'
+      rank: 'Species'
+      name_html: '<i>Astacus pallipes</i> Lereboullet, 1858'
+      url: 'http://www.catalogueoflife.org/col/details/species/id/3d050be53ecfb6c9a33d8069532e43e4'
+      is_extinct: 'true'
+:valid_family:
+  id: '2369699114e1f4c241019caf7f0ce43c'
+  name: 'Astacidae'
+  rank: 'Family'
+  name_status: 'accepted name'
+  name_html: 'Astacidae'
+  url: 'http://www.catalogueoflife.org/col/browse/tree/id/2369699114e1f4c241019caf7f0ce43c'
+  is_extinct: 'false'
+  classification:
+    -
+      id: '5ede24b0534ebd5e1f552d5b9f874a6a'
+      name: 'Animalia'
+      rank: 'Kingdom'
+      name_html: 'Animalia'
+      url: 'http://www.catalogueoflife.org/col/browse/tree/id/5ede24b0534ebd5e1f552d5b9f874a6a'
+    -
+      id: '89ac18bfcf1654a9662a600ba06bb494'
+      name: 'Arthropoda'
+      rank: 'Phylum'
+      name_html: 'Arthropoda'
+      url: 'http://www.catalogueoflife.org/col/browse/tree/id/89ac18bfcf1654a9662a600ba06bb494'
+    -
+      id: '86858bfbd5b0846611871d8eb3e25db1'
+      name: 'Malacostraca'
+      rank: 'Class'
+      name_html: 'Malacostraca'
+      url: 'http://www.catalogueoflife.org/col/browse/tree/id/86858bfbd5b0846611871d8eb3e25db1'
+    -
+      id: '1008e23f49cf95fb6c80631ab5505d14'
+      name: 'Decapoda'
+      rank: 'Order'
+      name_html: 'Decapoda'
+      url: 'http://www.catalogueoflife.org/col/browse/tree/id/1008e23f49cf95fb6c80631ab5505d14'
+    -
+      id: 'f7e33c38480f906dd432fd88b13fe73a'
+      name: 'Astacoidea'
+      rank: 'Superfamily'
+      name_html: 'Astacoidea'
+      url: 'http://www.catalogueoflife.org/col/browse/tree/id/f7e33c38480f906dd432fd88b13fe73a'
+  child_taxa:
+    -
+      id: 'cf32418e84a35b0f3825a8825c3c967c'
+      name: 'Astacus'
+      rank: 'Genus'
+      name_html: '<i>Astacus</i>'
+      url: 'http://www.catalogueoflife.org/col/browse/tree/id/cf32418e84a35b0f3825a8825c3c967c'
+      is_extinct: 'false'
+    -
+      id: 'c82c13d45a930d989406645a138fcde5'
+      name: 'Austropotamobius'
+      rank: 'Genus'
+      name_html: '<i>Austropotamobius</i>'
+      url: 'http://www.catalogueoflife.org/col/browse/tree/id/c82c13d45a930d989406645a138fcde5'
+      is_extinct: 'true'
+    -
+      id: 'ddcf5de68942edfe9781f0e59ffa9597'
+      name: 'Pacifastacus'
+      rank: 'Genus'
+      name_html: '<i>Pacifastacus</i>'
+      url: 'http://www.catalogueoflife.org/col/browse/tree/id/ddcf5de68942edfe9781f0e59ffa9597'
+      is_extinct: 'false'
+    -
+      id: '90d7d139a6b48cd0fa3316994fca31c7'
+      name: 'Palaeocambarus'
+      rank: 'Genus'
+      name_html: '<i>Palaeocambarus</i>'
+      url: 'http://www.catalogueoflife.org/col/browse/tree/id/90d7d139a6b48cd0fa3316994fca31c7'
+      is_extinct: 'true'
+
