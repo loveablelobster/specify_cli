@@ -4,12 +4,22 @@ module Specify
   module CatalogueOfLife
     #
     class TaxonResponse
+      attr_reader :full_response
+
       def initialize(col_result_hash)
-        @id = col_result_hash['id']
+        @full_response = col_result_hash
         @name = col_result_hash['name']
         @author = col_result_hash['author']
         @name_status = col_result_hash['name_status']
         @rank = col_result_hash['rank']
+      end
+
+      def method_missing(method_name, *args, &block)
+        full_response.fetch method_name.to_s
+      end
+
+      def respond_to?(method_name, include_private = false)
+        full_response.key?(method_name.to_s)# || super
       end
     end
   end

@@ -9,7 +9,7 @@ example_id                                             | status  | run_time     
 ./spec/catalogue_of_life/taxon_request_spec.rb[1:1:1]  | passed  | 0.19157 seconds |
 ./spec/catalogue_of_life/taxon_request_spec.rb[1:2:1]  | passed  | 0.00199 seconds |
 ./spec/catalogue_of_life/taxon_request_spec.rb[1:3:1]  | passed  | 0.13043 seconds |
-./spec/catalogue_of_life/taxon_response_spec.rb[1:1:1] | passed  | 0.35065 seconds |
+./spec/catalogue_of_life/taxon_response_spec.rb[1:1:1] | passed  | 0.00861 seconds |
 ./spec/cli/stubs_spec.rb[1:1:1]                        | passed  | 0.00066 seconds |
 ./spec/configuration/config_spec.rb[1:1]               | passed  | 0.00148 seconds |
 ./spec/configuration/config_spec.rb[1:2:1]             | passed  | 0.00091 seconds |

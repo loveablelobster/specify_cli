@@ -233,4 +233,666 @@
       name_html: '<i>Palaeocambarus</i>'
       url: 'http://www.catalogueoflife.org/col/browse/tree/id/90d7d139a6b48cd0fa3316994fca31c7'
       is_extinct: 'true'
-
+:synonym:
+  id: 'd81941a10d07fcc621073de9cdefca96'
+  name: 'Cancer fimbriatus'
+  rank: 'Species'
+  name_status: 'synonym'
+  genus: 'Cancer'
+  subgenus: ''
+  species: 'fimbriatus'
+  infraspecies_marker: ''
+  infraspecies: ''
+  author: 'Olivi, 1792'
+  record_scrutiny_date: false
+  online_resource: ''
+  source_database: 'WoRMS Brachyura: World List of marine Brachyura'
+  source_database_url: 'http://www.marinespecies.org'
+  bibliographic_citation: 'Ng P.K.L. & Davie P. (2018). WoRMS Brachyura: World List of marine Brachyura (version 2015-09-01). In: Roskov Y., Orrell T., Nicolson D., Bailly N., Kirk P.M., Bourgoin T., DeWalt R.E., Decock W., De Wever A., Nieukerken E. van, Zarucchi J., Penev L., eds. (2018). Species 2000 & ITIS Catalogue of Life, 31st July 2018. Digital resource at www.catalogueoflife.org/col. Species 2000: Naturalis, Leiden, the Netherlands. ISSN 2405-8858.'
+  name_html: '<i>Cancer fimbriatus</i> Olivi, 1792'
+  url: 'http://www.catalogueoflife.org/col/details/species/id/f3183ce46e4cc2b2d00c3b4c026b9481/synonym/d81941a10d07fcc621073de9cdefca96'
+  distribution: ''
+  references:
+    -
+      author: 'Adema, J.P.H.M.'
+      year: '1991'
+      title: 'De krabben van Nederland en Belgie (Crustacea, Decapoda, Brachyura) [The crabs of the Netherlands and Belgium (Crustacea, Decapoda, Brachyura)]'
+      source: 'Nationaal Natuurhistorisch Museum: Leiden, The Netherlands. ISBN 90-73239-02-8. 244 pp.'
+  accepted_name:
+    id: 'f3183ce46e4cc2b2d00c3b4c026b9481'
+    name: 'Cancer pagurus'
+    rank: 'Species'
+    name_status: 'accepted name'
+    genus: 'Cancer'
+    subgenus: ''
+    species: 'pagurus'
+    infraspecies_marker: ''
+    infraspecies: ''
+    author: 'Linnaeus, 1758'
+    record_scrutiny_date:
+      scrutiny: '12-Jun-2007'
+    online_resource: 'http://www.marinespecies.org/aphia.php?p=taxdetails&id=107276'
+    is_extinct: 'false'
+    source_database: 'WoRMS Brachyura: World List of marine Brachyura'
+    source_database_url: 'http://www.marinespecies.org'
+    bibliographic_citation: 'Ng P.K.L. & Davie P. (2018). WoRMS Brachyura: World List of marine Brachyura (version 2015-09-01). In: Roskov Y., Orrell T., Nicolson D., Bailly N., Kirk P.M., Bourgoin T., DeWalt R.E., Decock W., De Wever A., Nieukerken E. van, Zarucchi J., Penev L., eds. (2018). Species 2000 & ITIS Catalogue of Life, 31st July 2018. Digital resource at www.catalogueoflife.org/col. Species 2000: Naturalis, Leiden, the Netherlands. ISSN 2405-8858.'
+    name_html: '<i>Cancer pagurus</i> Linnaeus, 1758'
+    url: 'http://www.catalogueoflife.org/col/details/species/id/f3183ce46e4cc2b2d00c3b4c026b9481'
+    distribution: 'Arctic Ocean 634 2; Arctic Ocean 400 0; Atlantic Ocean 2326 0; Baltic Sea 695 2; Baltic Sea 1828 0; Belgian Exclusive Economic Zone 731 3; Belgian Exclusive Economic Zone 5945 0; Black Sea 614 2; Black Sea 1650 0; Blankenberge 6121 0; Canada 2109 0; De Haan 35006 0; De Panne 35011 0; Dutch Exclusive Economic Zone 769 3; Dutch Exclusive Economic Zone 5966 0; FAO fishing area 34 73884 0; FAO fishing area 47 73883 0; Knokke 73992 0; Knokke-Heist 35010 0; Mediterranean Sea 367 0; Mediterranean Sea - Eastern Basin 612 2; Mediterranean Sea - Eastern Basin 1730 0; Mediterranean Sea - Western Basin 611 2; Mediterranean Sea - Western Basin 1502 0; Moroccan Exclusive Economic Zone 852 3; Moroccan Exclusive Economic Zone 5953 0; Nieuwpoort 37129 0; North Atlantic 2324 0; North Atlantic Ocean 645 2; North Atlantic Ocean 297 0; North Coast of Norway 35005 0; North Sea 623 2; North Sea 5852 0; Norwegian Exclusive Economic Zone 867 3; Norwegian Exclusive Economic Zone 406 0; Oostduinkerke 37128 0; Oostende 9483 0; Pacific Ocean 9494 0; Swedish Exclusive Economic Zone 916 3; Swedish Exclusive Economic Zone 5976 0; USA 6 0; United Kingdom 3815 0; West Africa 6035 0; West Coast of Norway  5981 0; Wimereux 5939 0; Zeebrugge 6132 0; Zeeland 5980 0'
+    references: []
+    classification:
+      -
+        id: '5ede24b0534ebd5e1f552d5b9f874a6a'
+        name: 'Animalia'
+        rank: 'Kingdom'
+        name_html: 'Animalia'
+        url: 'http://www.catalogueoflife.org/col/browse/tree/id/5ede24b0534ebd5e1f552d5b9f874a6a'
+      -
+        id: '89ac18bfcf1654a9662a600ba06bb494'
+        name: 'Arthropoda'
+        rank: 'Phylum'
+        name_html: 'Arthropoda'
+        url: 'http://www.catalogueoflife.org/col/browse/tree/id/89ac18bfcf1654a9662a600ba06bb494'
+      -
+        id: '86858bfbd5b0846611871d8eb3e25db1'
+        name: 'Malacostraca'
+        rank: 'Class'
+        name_html: 'Malacostraca'
+        url: 'http://www.catalogueoflife.org/col/browse/tree/id/86858bfbd5b0846611871d8eb3e25db1'
+      -
+        id: '1008e23f49cf95fb6c80631ab5505d14'
+        name: 'Decapoda'
+        rank: 'Order'
+        name_html: 'Decapoda'
+        url: 'http://www.catalogueoflife.org/col/browse/tree/id/1008e23f49cf95fb6c80631ab5505d14'
+      -
+        id: '9be8921d8e8188baeaecec066ce71d08'
+        name: 'Cancroidea'
+        rank: 'Superfamily'
+        name_html: 'Cancroidea'
+        url: 'http://www.catalogueoflife.org/col/browse/tree/id/9be8921d8e8188baeaecec066ce71d08'
+      -
+        id: '389f95cb97ebc62b1bc609fcf87e7d46'
+        name: 'Cancridae'
+        rank: 'Family'
+        name_html: 'Cancridae'
+        url: 'http://www.catalogueoflife.org/col/browse/tree/id/389f95cb97ebc62b1bc609fcf87e7d46'
+      -
+        id: '51294cac34ebedd85418f7d880fd7fa5'
+        name: 'Cancer'
+        rank: 'Genus'
+        name_html: '<i>Cancer</i>'
+        url: 'http://www.catalogueoflife.org/col/browse/tree/id/51294cac34ebedd85418f7d880fd7fa5'
+    child_taxa: []
+    synonyms:
+      -
+        id: 'd81941a10d07fcc621073de9cdefca96'
+        name: 'Cancer fimbriatus'
+        rank: 'Species'
+        name_status: 'synonym'
+        genus: 'Cancer'
+        subgenus: ''
+        species: 'fimbriatus'
+        infraspecies_marker: ''
+        infraspecies: ''
+        author: 'Olivi, 1792'
+        record_scrutiny_date: ''
+        online_resource: ''
+        is_extinct: 0
+        name_html: '<i>Cancer fimbriatus</i> Olivi, 1792'
+        url: 'http://www.catalogueoflife.org/col/details/species/id/f3183ce46e4cc2b2d00c3b4c026b9481/synonym/d81941a10d07fcc621073de9cdefca96'
+        references:
+          -
+            author: 'Adema, J.P.H.M.'
+            year: '1991'
+            title: 'De krabben van Nederland en Belgie (Crustacea, Decapoda, Brachyura) [The crabs of the Netherlands and Belgium (Crustacea, Decapoda, Brachyura)]'
+            source: 'Nationaal Natuurhistorisch Museum: Leiden, The Netherlands. ISBN 90-73239-02-8. 244 pp.'
+      -
+        id: '4a6de56affa3de0e027145d2d7136f2a'
+        name: 'Cancer incisocrenatus'
+        rank: 'Species'
+        name_status: 'synonym'
+        genus: 'Cancer'
+        subgenus: ''
+        species: 'incisocrenatus'
+        infraspecies_marker: ''
+        infraspecies: ''
+        author: 'Couch, 1838'
+        record_scrutiny_date: ''
+        online_resource: ''
+        is_extinct: 0
+        name_html: '<i>Cancer incisocrenatus</i> Couch, 1838'
+        url: 'http://www.catalogueoflife.org/col/details/species/id/f3183ce46e4cc2b2d00c3b4c026b9481/synonym/4a6de56affa3de0e027145d2d7136f2a'
+        references: []
+      -
+        id: 'cc57308ba2f409c765bbdaedcbaa1f78'
+        name: 'Cancer luederwaldti'
+        rank: 'Species'
+        name_status: 'synonym'
+        genus: 'Cancer'
+        subgenus: ''
+        species: 'luederwaldti'
+        infraspecies_marker: ''
+        infraspecies: ''
+        author: 'Rathbun, 1930'
+        record_scrutiny_date: ''
+        online_resource: ''
+        is_extinct: 0
+        name_html: '<i>Cancer luederwaldti</i> Rathbun, 1930'
+        url: 'http://www.catalogueoflife.org/col/details/species/id/f3183ce46e4cc2b2d00c3b4c026b9481/synonym/cc57308ba2f409c765bbdaedcbaa1f78'
+        references:
+          -
+            author: 'Adema, J.P.H.M.'
+            year: '1991'
+            title: 'De krabben van Nederland en Belgie (Crustacea, Decapoda, Brachyura) [The crabs of the Netherlands and Belgium (Crustacea, Decapoda, Brachyura)]'
+            source: 'Nationaal Natuurhistorisch Museum: Leiden, The Netherlands. ISBN 90-73239-02-8. 244 pp.'
+    common_names:
+      -
+        name: 'taskekrabbe'
+        language: 'Danish'
+        country:
+        references:
+          -
+            author:
+            year:
+            title: 'PESI (A Pan-European Species directories Infrastructure) focal points'
+            source:
+      -
+        name: 'grote krab'
+        language: 'Dutch'
+        country:
+        references:
+          -
+            author: 'Adema, J.P.H.M.'
+            year: '1991'
+            title: 'De krabben van Nederland en Belgie (Crustacea, Decapoda, Brachyura) [The crabs of the Netherlands and Belgium (Crustacea, Decapoda, Brachyura)]'
+            source: 'Nationaal Natuurhistorisch Museum: Leiden, The Netherlands. ISBN 90-73239-02-8. 244 pp.'
+      -
+        name: 'grote noordzeekrab'
+        language: 'Dutch'
+        country:
+        references:
+          -
+            author: 'Adema, J.P.H.M.'
+            year: '1991'
+            title: 'De krabben van Nederland en Belgie (Crustacea, Decapoda, Brachyura) [The crabs of the Netherlands and Belgium (Crustacea, Decapoda, Brachyura)]'
+            source: 'Nationaal Natuurhistorisch Museum: Leiden, The Netherlands. ISBN 90-73239-02-8. 244 pp.'
+      -
+        name: 'hoofdkrab'
+        language: 'Dutch'
+        country':
+        references:
+          -
+            author: 'Adema, J.P.H.M.'
+            year: '1991'
+            title: 'De krabben van Nederland en Belgie (Crustacea, Decapoda, Brachyura) [The crabs of the Netherlands and Belgium (Crustacea, Decapoda, Brachyura)]'
+            source: 'Nationaal Natuurhistorisch Museum: Leiden, The Netherlands. ISBN 90-73239-02-8. 244 pp.'
+      -
+        name: 'Noordzeekrab'
+        language: 'Dutch'
+        country:
+        references:
+          -
+            author: 'Adema, J.P.H.M.'
+            year: '1991'
+            title: 'De krabben van Nederland en Belgie (Crustacea, Decapoda, Brachyura) [The crabs of the Netherlands and Belgium (Crustacea, Decapoda, Brachyura)]'
+            source: 'Nationaal Natuurhistorisch Museum: Leiden, The Netherlands. ISBN 90-73239-02-8. 244 pp.'
+      -
+        name: 'slagkrab'
+        language: 'Dutch'
+        country:
+        references:
+          -
+            author: 'Adema, J.P.H.M.'
+            year: '1991'
+            title: 'De krabben van Nederland en Belgie (Crustacea, Decapoda, Brachyura) [The crabs of the Netherlands and Belgium (Crustacea, Decapoda, Brachyura)]'
+            source: 'Nationaal Natuurhistorisch Museum: Leiden, The Netherlands. ISBN 90-73239-02-8. 244 pp.'
+      -
+        name: 'steenkrab'
+        language: 'Dutch'
+        country:
+        references:
+          -
+            author: 'Adema, J.P.H.M.'
+            year: '1991'
+            title: 'De krabben van Nederland en Belgie (Crustacea, Decapoda, Brachyura) [The crabs of the Netherlands and Belgium (Crustacea, Decapoda, Brachyura)]'
+            source: 'Nationaal Natuurhistorisch Museum: Leiden, The Netherlands. ISBN 90-73239-02-8. 244 pp.'
+      -
+        name: 'toogkrab'
+        language: 'Dutch'
+        country:
+        references:
+          -
+            author: 'Adema, J.P.H.M.'
+            year: '1991'
+            title: 'De krabben van Nederland en Belgie (Crustacea, Decapoda, Brachyura) [The crabs of the Netherlands and Belgium (Crustacea, Decapoda, Brachyura)]'
+            source: 'Nationaal Natuurhistorisch Museum: Leiden, The Netherlands. ISBN 90-73239-02-8. 244 pp.'
+      -
+        name: 'zeekrab'
+        language: 'Dutch'
+        country:
+        references:
+          -
+            author: 'Adema, J.P.H.M.'
+            year: '1991'
+            title: 'De krabben van Nederland en Belgie (Crustacea, Decapoda, Brachyura) [The crabs of the Netherlands and Belgium (Crustacea, Decapoda, Brachyura)]'
+            source: 'Nationaal Natuurhistorisch Museum: Leiden, The Netherlands. ISBN 90-73239-02-8. 244 pp.'
+      -
+        name: 'edible crab'
+        language: 'English'
+        country:
+        references:
+          -
+            author: 'Adema, J.P.H.M.'
+            year: '1991'
+            title: 'De krabben van Nederland en Belgie (Crustacea, Decapoda, Brachyura) [The crabs of the Netherlands and Belgium (Crustacea, Decapoda, Brachyura)]'
+            source: 'Nationaal Natuurhistorisch Museum: Leiden, The Netherlands. ISBN 90-73239-02-8. 244 pp.'
+      -
+        name: 'crabe-dormeur'
+        language: 'French'
+        country:
+        references:
+          -
+            author: 'Leewis, R.'
+            year: '2002'
+            title: 'Flora en fauna van de zee [Marine flora and fauna]. <i>Veldgids</i>, 16. KNNV Uitgeverij: Utrecht, The Netherlands. ISBN 90-5011-153-X. 320 pp.'
+            source:
+      -
+        name: 'Dormeur'
+        language: 'French'
+        country:
+        references:
+          -
+            author: 'Muller, Y.'
+            year: '2004'
+            title: 'Faune et flore du littoral du Nord, du Pas-de-Calais et de la Belgique: inventaire. [Coastal fauna and flora of the Nord, Pas-de-Calais and Belgium: inventory]'
+            source: 'Commission Régionale de Biologie Région Nord Pas-de-Calais: France. 307 pp'
+      -
+        name: 'tourteau'
+        language: 'French'
+        country:
+        references:
+          -
+            author: 'Adema, J.P.H.M.'
+            year: '1991'
+            title: 'De krabben van Nederland en Belgie (Crustacea, Decapoda, Brachyura) [The crabs of the Netherlands and Belgium (Crustacea, Decapoda, Brachyura)]'
+            source: 'Nationaal Natuurhistorisch Museum: Leiden, The Netherlands. ISBN 90-73239-02-8. 244 pp.'
+      -
+        name: 'Taschenkrebs'
+        language: 'German'
+        country:
+        references:
+          -
+            author: 'Leewis, R.'
+            year: '2002'
+            title: 'Flora en fauna van de zee [Marine flora and fauna]. <i>Veldgids</i>, 16. KNNV Uitgeverij: Utrecht, The Netherlands. ISBN 90-5011-153-X. 320 pp.'
+            source:
+      -
+        name: 'taskekrabbe'
+        language: 'Norwegian Bokmål'
+        country:
+        references:
+          -
+            author:
+            year:
+            title: 'PESI (A Pan-European Species directories Infrastructure) focal points'
+            source:
+      -
+        name: 'taskekrabbe'
+        language: 'Norwegian Nynorsk'
+        country:
+        references:
+          -
+            author:
+            year:
+            title: 'PESI (A Pan-European Species directories Infrastructure) focal points'
+            source:
+      -
+        name: 'sapateira'
+        language: 'Portuguese'
+        country:
+        references:
+          -
+            author: 'Davidson, A.'
+            year: '2001'
+            title: 'North Atlantic fish cookbook [Noord-Atlantisch viskookboek]. Scepter: Bussum, The Netherlands. ISBN 90-72653-14-9. 556 pp.'
+            source: ''
+      -
+        name: 'buey'
+        language: 'Spanish'
+        country:
+        references:
+          -
+            author: 'Davidson, A.'
+            year: '2001'
+            title: 'North Atlantic fish cookbook [Noord-Atlantisch viskookboek]. Scepter: Bussum, The Netherlands. ISBN 90-72653-14-9. 556 pp.'
+            source: ''
+      -
+        name: 'krabbtaska'
+        language: 'Swedish'
+        country:
+        references:
+          -
+            author:
+            year:
+            title: 'PESI (A Pan-European Species directories Infrastructure) focal points'
+            source:
+:accepted_with_synonyms:
+  id: 'f3183ce46e4cc2b2d00c3b4c026b9481'
+  name: 'Cancer pagurus'
+  rank: 'Species'
+  name_status: 'accepted name'
+  genus: 'Cancer'
+  subgenus: ''
+  species: 'pagurus'
+  infraspecies_marker: ''
+  infraspecies: ''
+  author: 'Linnaeus, 1758'
+  record_scrutiny_date:
+    scrutiny: '12-Jun-2007'
+  online_resource: 'http://www.marinespecies.org/aphia.php?p=taxdetails&id=107276'
+  is_extinct: 'false'
+  source_database: 'WoRMS Brachyura: World List of marine Brachyura'
+  source_database_url: 'http://www.marinespecies.org'
+  bibliographic_citation: 'Ng P.K.L. & Davie P. (2018). WoRMS Brachyura: World List of marine Brachyura (version 2015-09-01). In: Roskov Y., Orrell T., Nicolson D., Bailly N., Kirk P.M., Bourgoin T., DeWalt R.E., Decock W., De Wever A., Nieukerken E. van, Zarucchi J., Penev L., eds. (2018). Species 2000 & ITIS Catalogue of Life, 31st July 2018. Digital resource at www.catalogueoflife.org/col. Species 2000: Naturalis, Leiden, the Netherlands. ISSN 2405-8858.'
+  name_html: '<i>Cancer pagurus</i> Linnaeus, 1758'
+  url: 'http://www.catalogueoflife.org/col/details/species/id/f3183ce46e4cc2b2d00c3b4c026b9481'
+  distribution: 'Arctic Ocean 634 2; Arctic Ocean 400 0; Atlantic Ocean 2326 0; Baltic Sea 695 2; Baltic Sea 1828 0; Belgian Exclusive Economic Zone 731 3; Belgian Exclusive Economic Zone 5945 0; Black Sea 614 2; Black Sea 1650 0; Blankenberge 6121 0; Canada 2109 0; De Haan 35006 0; De Panne 35011 0; Dutch Exclusive Economic Zone 769 3; Dutch Exclusive Economic Zone 5966 0; FAO fishing area 34 73884 0; FAO fishing area 47 73883 0; Knokke 73992 0; Knokke-Heist 35010 0; Mediterranean Sea 367 0; Mediterranean Sea - Eastern Basin 612 2; Mediterranean Sea - Eastern Basin 1730 0; Mediterranean Sea - Western Basin 611 2; Mediterranean Sea - Western Basin 1502 0; Moroccan Exclusive Economic Zone 852 3; Moroccan Exclusive Economic Zone 5953 0; Nieuwpoort 37129 0; North Atlantic 2324 0; North Atlantic Ocean 645 2; North Atlantic Ocean 297 0; North Coast of Norway 35005 0; North Sea 623 2; North Sea 5852 0; Norwegian Exclusive Economic Zone 867 3; Norwegian Exclusive Economic Zone 406 0; Oostduinkerke 37128 0; Oostende 9483 0; Pacific Ocean 9494 0; Swedish Exclusive Economic Zone 916 3; Swedish Exclusive Economic Zone 5976 0; USA 6 0; United Kingdom 3815 0; West Africa 6035 0; West Coast of Norway  5981 0; Wimereux 5939 0; Zeebrugge 6132 0; Zeeland 5980 0'
+  references: []
+  classification:
+    -
+      id: '5ede24b0534ebd5e1f552d5b9f874a6a'
+      name: 'Animalia'
+      rank: 'Kingdom'
+      name_html: 'Animalia'
+      url: 'http://www.catalogueoflife.org/col/browse/tree/id/5ede24b0534ebd5e1f552d5b9f874a6a'
+    -
+      id: '89ac18bfcf1654a9662a600ba06bb494'
+      name: 'Arthropoda'
+      rank: 'Phylum'
+      name_html: 'Arthropoda'
+      url: 'http://www.catalogueoflife.org/col/browse/tree/id/89ac18bfcf1654a9662a600ba06bb494'
+    -
+      id: '86858bfbd5b0846611871d8eb3e25db1'
+      name: 'Malacostraca'
+      rank: 'Class'
+      name_html: 'Malacostraca'
+      url: 'http://www.catalogueoflife.org/col/browse/tree/id/86858bfbd5b0846611871d8eb3e25db1'
+    -
+      id: '1008e23f49cf95fb6c80631ab5505d14'
+      name: 'Decapoda'
+      rank: 'Order'
+      name_html: 'Decapoda'
+      url: 'http://www.catalogueoflife.org/col/browse/tree/id/1008e23f49cf95fb6c80631ab5505d14'
+    -
+      id: '9be8921d8e8188baeaecec066ce71d08'
+      name: 'Cancroidea'
+      rank: 'Superfamily'
+      name_html: 'Cancroidea'
+      url: 'http://www.catalogueoflife.org/col/browse/tree/id/9be8921d8e8188baeaecec066ce71d08'
+    -
+      id: '389f95cb97ebc62b1bc609fcf87e7d46'
+      name: 'Cancridae'
+      rank: 'Family'
+      name_html: 'Cancridae'
+      url: 'http://www.catalogueoflife.org/col/browse/tree/id/389f95cb97ebc62b1bc609fcf87e7d46'
+    -
+      id: '51294cac34ebedd85418f7d880fd7fa5'
+      name: 'Cancer'
+      rank: 'Genus'
+      name_html: '<i>Cancer</i>'
+      url: 'http://www.catalogueoflife.org/col/browse/tree/id/51294cac34ebedd85418f7d880fd7fa5'
+  child_taxa: []
+  synonyms:
+    -
+      id: 'd81941a10d07fcc621073de9cdefca96'
+      name: 'Cancer fimbriatus'
+      rank: 'Species'
+      name_status: 'synonym'
+      genus: 'Cancer'
+      subgenus: ''
+      species: 'fimbriatus'
+      infraspecies_marker: ''
+      infraspecies: ''
+      author: 'Olivi, 1792'
+      record_scrutiny_date: ''
+      online_resource: ''
+      is_extinct: 0
+      name_html: '<i>Cancer fimbriatus</i> Olivi, 1792'
+      url: 'http://www.catalogueoflife.org/col/details/species/id/f3183ce46e4cc2b2d00c3b4c026b9481/synonym/d81941a10d07fcc621073de9cdefca96'
+      references:
+        -
+          author: 'Adema, J.P.H.M.'
+          year: '1991'
+          title: 'De krabben van Nederland en Belgie (Crustacea, Decapoda, Brachyura) [The crabs of the Netherlands and Belgium (Crustacea, Decapoda, Brachyura)]'
+          source: 'Nationaal Natuurhistorisch Museum: Leiden, The Netherlands. ISBN 90-73239-02-8. 244 pp.'
+    -
+      id: '4a6de56affa3de0e027145d2d7136f2a'
+      name: 'Cancer incisocrenatus'
+      rank: 'Species'
+      name_status: 'synonym'
+      genus: 'Cancer'
+      subgenus: ''
+      species: 'incisocrenatus'
+      infraspecies_marker: ''
+      infraspecies: ''
+      author: 'Couch, 1838'
+      record_scrutiny_date: ''
+      online_resource: ''
+      is_extinct: 0
+      name_html: '<i>Cancer incisocrenatus</i> Couch, 1838'
+      url: 'http://www.catalogueoflife.org/col/details/species/id/f3183ce46e4cc2b2d00c3b4c026b9481/synonym/4a6de56affa3de0e027145d2d7136f2a'
+      references: []
+    -
+      id: 'cc57308ba2f409c765bbdaedcbaa1f78'
+      name: 'Cancer luederwaldti'
+      rank: 'Species'
+      name_status: 'synonym'
+      genus: 'Cancer'
+      subgenus: ''
+      species: 'luederwaldti'
+      infraspecies_marker: ''
+      infraspecies: ''
+      author: 'Rathbun, 1930'
+      record_scrutiny_date: ''
+      online_resource: ''
+      is_extinct: 0
+      name_html: '<i>Cancer luederwaldti</i> Rathbun, 1930'
+      url: 'http://www.catalogueoflife.org/col/details/species/id/f3183ce46e4cc2b2d00c3b4c026b9481/synonym/cc57308ba2f409c765bbdaedcbaa1f78'
+      references:
+        -
+          author: 'Adema, J.P.H.M.'
+          year: '1991'
+          title: 'De krabben van Nederland en Belgie (Crustacea, Decapoda, Brachyura) [The crabs of the Netherlands and Belgium (Crustacea, Decapoda, Brachyura)]'
+          source: 'Nationaal Natuurhistorisch Museum: Leiden, The Netherlands. ISBN 90-73239-02-8. 244 pp.'
+  common_names:
+    -
+      name: 'taskekrabbe'
+      language: 'Danish'
+      country:
+      references:
+        -
+          author:
+          year:
+          title: 'PESI (A Pan-European Species directories Infrastructure) focal points'
+          source:
+    -
+      name: 'grote krab'
+      language: 'Dutch'
+      country:
+      references:
+        -
+          author: 'Adema, J.P.H.M.'
+          year: '1991'
+          title: 'De krabben van Nederland en Belgie (Crustacea, Decapoda, Brachyura) [The crabs of the Netherlands and Belgium (Crustacea, Decapoda, Brachyura)]'
+          source: 'Nationaal Natuurhistorisch Museum: Leiden, The Netherlands. ISBN 90-73239-02-8. 244 pp.'
+    -
+      name: 'grote noordzeekrab'
+      language: 'Dutch'
+      country:
+      references:
+        -
+          author: 'Adema, J.P.H.M.'
+          year: '1991'
+          title: 'De krabben van Nederland en Belgie (Crustacea, Decapoda, Brachyura) [The crabs of the Netherlands and Belgium (Crustacea, Decapoda, Brachyura)]'
+          source: 'Nationaal Natuurhistorisch Museum: Leiden, The Netherlands. ISBN 90-73239-02-8. 244 pp.'
+    -
+      name: 'hoofdkrab'
+      language: 'Dutch'
+      country:
+      references:
+        -
+          author: 'Adema, J.P.H.M.'
+          year: '1991'
+          title: 'De krabben van Nederland en Belgie (Crustacea, Decapoda, Brachyura) [The crabs of the Netherlands and Belgium (Crustacea, Decapoda, Brachyura)]'
+          source: 'Nationaal Natuurhistorisch Museum: Leiden, The Netherlands. ISBN 90-73239-02-8. 244 pp.'
+    -
+      name: 'Noordzeekrab'
+      language: 'Dutch'
+      country:
+      references:
+        -
+          author: 'Adema, J.P.H.M.'
+          year: '1991'
+          title: 'De krabben van Nederland en Belgie (Crustacea, Decapoda, Brachyura) [The crabs of the Netherlands and Belgium (Crustacea, Decapoda, Brachyura)]'
+          source: 'Nationaal Natuurhistorisch Museum: Leiden, The Netherlands. ISBN 90-73239-02-8. 244 pp.'
+    -
+      name: 'slagkrab'
+      language: 'Dutch'
+      country:
+      references:
+        -
+          author: 'Adema, J.P.H.M.'
+          year: '1991'
+          title: 'De krabben van Nederland en Belgie (Crustacea, Decapoda, Brachyura) [The crabs of the Netherlands and Belgium (Crustacea, Decapoda, Brachyura)]'
+          source: 'Nationaal Natuurhistorisch Museum: Leiden, The Netherlands. ISBN 90-73239-02-8. 244 pp.'
+    -
+      name: 'steenkrab'
+      language: 'Dutch'
+      country:
+      references:
+        -
+          author: 'Adema, J.P.H.M.'
+          year: '1991'
+          title: 'De krabben van Nederland en Belgie (Crustacea, Decapoda, Brachyura) [The crabs of the Netherlands and Belgium (Crustacea, Decapoda, Brachyura)]'
+          source: 'Nationaal Natuurhistorisch Museum: Leiden, The Netherlands. ISBN 90-73239-02-8. 244 pp.'
+    -
+      name: 'toogkrab'
+      language: 'Dutch'
+      country:
+      references:
+        -
+          author: 'Adema, J.P.H.M.'
+          year: '1991'
+          title: 'De krabben van Nederland en Belgie (Crustacea, Decapoda, Brachyura) [The crabs of the Netherlands and Belgium (Crustacea, Decapoda, Brachyura)]'
+          source: 'Nationaal Natuurhistorisch Museum: Leiden, The Netherlands. ISBN 90-73239-02-8. 244 pp.'
+    -
+      name: 'zeekrab'
+      language: 'Dutch'
+      country:
+      references:
+        -
+          author: 'Adema, J.P.H.M.'
+          year: '1991'
+          title: 'De krabben van Nederland en Belgie (Crustacea, Decapoda, Brachyura) [The crabs of the Netherlands and Belgium (Crustacea, Decapoda, Brachyura)]'
+          source: 'Nationaal Natuurhistorisch Museum: Leiden, The Netherlands. ISBN 90-73239-02-8. 244 pp.'
+    -
+      name: 'edible crab'
+      language: 'English'
+      country:
+      references:
+        -
+          author: 'Adema, J.P.H.M.'
+          year: '1991'
+          title: 'De krabben van Nederland en Belgie (Crustacea, Decapoda, Brachyura) [The crabs of the Netherlands and Belgium (Crustacea, Decapoda, Brachyura)]'
+          source: 'Nationaal Natuurhistorisch Museum: Leiden, The Netherlands. ISBN 90-73239-02-8. 244 pp.'
+    -
+      name: 'crabe-dormeur'
+      language: 'French'
+      country:
+      references:
+        -
+          author: 'Leewis, R.'
+          year: '2002'
+          title: 'Flora en fauna van de zee [Marine flora and fauna]. <i>Veldgids</i>, 16. KNNV Uitgeverij: Utrecht, The Netherlands. ISBN 90-5011-153-X. 320 pp.'
+          source:
+    -
+      name: 'Dormeur'
+      language: 'French'
+      country:
+      references:
+        -
+          author: 'Muller, Y.'
+          year: '2004'
+          title: 'Faune et flore du littoral du Nord, du Pas-de-Calais et de la Belgique: inventaire. [Coastal fauna and flora of the Nord, Pas-de-Calais and Belgium: inventory]'
+          source: 'Commission Régionale de Biologie Région Nord Pas-de-Calais: France. 307 pp'
+    -
+      name: 'tourteau'
+      language: 'French'
+      country:
+      references:
+        -
+          author: 'Adema, J.P.H.M.'
+          year: '1991'
+          title: 'De krabben van Nederland en Belgie (Crustacea, Decapoda, Brachyura) [The crabs of the Netherlands and Belgium (Crustacea, Decapoda, Brachyura)]'
+          source: 'Nationaal Natuurhistorisch Museum: Leiden, The Netherlands. ISBN 90-73239-02-8. 244 pp.'
+    -
+      name: 'Taschenkrebs'
+      language: 'German'
+      country:
+      references:
+        -
+          author: 'Leewis, R.'
+          year: '2002'
+          title: 'Flora en fauna van de zee [Marine flora and fauna]. <i>Veldgids</i>, 16. KNNV Uitgeverij: Utrecht, The Netherlands. ISBN 90-5011-153-X. 320 pp.'
+          source:
+    -
+      name: 'taskekrabbe'
+      language: 'Norwegian Bokmål'
+      country:
+      references:
+        -
+          author:
+          year:
+          title: 'PESI (A Pan-European Species directories Infrastructure) focal points'
+          source:
+    -
+      name: 'taskekrabbe'
+      language: 'Norwegian Nynorsk'
+      country:
+      references:
+        -
+          author:
+          year:
+          title: 'PESI (A Pan-European Species directories Infrastructure) focal points'
+          source:
+    -
+      name: 'sapateira'
+      language: 'Portuguese'
+      country:
+      references:
+        -
+          author: 'Davidson, A.'
+          year: '2001'
+          title: 'North Atlantic fish cookbook [Noord-Atlantisch viskookboek]. Scepter: Bussum, The Netherlands. ISBN 90-72653-14-9. 556 pp.'
+          source: ''
+    -
+      name: 'buey'
+      language: 'Spanish'
+      country:
+      references:
+        -
+          author: 'Davidson, A.'
+          year: '2001'
+          title: 'North Atlantic fish cookbook [Noord-Atlantisch viskookboek]. Scepter: Bussum, The Netherlands. ISBN 90-72653-14-9. 556 pp.'
+          source: ''
+    -
+      name: 'krabbtaska'
+      language: 'Swedish'
+      country:
+      references:
+        -
+          author:
+          year:
+          title: 'PESI (A Pan-European Species directories Infrastructure) focal points'
+          source:

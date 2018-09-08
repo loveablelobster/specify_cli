@@ -4,21 +4,15 @@
 module Specify
   module CatalogueOfLife
     RSpec.describe TaxonResponse do
-      let :crayfish_yaml do
-        Psych.load_file('spec/support/taxon_response.yaml')[:valid_species]
+      let :cancer_pagurus do
+        described_class.new(Psych.load_file('spec/support/taxon_response.yaml')
+                                 .fetch :accepted_with_synonyms)
       end
 
-      let :crayfish do
-        TaxonRequest.new(:json) do |req|
-          req.name = 'Astacidae'
-          req.rank = 'family'
-        end
-      end
+      describe '#id' do
+        subject { cancer_pagurus.id }
 
-      describe '#new' do
-        subject { described_class.new() }
-
-        it { p crayfish.results.first }
+        it { p subject }
       end
     end
   end
