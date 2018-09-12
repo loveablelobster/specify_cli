@@ -18,11 +18,11 @@ module Specify
 
       # Rank of the taxon to search for (can be multiple).
       # if empty, all matches within any rank will be returned
-      attr_accessor :rank
+      attr_reader :rank
 
       # :full (default) or :terse. :terse will ommit classification and child
       # taxa
-      attr_accessor :response
+      attr_accessor :response_type
 
       # Taxonomic status (e.g. `accepted name`, 'synonym') of the taxon;
       # optional, if ommitted, any match satisfying the other parameters
@@ -50,7 +50,7 @@ module Specify
         @id = nil
         @name = nil
         @rank = nil
-        @response = :full
+        @response_type = :full
         @status = nil
         @extinct = nil
         yield(self) if block_given?
@@ -67,16 +67,22 @@ module Specify
       def params
         {
           'format' => content_type.to_s,
-          'response' => response.to_s,
+          'response' => response_type.to_s,
           'id' => id,
           'name' => name,
-          'rank' => rank,
+          'rank' => rank.to_s,
           'extinct' => extinct
         }.compact
       end
 
-      def results
-        get.body['results']
+      def rank=(name)
+        @rank = TaxonRank.new(name)
+      end
+
+      def response
+        results = get.body['results']
+        raise "Multiple matches for #{self}" if results.size > 1
+        TaxonResponse.new results.first
       end
 
       def to_s

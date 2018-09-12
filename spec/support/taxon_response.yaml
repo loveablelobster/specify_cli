@@ -77,6 +77,74 @@
   child_taxa: []
   synonyms: []
   common_names: []
+:extinct_species:
+  id: '8d133bcc525ea8e040d6858ed52625bd'
+  name: 'Astacus edwardsi'
+  rank: 'Species'
+  name_status: 'accepted name'
+  genus: 'Astacus'
+  subgenus: ''
+  species: 'edwardsi'
+  infraspecies_marker: ''
+  infraspecies: ''
+  author: 'Van Straelen, 1928'
+  record_scrutiny_date:
+    scrutiny: 'Jan-2017'
+  online_resource: 'https:\/\/paleobiodb.org\/classic\/basicTaxonInfo?taxon_no=217935'
+  is_extinct: 'true'
+  source_database: 'PaleoBioDB: The Paleobiology Database'
+  source_database_url: 'https:\/\/paleobiodb.org'
+  bibliographic_citation: 'Paleobiology Database contributors (2018). PaleoBioDB: The Paleobiology Database (version Feb 2018). In: Roskov Y., Ower G., Orrell T., Nicolson D., Bailly N., Kirk P.M., Bourgoin T., DeWalt R.E., Decock W., De Wever A., Nieukerken E. van, Zarucchi J., Penev L., eds. (2018). Species 2000 & ITIS Catalogue of Life, 24th September 2018. Digital resource at www.catalogueoflife.org\/col. Species 2000: Naturalis, Leiden, the Netherlands. ISSN 2405-8858.'
+  name_html: '<i>Astacus edwardsi<\/i> Van Straelen, 1928'
+  url: 'http:\/\/www.catalogueoflife.org\/col\/details\/species\/id\/8d133bcc525ea8e040d6858ed52625bd'
+  distribution: ''
+  references: []
+  classification:
+    -
+      id: '5ede24b0534ebd5e1f552d5b9f874a6a'
+      name: 'Animalia'
+      rank: 'Kingdom'
+      name_html: 'Animalia'
+      url: 'http:\/\/www.catalogueoflife.org\/col\/browse\/tree\/id\/5ede24b0534ebd5e1f552d5b9f874a6a'
+    -
+      id: '89ac18bfcf1654a9662a600ba06bb494'
+      name: 'Arthropoda'
+      rank: 'Phylum'
+      name_html: 'Arthropoda'
+      url: 'http:\/\/www.catalogueoflife.org\/col\/browse\/tree\/id\/89ac18bfcf1654a9662a600ba06bb494'
+    -
+      id: '86858bfbd5b0846611871d8eb3e25db1'
+      name: 'Malacostraca'
+      rank: 'Class'
+      name_html: 'Malacostraca'
+      url: 'http:\/\/www.catalogueoflife.org\/col\/browse\/tree\/id\/86858bfbd5b0846611871d8eb3e25db1'
+    -
+      id: '1008e23f49cf95fb6c80631ab5505d14'
+      name: 'Decapoda'
+      rank: 'Order'
+      name_html: 'Decapoda'
+      url: 'http:\/\/www.catalogueoflife.org\/col\/browse\/tree\/id\/1008e23f49cf95fb6c80631ab5505d14'
+    -
+      id: 'f7e33c38480f906dd432fd88b13fe73a'
+      name: 'Astacoidea'
+      rank: 'Superfamily'
+      name_html: 'Astacoidea'
+      url: 'http:\/\/www.catalogueoflife.org\/col\/browse\/tree\/id\/f7e33c38480f906dd432fd88b13fe73a'
+    -
+      id: '2369699114e1f4c241019caf7f0ce43c'
+      name: 'Astacidae'
+      rank: 'Family'
+      name_html: 'Astacidae'
+      url: 'http:\/\/www.catalogueoflife.org\/col\/browse\/tree\/id\/2369699114e1f4c241019caf7f0ce43c'
+    -
+      id: 'cf32418e84a35b0f3825a8825c3c967c'
+      name: 'Astacus'
+      rank: 'Genus'
+      name_html: '<i>Astacus<\/i>'
+      url: 'http:\/\/www.catalogueoflife.org\/col\/browse\/tree\/id\/cf32418e84a35b0f3825a8825c3c967c'
+  child_taxa: []
+  synonyms: []
+  common_names: []
 :valid_genus:
   id: 'cf32418e84a35b0f3825a8825c3c967c'
   name: 'Astacus'
@@ -583,7 +651,7 @@
   rank: 'Species'
   name_status: 'accepted name'
   genus: 'Cancer'
-  subgenus: ''
+  subgenus:
   species: 'pagurus'
   infraspecies_marker: ''
   infraspecies: ''
