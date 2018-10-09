@@ -9,8 +9,8 @@ module Specify
       #
       attr_reader :full_response
 
-      #
-      attr_accessor :parent
+#
+#       attr_accessor :parent
 
       #
       attr_reader :rank
@@ -35,9 +35,15 @@ module Specify
         full_response['child_taxa'] && !full_response['child_taxa'].empty?
       end
 
+      # TODO: add Source: 'CatalogueOfLife' to criteria
       def equivalent(taxonomy)
-        taxonomy.names_dataset.first Name: name,
-                                     rank: rank.equivalent(taxonomy)
+        taxonomy.names_dataset.first(TaxonomicSerialNumber: id) ||
+          taxonomy.names_dataset.first(Name: name,
+                                       rank: rank.equivalent(taxonomy))
+      end
+
+      def import(taxonomy)
+
       end
 
       # Returns +true+ if +self+ is extinct, +false+ otherwise.
@@ -57,6 +63,10 @@ module Specify
         else
           full_response['name']
         end
+      end
+
+      def parent
+        full_response['classification']&.last&.fetch('id')
       end
 
       def synonyms

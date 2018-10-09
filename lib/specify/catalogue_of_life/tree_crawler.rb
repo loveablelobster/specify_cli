@@ -34,7 +34,7 @@ module Specify
           Thread.new(child) { |id| TaxonRequest.by_id(id).response }
         end
         children.each do |child|
-          child.value.parent = parent
+#           child.value.parent = parent
           yield(child.value) # FIXME: move up to parent before return again?
           crawl(child.value, options, &block)
         end

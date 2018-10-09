@@ -36,7 +36,7 @@ example_id                                               | status  | run_time   
 ./spec/catalogue_of_life/taxon_response_spec.rb[1:8:3:1] | passed  | 0.00685 seconds |
 ./spec/catalogue_of_life/taxon_response_spec.rb[1:9:1:1] | passed  | 0.0079 seconds  |
 ./spec/catalogue_of_life/taxon_response_spec.rb[1:9:2:1] | passed  | 0.00818 seconds |
-./spec/catalogue_of_life/tree_crawler_spec.rb[1:1:1]     | passed  | 1.21 seconds    |
+./spec/catalogue_of_life/tree_crawler_spec.rb[1:1:1]     | passed  | 0.89032 seconds |
 ./spec/catalogue_of_life/tree_crawler_spec.rb[1:2:1]     | passed  | 0.42468 seconds |
 ./spec/cli/stubs_spec.rb[1:1:1]                          | passed  | 0.00066 seconds |
 ./spec/configuration/config_spec.rb[1:1]                 | passed  | 0.00148 seconds |
