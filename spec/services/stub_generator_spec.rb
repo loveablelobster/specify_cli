@@ -591,10 +591,7 @@ module Specify
                                  geographic_name: county)
         end
 
-        it do pending 'example broken in rspec 3.8'
-          is_expected.to be_a(Sequel::Dataset)
-            .and include locality
-        end
+        it { is_expected.to be_a(Sequel::Dataset).and include locality }
       end
 
       describe '#preparation=(type:, count:)' do

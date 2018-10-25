@@ -13,7 +13,7 @@ spec = Gem::Specification.new do |s|
   s.files = `git ls-files`.split("
 ")
   s.require_paths << 'lib'
-  s.has_rdoc = true
+#   s.has_rdoc = true
   s.extra_rdoc_files = ['README.rdoc','specify_cli.rdoc']
   s.rdoc_options << '--title' << 'specify_cli' << '--main' << 'README.rdoc' << '-ri'
   s.bindir = 'bin'
