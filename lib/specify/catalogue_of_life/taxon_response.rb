@@ -17,7 +17,7 @@ module Specify
 
       def initialize(col_result_hash)
         @full_response = col_result_hash
-        @parent = @full_response['classification'].last
+        @parent = @full_response['classification']&.last
         @rank = TaxonRank.new col_result_hash['rank']
       end
 

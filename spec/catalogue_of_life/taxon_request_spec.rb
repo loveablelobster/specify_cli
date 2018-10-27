@@ -33,9 +33,7 @@ module Specify
       describe '#results' do
         subject { crayfish.results }
 
-        it do
-          p subject
-        end
+        it pending 'should filter multiple results'
       end
     end
   end
