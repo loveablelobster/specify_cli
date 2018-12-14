@@ -4,11 +4,6 @@
 module Specify
   module CatalogueOfLife
     RSpec.describe TaxonEquivalent do
-      let :asaphida_eq do
-        described_class.new(spec_taxonomy,
-                            '5ac1330933c62d7d617a8d4a80dcecf3')
-      end
-
       let :asaphida_resp do
         TaxonResponse.new(Psych.load_file('spec/support/taxon_response.yaml')
                                .fetch :asaphida)
@@ -30,7 +25,12 @@ module Specify
       end
 
       describe '#find_by_id' do
-      	it { p asaphus_resp }
+        let :asaphida_eq do
+          described_class.new(spec_taxonomy,
+                              asaphida_resp)
+        end
+
+      	it { p asaphida_eq }
       end
     end
   end

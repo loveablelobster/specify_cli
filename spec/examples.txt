@@ -6,7 +6,7 @@ example_id                                                | status  | run_time  
 ./spec/branch_parser_spec.rb[1:1:4:1]                     | passed  | 0.00096 seconds |
 ./spec/branch_parser_spec.rb[1:2:1]                       | pending | 0.00001 seconds |
 ./spec/branch_parser_spec.rb[1:2:2]                       | pending | 0.00001 seconds |
-./spec/catalogue_of_life/taxon_equivalent_spec.rb[1:1:1]  | passed  | 0.01346 seconds |
+./spec/catalogue_of_life/taxon_equivalent_spec.rb[1:1:1]  | passed  | 0.01337 seconds |
 ./spec/catalogue_of_life/taxon_rank_spec.rb[1:1:1:1]      | passed  | 0.00038 seconds |
 ./spec/catalogue_of_life/taxon_rank_spec.rb[1:1:2:1]      | passed  | 0.00033 seconds |
 ./spec/catalogue_of_life/taxon_rank_spec.rb[1:2:1:1]      | passed  | 0.00042 seconds |

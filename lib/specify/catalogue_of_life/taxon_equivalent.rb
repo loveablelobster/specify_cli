@@ -6,7 +6,7 @@ module Specify
     # their equivalent in the Specify database
     class TaxonEquivalent
       # The id for the taxon record used by the web service.
-      attr_reader :id
+      attr_reader :concept
 
       # The URI of the web service used.
       # e.g. http://webservice.catalogueoflife.org/col/webservice
@@ -19,11 +19,11 @@ module Specify
       # +id+ is a CatalogOfLife TaxonRespeonse #id
       # +vals+ is a hash for parameters to find the taxon by in case it does
       # not have an id.
-      def initialize(taxonomy, id = nil, vals = {})
-        @id = id
+      def initialize(taxonomy, response = nil)
+        @concept = response
         @service_url = CatalogueOfLife::URL
         @taxonomy = taxonomy
-        @taxon = find_by_id(id) || find_by_values(vals)
+#         @taxon = find_by_id(id) || find_by_values(vals)
       end
 
       def create(vals)
@@ -35,10 +35,12 @@ module Specify
 
       def find_by_id(id)
         taxonomy.names_dataset.first(Source: service_url,
-                                     TaxonomicSerialNumber: id)
+                                     TaxonomicSerialNumber: concept.id)
       end
 
       def find_by_values(vals)
+        # FIXME: vals should by default be concept.name, concept.rank,
+        #        parent
         results = taxonomy.names_dataset.find(vals)
         return results.first if results.size == 1
         raise 'Multiple matches' if results.size > 1
