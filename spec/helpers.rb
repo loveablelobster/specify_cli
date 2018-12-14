@@ -12,4 +12,9 @@ module Helpers
          there are probably uncommited changes on #{@origin}"
     raise e unless $CHILD_STATUS == 0
   end
+
+  # TODO: make this more robust (find by Taxonomy by criteria)
+  def spec_taxonomy
+    Specify::Model::Taxonomy.first
+  end
 end

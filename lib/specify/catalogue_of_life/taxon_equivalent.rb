@@ -2,7 +2,8 @@
 
 module Specify
   module CatalogueOfLife
-    # TaxonEquivalents are finder objects
+    # TaxonEquivalents are finder objects that wrap TaxonResponeses and find
+    # their equivalent in the Specify database
     class TaxonEquivalent
       # The id for the taxon record used by the web service.
       attr_reader :id
@@ -14,6 +15,7 @@ module Specify
       # The Specify::Model::Taxonomy.
       attr_reader :taxonomy
 
+      # FIXME: should be initialized with a taxon response, extract id
       # +id+ is a CatalogOfLife TaxonRespeonse #id
       # +vals+ is a hash for parameters to find the taxon by in case it does
       # not have an id.
