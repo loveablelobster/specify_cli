@@ -17,4 +17,9 @@ module Helpers
   def spec_taxonomy
     Specify::Model::Taxonomy.first
   end
+
+  def response(sym)
+    yaml = Psych.load_file('spec/support/taxon_response.yaml').fetch sym
+    Specify::CatalogueOfLife::TaxonResponse.new(yaml)
+  end
 end

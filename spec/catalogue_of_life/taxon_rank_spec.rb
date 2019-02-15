@@ -41,6 +41,14 @@ module Specify
       		it { is_expected.to be_truthy }
       	end
       end
+
+      describe '#equivalent'
+
+      describe '#position'
+
+      describe '#to_s'
+
+      describe '#valid?'
     end
   end
 end

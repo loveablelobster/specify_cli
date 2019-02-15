@@ -4,9 +4,14 @@ module Specify
   module CatalogueOfLife
     # TaxonEquivalents are finder objects that wrap TaxonResponeses and find
     # their equivalent in the Specify database
+    # TODO: should have bools for exists in DB
     class TaxonEquivalent
       # The id for the taxon record used by the web service.
       attr_reader :concept
+
+      attr_reader :name
+
+      attr_reader :rank
 
       # The URI of the web service used.
       # e.g. http://webservice.catalogueoflife.org/col/webservice
@@ -23,7 +28,29 @@ module Specify
         @concept = response
         @service_url = CatalogueOfLife::URL
         @taxonomy = taxonomy
-#         @taxon = find_by_id(id) || find_by_values(vals)
+        @name = concept.name
+        @rank = concept.rank
+#         @taxon = find_by_id || find_by_values
+      end
+
+      # Returns an Array of TaxonEquivalent instances for all ancestors in the
+      # TaxonResponse's classification.
+      def ancestors
+        concept.classification
+               .map { |t| TaxonEquivalent.new(taxonomy, TaxonResponse.new(t)) }
+               .sort { |a, b| a.rank <=> b.rank }
+      end
+
+      # Returns the ID of the taxon concept in the external resource
+      # (CatalogueOfLife)
+      def concept_id
+        concept.id
+      end
+
+      # Returns a Hash with values to find the concept in the taxonomy
+      def concept_query_values
+        { Name: concept.name,
+          rank: concept.rank.equivalent(taxonomy) }
       end
 
       def create(vals)
@@ -33,17 +60,46 @@ module Specify
         taxonomy.add_name(vals)
       end
 
-      def find_by_id(id)
+      def find
+        # TODO: once found should set ivar to TaxonID
+        find_by_id || find_by_values
+      end
+
+      def find_by_id
         taxonomy.names_dataset.first(Source: service_url,
                                      TaxonomicSerialNumber: concept.id)
       end
 
-      def find_by_values(vals)
-        # FIXME: vals should by default be concept.name, concept.rank,
-        #        parent
-        results = taxonomy.names_dataset.find(vals)
-        return results.first if results.size == 1
-        raise 'Multiple matches' if results.size > 1
+      def find_by_values
+        # TODO: should also include parent
+        results = taxonomy.names_dataset.where(concept_query_values)
+        return results.first if results.count == 1
+        raise 'Multiple matches' if results.count > 1
+      end
+
+      # FIXME: argument only for dependency injection
+      def find_parent(parent_response = nil)
+        # Try to create a TaxonResponse from the classification doc
+        parent_equivalent.find
+        # TODO: get the full TaxonResponse for the parent
+        # TODO: should create TaxonEquivalent
+      end
+
+      # Returns an Array of TaxonEquivalent instances for all ancestors that
+      # exist in #taxomy
+      def known_ancestors(method = :find)
+        ancestors.select { |anc| anc.public_send(method) }
+      end
+
+      # Returns an Array of TaxonEquivalent instances for all ancestors that
+      # do not exist in #taxomy
+      def missing_ancestors(method = :find)
+        ancestors.reject { |anc| anc.public_send(method) }
+      end
+
+      def parent_equivalent
+        parent_response ||= TaxonResponse.new(concept.classification.last)
+        TaxonEquivalent.new(taxonomy, parent_response)
       end
     end
   end
