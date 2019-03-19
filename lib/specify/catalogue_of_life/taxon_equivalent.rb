@@ -32,7 +32,6 @@ module Specify
         @missing_ancestors = []
         @name = concept.name
         @rank = concept.rank
-#         @taxon = find
       end
 
       # Returns an Array of TaxonEquivalent instances for all ancestors in the
@@ -40,19 +39,13 @@ module Specify
       def ancestors
         concept.classification
                .map { |t| TaxonEquivalent.new(taxonomy, t) }
-               .sort { |a, b| a.rank <=> b.rank }
+               .sort_by(&:rank)
       end
 
       # Returns the ID of the taxon concept in the external resource
       # (CatalogueOfLife)
       def concept_id
         concept.id
-      end
-
-      # Returns a Hash with values to find the concept in the taxonomy
-      def concept_query_values
-        { Name: concept.name,
-          rank: concept.rank.equivalent(taxonomy) }
       end
 
       def create(vals)
@@ -62,56 +55,38 @@ module Specify
         taxonomy.add_name(vals)
       end
 
-      def find
-        find_by_id || find_by_values
+      # Finds a taxon in #taxonomy.
+      def find(parent = nil)
+        find_by_id || find_by_values(parent)
       end
 
+      # Finds a taxon by the #service_url and +id+ attribute of #concept
+      # (the Catalogue Of Life id).
       def find_by_id
         taxonomy.names_dataset.first(Source: service_url,
                                      TaxonomicSerialNumber: concept.id)
       end
 
-      def find_by_values(vals = nil)
-        # TODO: should also include parent
-        vals ||= concept_query_values
-        results = taxonomy.names_dataset.where(vals)
-        return results.first if results.count == 1
-        raise 'Multiple matches' if results.count > 1
+      # Finds the taxon for +self+ in #taxonomy by _name_, _rank_, and
+      # optionally _parent_, if a TaxonEquivalent as passed in as the +parent+
+      # argument.
+      def find_by_values(parent = nil)
+        vals = { Name: concept.name,
+                 rank: concept.rank.equivalent(taxonomy),
+                 parent: parent&.find }
+        results = taxonomy.names_dataset.where(vals.compact)
+        results.count > 1 ? results : results.first
       end
 
-      # Returns the Specify::Model::Taxon for the immediate ancestor of +self+.
-      # Will return nil if not found
-      # FIXME: should throw symbol :root if there are no ancestors
-      def find_parent
-        return unless ancestors.first
-        ancestors.first.find
-      end
-
-      # FIXME: rename known_ancestor
-      # TODO: should take param that updates records found by value with id
+      # Returns the closest ancestor known in #taxonomy.
       def known_ancestor
         lineage = ancestors
         lineage.each_with_index do |ancestor, i|
-          qualified_match = ancestor.find_by_id
-          return qualified_match if qualified_match
-
-          # find by vals
-          grandparent = lineage[i + 1].find_by_values
-          if grandparent
-            vals = { Name: ancestor.name,
-                    rank: ancestor.rank.equivalent(taxonomy),
-                    parent: grandparent }
-            match = ancestor.find_by_values vals
-            return match if match
-          end
+          match = ancestor.find(lineage[i + 1])
+          return match if match
 
           missing_ancestors << ancestor
         end
-      end
-
-      # Returns a TaxonEquivalent instance for the parent of +self+
-      def parent_equivalent
-        TaxonEquivalent.new(taxonomy, concept.parent)
       end
     end
   end
