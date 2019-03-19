@@ -17,7 +17,7 @@ module Specify
 
       def initialize(col_result_hash)
         @full_response = col_result_hash
-        @parent = @full_response['classification']&.last
+#         @parent = @full_response['classification']&.last
         @rank = TaxonRank.new col_result_hash['rank']
       end
 
@@ -33,6 +33,13 @@ module Specify
 
       def children?
         full_response['child_taxa'] && !full_response['child_taxa'].empty?
+      end
+
+      def classification
+        responses =  full_response['classification']&.map do |anc|
+          Thread.new(anc) { |id| TaxonRequest.by_id(anc['id']).response }
+        end
+        responses.map { |t| t.value }
       end
 
       # TODO: add Source: 'CatalogueOfLife' to criteria
@@ -66,7 +73,9 @@ module Specify
       end
 
       def parent
-        full_response['classification']&.last&.fetch('id')
+        parent_id = full_response['classification'].last&.fetch('id')
+        return unless parent_id
+        TaxonRequest.by_id(parent_id).response
       end
 
       def synonyms

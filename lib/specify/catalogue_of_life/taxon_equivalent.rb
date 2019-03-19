@@ -20,24 +20,23 @@ module Specify
       # The Specify::Model::Taxonomy.
       attr_reader :taxonomy
 
-      # FIXME: should be initialized with a taxon response, extract id
-      # +id+ is a CatalogOfLife TaxonRespeonse #id
-      # +vals+ is a hash for parameters to find the taxon by in case it does
-      # not have an id.
+      # Returns a new instance.
+      # +taxonomy+ is a Specify::Model::Taxonomy
+      # +response+ is a Specify::CatalogueOfLife::TaxonResponse
       def initialize(taxonomy, response = nil)
         @concept = response
         @service_url = CatalogueOfLife::URL
         @taxonomy = taxonomy
         @name = concept.name
         @rank = concept.rank
-#         @taxon = find_by_id || find_by_values
+#         @taxon = find
       end
 
       # Returns an Array of TaxonEquivalent instances for all ancestors in the
       # TaxonResponse's classification.
       def ancestors
         concept.classification
-               .map { |t| TaxonEquivalent.new(taxonomy, TaxonResponse.new(t)) }
+               .map { |t| TaxonEquivalent.new(taxonomy, t) }
                .sort { |a, b| a.rank <=> b.rank }
       end
 
@@ -61,7 +60,6 @@ module Specify
       end
 
       def find
-        # TODO: once found should set ivar to TaxonID
         find_by_id || find_by_values
       end
 
@@ -72,17 +70,18 @@ module Specify
 
       def find_by_values
         # TODO: should also include parent
+        p find_parent
         results = taxonomy.names_dataset.where(concept_query_values)
         return results.first if results.count == 1
         raise 'Multiple matches' if results.count > 1
       end
 
-      # FIXME: argument only for dependency injection
-      def find_parent(parent_response = nil)
-        # Try to create a TaxonResponse from the classification doc
-        parent_equivalent.find
-        # TODO: get the full TaxonResponse for the parent
-        # TODO: should create TaxonEquivalent
+      # Returns the Specify::Model::Taxon for the immediate ancestor of +self+.
+      # Will return nil if not found
+      # FIXME: should throw symbol :root if there are no ancestors
+      def find_parent
+        return unless ancestors.first
+        ancestors.first.find
       end
 
       # Returns an Array of TaxonEquivalent instances for all ancestors that
@@ -97,9 +96,9 @@ module Specify
         ancestors.reject { |anc| anc.public_send(method) }
       end
 
+      # Returns a TaxonEquivalent instance for the parent of +self+
       def parent_equivalent
-        parent_response ||= TaxonResponse.new(concept.classification.last)
-        TaxonEquivalent.new(taxonomy, parent_response)
+        TaxonEquivalent.new(taxonomy, concept.parent)
       end
     end
   end

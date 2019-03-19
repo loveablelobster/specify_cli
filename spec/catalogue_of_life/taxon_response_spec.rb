@@ -34,6 +34,11 @@ module Specify
                                  .fetch :accepted_with_synonyms)
       end
 
+      let :animalia do
+        described_class.new(Psych.load_file('spec/support/taxon_response.yaml')
+                                 .fetch :root)
+      end
+
       context 'when calling a method not represented in #full_response' do
         subject(:no_method) { cancer_pagurus.no_such_key }
 
@@ -112,6 +117,24 @@ module Specify
       	end
       end
 
+      describe '#classification' do
+        subject(:ancestors) { astacidae.classification }
+
+        it do
+          expect(ancestors).to include(
+            an_instance_of(described_class) & have_attributes(name: 'Animalia'),
+            an_instance_of(described_class) &
+              have_attributes(name: 'Arthropoda'),
+            an_instance_of(described_class) &
+              have_attributes(name: 'Malacostraca'),
+            an_instance_of(described_class) &
+              have_attributes(name: 'Decapoda'),
+            an_instance_of(described_class) &
+              have_attributes(name: 'Astacoidea')
+          )
+        end
+      end
+
       describe '#extinct?' do
       	context 'when it is extant)' do
           subject { astacus_astacus.extinct? }
@@ -155,15 +178,19 @@ module Specify
       end
 
       describe '#parent' do
-        context 'when it is the root (parent not parsed)' do
-        	it 'returns a the last item in the classification'
-        	# or not! what if that just parses all to the root?
+        context 'when it is the root' do
+        	subject { animalia.parent }
+
+        	it { is_expected.to be_nil }
         end
 
-        context 'when it is below the root (parent parsed)' do
-        	before { astacus_astacus.parent = astacus }
+        context 'when it is below the root' do
+          subject(:parent) { astacus_astacus.parent }
 
-        	it 'is a TaxonResponse or a Model::Taxon'
+          it do
+          	expect(parent).to be_a(TaxonResponse) &
+          	  have_attributes(name: 'Astacus')
+          end
         end
       end
 

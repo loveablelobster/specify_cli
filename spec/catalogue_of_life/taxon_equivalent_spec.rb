@@ -76,9 +76,14 @@ module Specify
       end
 
       describe '#find_parent' do
-#         it 'does something' do
-#           p asaphus_eq.find_parent
-#         end
+        subject { asaphoidea_eq.find_parent }
+
+        let :be_asaphida do
+        	an_instance_of(Model::Taxon) &
+        	  have_attributes(Name: 'Asaphida')
+        end
+
+        it { is_expected.to be_asaphida }
       end
 
       describe '#known_ancestors' do
