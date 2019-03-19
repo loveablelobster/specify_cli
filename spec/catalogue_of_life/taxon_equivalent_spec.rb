@@ -20,6 +20,66 @@ module Specify
         described_class.new(spec_taxonomy, response(:asaphus))
       end
 
+      let :asaphus_expansus_eq do
+        described_class.new(spec_taxonomy, response(:asaphus_expansus))
+      end
+
+      let :raymondaspis_eq do
+        described_class.new(spec_taxonomy, response(:raymondaspis))
+      end
+
+      describe '#known_ancestor' do
+        context 'when root'
+
+        context 'when below root and immediate ancestor is found by id' do
+          subject(:match) { asaphus_eq.known_ancestor }
+
+          it do
+          	expect(match).to be_a(Model::Taxon) &
+          	  have_attributes(Name: 'Asaphidae',
+          	                  Source: 'http://webservice.catalogueoflife.org/'\
+          	                          'col/webservice',
+          	                  TaxonomicSerialNumber: '65dabea41cd4470ce'\
+          	                                         '498767d730f5c6f')
+          end
+        end
+
+        context 'when below root and immediate ancestor is found by'\
+                ' name, rank, parent' do
+        	subject(:match) { asaphidae_eq.known_ancestor }
+
+        	it do
+        		expect(match).to be_a(Model::Taxon) &
+        		  have_attributes(Name: 'Asaphoidea',
+        		                  Source: nil,
+        		                  TaxonomicSerialNumber: nil)
+        	end
+        end
+
+        context 'when below root and immediate ancestor is not found' do
+        	subject(:match) { raymondaspis_eq.known_ancestor }
+
+        	it do
+        		expect(match).to be_a(Model::Taxon) &
+        		  have_attributes(Name: 'Trilobita',
+        		                  Source: nil,
+        		                  TaxonomicSerialNumber: nil)
+        	end
+
+        	it do
+        		expect { match }
+        		  .to change(raymondaspis_eq, :missing_ancestors)
+              .from(be_empty)
+              .to include(an_instance_of(TaxonEquivalent) &
+                            have_attributes(name: 'Styginidae'),
+                          an_instance_of(TaxonEquivalent) &
+                            have_attributes(name: 'Corynexochida'))
+        	end
+        end
+
+        context 'when below root and no ancestor is found'
+      end
+
       describe '#ancestors' do
         subject { asaphus_eq.ancestors }
 
@@ -84,70 +144,6 @@ module Specify
         end
 
         it { is_expected.to be_asaphida }
-      end
-
-      describe '#known_ancestors' do
-      	context '#when finding by id' do
-          subject { asaphoidea_eq.known_ancestors(:find_by_id) }
-
-          let :contain_ancestors do
-            contain_exactly(an_instance_of(TaxonEquivalent) &
-                            have_attributes(name: 'Asaphida'))
-          end
-
-          it { is_expected.to contain_ancestors }
-      	end
-
-      	context '#when finding by id or params' do
-          subject { asaphoidea_eq.known_ancestors }
-
-          let :contain_ancestors do
-            contain_exactly(an_instance_of(TaxonEquivalent) &
-                            have_attributes(name: 'Asaphida'),
-                            an_instance_of(TaxonEquivalent) &
-                            have_attributes(name: 'Trilobita'),
-                            an_instance_of(TaxonEquivalent) &
-                            have_attributes(name: 'Arthropoda'),
-                            an_instance_of(TaxonEquivalent) &
-                            have_attributes(name: 'Animalia'))
-          end
-
-          it { is_expected.to contain_ancestors }
-        end
-      end
-
-      describe '#missing_ancestors' do
-      	context '#when finding by id' do
-          subject { asaphoidea_eq.missing_ancestors(:find_by_id) }
-
-          let :contain_ancestors do
-            contain_exactly(an_instance_of(TaxonEquivalent) &
-                            have_attributes(name: 'Trilobita'),
-                            an_instance_of(TaxonEquivalent) &
-                            have_attributes(name: 'Arthropoda'),
-                            an_instance_of(TaxonEquivalent) &
-                            have_attributes(name: 'Animalia'))
-          end
-
-          it { is_expected.to contain_ancestors }
-      	end
-
-      	context '#when finding by id or params' do
-          subject { asaphoidea_eq.missing_ancestors }
-
-          let :contain_ancestors do
-            contain_exactly(an_instance_of(TaxonEquivalent) &
-                            have_attributes(name: 'Asaphida'),
-                            an_instance_of(TaxonEquivalent) &
-                            have_attributes(name: 'Trilobita'),
-                            an_instance_of(TaxonEquivalent) &
-                            have_attributes(name: 'Arthropoda'),
-                            an_instance_of(TaxonEquivalent) &
-                            have_attributes(name: 'Animalia'))
-          end
-
-          it { is_expected.to be_empty }
-        end
       end
     end
   end

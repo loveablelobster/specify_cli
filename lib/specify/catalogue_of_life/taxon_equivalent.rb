@@ -9,6 +9,8 @@ module Specify
       # The id for the taxon record used by the web service.
       attr_reader :concept
 
+      attr_accessor :missing_ancestors
+
       attr_reader :name
 
       attr_reader :rank
@@ -27,6 +29,7 @@ module Specify
         @concept = response
         @service_url = CatalogueOfLife::URL
         @taxonomy = taxonomy
+        @missing_ancestors = []
         @name = concept.name
         @rank = concept.rank
 #         @taxon = find
@@ -68,10 +71,10 @@ module Specify
                                      TaxonomicSerialNumber: concept.id)
       end
 
-      def find_by_values
+      def find_by_values(vals = nil)
         # TODO: should also include parent
-        p find_parent
-        results = taxonomy.names_dataset.where(concept_query_values)
+        vals ||= concept_query_values
+        results = taxonomy.names_dataset.where(vals)
         return results.first if results.count == 1
         raise 'Multiple matches' if results.count > 1
       end
@@ -84,16 +87,26 @@ module Specify
         ancestors.first.find
       end
 
-      # Returns an Array of TaxonEquivalent instances for all ancestors that
-      # exist in #taxomy
-      def known_ancestors(method = :find)
-        ancestors.select { |anc| anc.public_send(method) }
-      end
+      # FIXME: rename known_ancestor
+      # TODO: should take param that updates records found by value with id
+      def known_ancestor
+        lineage = ancestors
+        lineage.each_with_index do |ancestor, i|
+          qualified_match = ancestor.find_by_id
+          return qualified_match if qualified_match
 
-      # Returns an Array of TaxonEquivalent instances for all ancestors that
-      # do not exist in #taxomy
-      def missing_ancestors(method = :find)
-        ancestors.reject { |anc| anc.public_send(method) }
+          # find by vals
+          grandparent = lineage[i + 1].find_by_values
+          if grandparent
+            vals = { Name: ancestor.name,
+                    rank: ancestor.rank.equivalent(taxonomy),
+                    parent: grandparent }
+            match = ancestor.find_by_values vals
+            return match if match
+          end
+
+          missing_ancestors << ancestor
+        end
       end
 
       # Returns a TaxonEquivalent instance for the parent of +self+
