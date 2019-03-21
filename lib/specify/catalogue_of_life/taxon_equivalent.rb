@@ -19,6 +19,8 @@ module Specify
       # e.g. http://webservice.catalogueoflife.org/col/webservice
       attr_reader :service_url
 
+      attr_reader :taxon
+
       # The Specify::Model::Taxonomy.
       attr_reader :taxonomy
 
@@ -32,6 +34,8 @@ module Specify
         @missing_ancestors = []
         @name = concept.name
         @rank = concept.rank
+        @taxon = nil
+        @referenced = false
       end
 
       # Returns an Array of TaxonEquivalent instances for all ancestors in the
@@ -50,7 +54,7 @@ module Specify
 
       def create(vals)
         vals[:Source] = service_url
-        vals[:TaxonomicSerialNumber] = id
+        vals[:TaxonomicSerialNumber] = concept_id
         # TODO: find the parent
         taxonomy.add_name(vals)
       end
@@ -63,8 +67,10 @@ module Specify
       # Finds a taxon by the #service_url and +id+ attribute of #concept
       # (the Catalogue Of Life id).
       def find_by_id
-        taxonomy.names_dataset.first(Source: service_url,
-                                     TaxonomicSerialNumber: concept.id)
+        @taxon = taxonomy.names_dataset.first(Source: service_url,
+                                              TaxonomicSerialNumber: concept.id)
+        @referenced = true if @taxon
+        @taxon
       end
 
       # Finds the taxon for +self+ in #taxonomy by _name_, _rank_, and
@@ -75,18 +81,47 @@ module Specify
                  rank: concept.rank.equivalent(taxonomy),
                  parent: parent&.find }
         results = taxonomy.names_dataset.where(vals.compact)
-        results.count > 1 ? results : results.first
+        return results if results.count > 1
+
+        @taxon = results.first
       end
 
       # Returns the closest ancestor known in #taxonomy.
       def known_ancestor
-        lineage = ancestors
-        lineage.each_with_index do |ancestor, i|
-          match = ancestor.find(lineage[i + 1])
+        ancestors.each_with_index do |ancestor, i|
+          match = ancestor.find(ancestors[i + 1])
           return match if match
 
           missing_ancestors << ancestor
         end
+        nil
+      end
+
+      # Updates _@taxon_ (Specify::Model::Taxon), sets +TaxonomicSerialNumber+
+      # to tge concept id.
+      def reference!
+        return if referenced?
+
+        return unless @taxon
+
+        @taxon.TaxonomicSerialNumber = concept_id
+        @taxon.Source = service_url
+        @taxon.save
+        @referenced = true
+      end
+
+      # TODO: should add references to all eqvs above that can be found
+      def reference_ancestors!
+        #
+      end
+
+      # Returns true if the concept is referenced in the database by id
+      # (+TaxonomicSerialNumber+).
+      # Returns +nil+ if #find has nor been  called
+      def referenced?
+        return unless @taxon
+
+        @referenced
       end
     end
   end

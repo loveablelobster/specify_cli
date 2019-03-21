@@ -28,6 +28,10 @@ module Specify
         described_class.new(spec_taxonomy, response(:raymondaspis))
       end
 
+      let :animalia_eq do
+        described_class.new(spec_taxonomy, response(:root))
+      end
+
       describe '#ancestors' do
         subject { asaphus_eq.ancestors }
 
@@ -59,13 +63,20 @@ module Specify
 
       describe '#find_by_id' do
         context 'when the taxon with concept id exists' do
-          subject { asaphida_eq.find_by_id }
+          subject(:exact_match) { asaphida_eq.find_by_id }
 
           let :be_asaphida do
             be_a(Model::Taxon) & have_attributes(Name: 'Asaphida')
           end
 
           it { is_expected.to be_asaphida }
+
+          it do
+          	expect {exact_match}
+          	  .to change(asaphida_eq, :referenced?)
+          	  .from(be_falsey)
+          	  .to(be_truthy)
+          end
         end
 
         context 'when the taxon with concept id does not exist' do
@@ -84,7 +95,11 @@ module Specify
       end
 
       describe '#known_ancestor' do
-        context 'when root'
+        context 'when root' do
+        	subject(:root) { animalia_eq.known_ancestor }
+
+        	it { is_expected.to be_nil }
+        end
 
         context 'when below root and immediate ancestor is found by id' do
           subject(:match) { asaphus_eq.known_ancestor }
@@ -133,6 +148,28 @@ module Specify
         end
 
         context 'when below root and no ancestor is found'
+      end
+
+      describe '#reference!' do
+        subject(:add_reference) { asaphoidea_eq.reference! }
+
+        before { asaphoidea_eq.find }
+
+      	it do
+      		expect { add_reference }
+      		  .to change(asaphoidea_eq, :referenced?)
+      		  .from(be_falsey).to(be_truthy)
+      	end
+
+      	it  do
+      	  expect { add_reference }
+      	    .to change { asaphoidea_eq.taxon.Source }
+      	    .from(be_nil)
+      	    .to('http://webservice.catalogueoflife.org/col/webservice')
+      	    .and change { asaphoidea_eq.taxon.TaxonomicSerialNumber }
+      	    .from(be_nil)
+      	    .to('f3f01b65054a3e887d04554962e49097')
+      	end
       end
     end
   end
