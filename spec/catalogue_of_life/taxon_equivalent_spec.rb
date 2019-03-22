@@ -72,10 +72,10 @@ module Specify
           it { is_expected.to be_asaphida }
 
           it do
-          	expect {exact_match}
-          	  .to change(asaphida_eq, :referenced?)
-          	  .from(be_falsey)
-          	  .to(be_truthy)
+            expect {exact_match}
+              .to change(asaphida_eq, :referenced?)
+              .from(be_falsey)
+              .to(be_truthy)
           end
         end
 
@@ -96,55 +96,70 @@ module Specify
 
       describe '#known_ancestor' do
         context 'when root' do
-        	subject(:root) { animalia_eq.known_ancestor }
+          subject(:root) { animalia_eq.known_ancestor }
 
-        	it { is_expected.to be_nil }
+          it { is_expected.to be_nil }
         end
 
         context 'when below root and immediate ancestor is found by id' do
           subject(:match) { asaphus_eq.known_ancestor }
 
           it do
-          	expect(match).to be_a(Model::Taxon) &
-          	  have_attributes(Name: 'Asaphidae',
-          	                  Source: 'http://webservice.catalogueoflife.org/'\
-          	                          'col/webservice',
-          	                  TaxonomicSerialNumber: '65dabea41cd4470ce'\
-          	                                         '498767d730f5c6f')
+            expect(match).to be_a(described_class) &
+              have_attributes(name: 'Asaphidae')
+          end
+
+          it do
+            expect(match.taxon).to be_a(Model::Taxon) &
+              have_attributes(Name: 'Asaphidae',
+                              Source: 'http://webservice.catalogueoflife.org/'\
+                                      'col/webservice',
+                              TaxonomicSerialNumber: '65dabea41cd4470ce'\
+                                                     '498767d730f5c6f')
           end
         end
 
         context 'when below root and immediate ancestor is found by'\
                 ' name, rank, parent' do
-        	subject(:match) { asaphidae_eq.known_ancestor }
+          subject(:match) { asaphidae_eq.known_ancestor }
 
-        	it do
-        		expect(match).to be_a(Model::Taxon) &
-        		  have_attributes(Name: 'Asaphoidea',
-        		                  Source: nil,
-        		                  TaxonomicSerialNumber: nil)
-        	end
+          it do
+            expect(match).to be_a(described_class) &
+              have_attributes(name: 'Asaphoidea')
+          end
+
+          it do
+            expect(match.taxon).to be_a(Model::Taxon) &
+              have_attributes(Name: 'Asaphoidea',
+                              Source: nil,
+                              TaxonomicSerialNumber: nil)
+          end
         end
 
         context 'when below root and immediate ancestor is not found' do
-        	subject(:match) { raymondaspis_eq.known_ancestor }
+          subject(:match) { raymondaspis_eq.known_ancestor }
 
-        	it do
-        		expect(match).to be_a(Model::Taxon) &
-        		  have_attributes(Name: 'Trilobita',
-        		                  Source: nil,
-        		                  TaxonomicSerialNumber: nil)
-        	end
+          it do
+            expect(match).to be_a(described_class) &
+              have_attributes(name: 'Trilobita')
+          end
 
-        	it do
-        		expect { match }
-        		  .to change(raymondaspis_eq, :missing_ancestors)
+          it do
+            expect(match.taxon).to be_a(Model::Taxon) &
+              have_attributes(Name: 'Trilobita',
+                              Source: nil,
+                              TaxonomicSerialNumber: nil)
+          end
+
+          it do
+            expect { match }
+              .to change(raymondaspis_eq, :missing_ancestors)
               .from(be_empty)
               .to include(an_instance_of(TaxonEquivalent) &
                             have_attributes(name: 'Styginidae'),
                           an_instance_of(TaxonEquivalent) &
                             have_attributes(name: 'Corynexochida'))
-        	end
+          end
         end
 
         context 'when below root and no ancestor is found'
@@ -155,21 +170,21 @@ module Specify
 
         before { asaphoidea_eq.find }
 
-      	it do
-      		expect { add_reference }
-      		  .to change(asaphoidea_eq, :referenced?)
-      		  .from(be_falsey).to(be_truthy)
-      	end
+        it do
+          expect { add_reference }
+            .to change(asaphoidea_eq, :referenced?)
+            .from(be_falsey).to(be_truthy)
+        end
 
-      	it  do
-      	  expect { add_reference }
-      	    .to change { asaphoidea_eq.taxon.Source }
-      	    .from(be_nil)
-      	    .to('http://webservice.catalogueoflife.org/col/webservice')
-      	    .and change { asaphoidea_eq.taxon.TaxonomicSerialNumber }
-      	    .from(be_nil)
-      	    .to('f3f01b65054a3e887d04554962e49097')
-      	end
+        it  do
+          expect { add_reference }
+            .to change { asaphoidea_eq.taxon.Source }
+            .from(be_nil)
+            .to('http://webservice.catalogueoflife.org/col/webservice')
+            .and change { asaphoidea_eq.taxon.TaxonomicSerialNumber }
+            .from(be_nil)
+            .to('f3f01b65054a3e887d04554962e49097')
+        end
       end
     end
   end

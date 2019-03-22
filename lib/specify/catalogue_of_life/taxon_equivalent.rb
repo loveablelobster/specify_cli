@@ -87,10 +87,13 @@ module Specify
       end
 
       # Returns the closest ancestor known in #taxonomy.
+      # FIXME: should return TaxonEquivalent
+      #        so that it can be referenced if desired
+      #        access Model::Taxon through TaxonEquivalent#taxon
       def known_ancestor
         ancestors.each_with_index do |ancestor, i|
           match = ancestor.find(ancestors[i + 1])
-          return match if match
+          return ancestor if match
 
           missing_ancestors << ancestor
         end
@@ -108,11 +111,6 @@ module Specify
         @taxon.Source = service_url
         @taxon.save
         @referenced = true
-      end
-
-      # TODO: should add references to all eqvs above that can be found
-      def reference_ancestors!
-        #
       end
 
       # Returns true if the concept is referenced in the database by id
