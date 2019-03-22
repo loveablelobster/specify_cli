@@ -6,22 +6,22 @@ example_id                                                 | status  | run_time 
 ./spec/branch_parser_spec.rb[1:1:4:1]                      | passed  | 0.00088 seconds |
 ./spec/branch_parser_spec.rb[1:2:1]                        | pending | 0 seconds       |
 ./spec/branch_parser_spec.rb[1:2:2]                        | pending | 0 seconds       |
-./spec/catalogue_of_life/taxon_equivalent_spec.rb[1:1:1]   | passed  | 0.27911 seconds |
-./spec/catalogue_of_life/taxon_equivalent_spec.rb[1:2:1]   | passed  | 0.01846 seconds |
-./spec/catalogue_of_life/taxon_equivalent_spec.rb[1:4:1:1] | passed  | 0.02582 seconds |
-./spec/catalogue_of_life/taxon_equivalent_spec.rb[1:4:1:2] | passed  | 0.01354 seconds |
-./spec/catalogue_of_life/taxon_equivalent_spec.rb[1:4:2:1] | passed  | 0.01472 seconds |
-./spec/catalogue_of_life/taxon_equivalent_spec.rb[1:5:1:1] | passed  | 0.0183 seconds  |
-./spec/catalogue_of_life/taxon_equivalent_spec.rb[1:6:1:1] | passed  | 0.01516 seconds |
-./spec/catalogue_of_life/taxon_equivalent_spec.rb[1:6:2:1] | passed  | 0.30437 seconds |
-./spec/catalogue_of_life/taxon_equivalent_spec.rb[1:6:2:2] | unknown |                 |
-./spec/catalogue_of_life/taxon_equivalent_spec.rb[1:6:3:1] | passed  | 0.39555 seconds |
-./spec/catalogue_of_life/taxon_equivalent_spec.rb[1:6:3:2] | unknown |                 |
-./spec/catalogue_of_life/taxon_equivalent_spec.rb[1:6:4:1] | passed  | 2.4 seconds     |
-./spec/catalogue_of_life/taxon_equivalent_spec.rb[1:6:4:2] | passed  | 0.58816 seconds |
-./spec/catalogue_of_life/taxon_equivalent_spec.rb[1:6:4:3] | unknown |                 |
-./spec/catalogue_of_life/taxon_equivalent_spec.rb[1:7:1]   | passed  | 0.02018 seconds |
-./spec/catalogue_of_life/taxon_equivalent_spec.rb[1:7:2]   | passed  | 0.09367 seconds |
+./spec/catalogue_of_life/taxon_equivalent_spec.rb[1:1:1]   | passed  | 0.13779 seconds |
+./spec/catalogue_of_life/taxon_equivalent_spec.rb[1:2:1]   | passed  | 0.01472 seconds |
+./spec/catalogue_of_life/taxon_equivalent_spec.rb[1:4:1:1] | passed  | 0.02273 seconds |
+./spec/catalogue_of_life/taxon_equivalent_spec.rb[1:4:1:2] | passed  | 0.01353 seconds |
+./spec/catalogue_of_life/taxon_equivalent_spec.rb[1:4:2:1] | passed  | 0.01333 seconds |
+./spec/catalogue_of_life/taxon_equivalent_spec.rb[1:5:1:1] | passed  | 0.0291 seconds  |
+./spec/catalogue_of_life/taxon_equivalent_spec.rb[1:6:1:1] | passed  | 0.02951 seconds |
+./spec/catalogue_of_life/taxon_equivalent_spec.rb[1:6:2:1] | passed  | 0.35106 seconds |
+./spec/catalogue_of_life/taxon_equivalent_spec.rb[1:6:2:2] | passed  | 0.29471 seconds |
+./spec/catalogue_of_life/taxon_equivalent_spec.rb[1:6:3:1] | passed  | 0.33053 seconds |
+./spec/catalogue_of_life/taxon_equivalent_spec.rb[1:6:3:2] | passed  | 0.36974 seconds |
+./spec/catalogue_of_life/taxon_equivalent_spec.rb[1:6:4:1] | passed  | 0.90495 seconds |
+./spec/catalogue_of_life/taxon_equivalent_spec.rb[1:6:4:2] | passed  | 1.85 seconds    |
+./spec/catalogue_of_life/taxon_equivalent_spec.rb[1:6:4:3] | passed  | 1.83 seconds    |
+./spec/catalogue_of_life/taxon_equivalent_spec.rb[1:7:1]   | passed  | 0.02349 seconds |
+./spec/catalogue_of_life/taxon_equivalent_spec.rb[1:7:2]   | passed  | 0.04451 seconds |
 ./spec/catalogue_of_life/taxon_rank_spec.rb[1:1:1:1]       | passed  | 0.00046 seconds |
 ./spec/catalogue_of_life/taxon_rank_spec.rb[1:1:2:1]       | passed  | 0.0004 seconds  |
 ./spec/catalogue_of_life/taxon_rank_spec.rb[1:2:1:1]       | passed  | 0.00035 seconds |

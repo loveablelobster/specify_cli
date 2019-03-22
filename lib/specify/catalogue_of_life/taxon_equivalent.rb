@@ -90,13 +90,11 @@ module Specify
       # Can be referenced if desired
       # Access Model::Taxon through TaxonEquivalent#taxon
       def known_ancestor
-        ancestors.each_with_index do |ancestor, i|
+        ancestors.find.with_index do |ancestor, i|
           match = ancestor.find(ancestors[i + 1])
-          return ancestor if match
-
-          missing_ancestors << ancestor
+          missing_ancestors << ancestor unless match
+          match
         end
-        nil
       end
 
       # Updates _@taxon_ (Specify::Model::Taxon), sets +TaxonomicSerialNumber+
