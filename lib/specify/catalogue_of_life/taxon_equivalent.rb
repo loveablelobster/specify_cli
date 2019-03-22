@@ -87,9 +87,8 @@ module Specify
       end
 
       # Returns the closest ancestor known in #taxonomy.
-      # FIXME: should return TaxonEquivalent
-      #        so that it can be referenced if desired
-      #        access Model::Taxon through TaxonEquivalent#taxon
+      # Can be referenced if desired
+      # Access Model::Taxon through TaxonEquivalent#taxon
       def known_ancestor
         ancestors.each_with_index do |ancestor, i|
           match = ancestor.find(ancestors[i + 1])
