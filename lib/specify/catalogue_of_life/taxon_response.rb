@@ -9,9 +9,6 @@ module Specify
       #
       attr_reader :full_response
 
-#
-#       attr_accessor :parent
-
       #
       attr_reader :rank
 
@@ -49,10 +46,6 @@ module Specify
                                        rank: rank.equivalent(taxonomy))
       end
 
-      def import(taxonomy)
-
-      end
-
       # Returns +true+ if +self+ is extinct, +false+ otherwise.
       # Catalogue of Life taxon response will use `'true'` or `'false'` for
       # the extinct status of valid names, `0` or `1` in the nested `synonyms`
@@ -72,10 +65,17 @@ module Specify
         end
       end
 
+      # FIXME: necessary?
       def parent
         parent_id = full_response['classification'].last&.fetch('id')
         return unless parent_id
         TaxonRequest.by_id(parent_id).response
+      end
+
+      def root?
+        return unless full_response['classification']
+
+        full_response['classification'].empty?
       end
 
       def synonyms

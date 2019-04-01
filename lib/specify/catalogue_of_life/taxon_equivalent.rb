@@ -33,6 +33,7 @@ module Specify
         @taxonomy = taxonomy
         @missing_ancestors = []
         @name = concept.name
+        @parent = nil # TODO: should be false if not persisted, taxoneq else
         @rank = concept.rank
         @taxon = nil
         @referenced = false
@@ -52,7 +53,9 @@ module Specify
         concept.id
       end
 
-      def create(vals)
+      def create(fill_lineage: false)
+        raise 'Immidiate ancestor missing' unless parent? || fill_lineage
+
         vals[:Source] = service_url
         vals[:TaxonomicSerialNumber] = concept_id
         # TODO: find the parent
@@ -90,11 +93,19 @@ module Specify
       # Can be referenced if desired
       # Access Model::Taxon through TaxonEquivalent#taxon
       def known_ancestor
-        ancestors.find.with_index do |ancestor, i|
+        # TODO: do something meaningful with @parent if self is root
+        @parent = ancestors.find.with_index do |ancestor, i|
           match = ancestor.find(ancestors[i + 1])
           missing_ancestors << ancestor unless match
           match
         end
+        @parent ||= false
+      end
+
+      # Returns +true+ if the immediate ancestor is known in the databse.
+      def parent?
+        ancestor = known_ancestor
+        return ancestor if ancestor && missing_ancestors.empty?
       end
 
       # Updates _@taxon_ (Specify::Model::Taxon), sets +TaxonomicSerialNumber+
@@ -117,6 +128,19 @@ module Specify
         return unless @taxon
 
         @referenced
+      end
+
+      # Returns a hash, mapping #concept attributes to Specify::Model::Taxon
+      # attributes
+      def to_model_attributes
+        {
+          Author: concept.author,
+          COLStatus: concept.name_status,
+          IsAccepted: concept.accepted?, # TODO: should insert valid taxon
+          Name: concept.name,
+          Source: service_url,
+          TaxonomicSerialNumber: concept_id
+        }
       end
     end
   end

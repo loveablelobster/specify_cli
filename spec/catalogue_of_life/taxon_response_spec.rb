@@ -194,6 +194,26 @@ module Specify
         end
       end
 
+      describe '#root?' do
+        context 'when the resonse represent the root' do
+          subject { animalia.root? }
+
+          it { is_expected.to be_truthy }
+        end
+
+        context 'when the response does not represent the root' do
+          subject { astacidae.root? }
+
+          it { is_expected.to be_falsey }
+        end
+
+        context 'when the response has no classificatiom (synonym)' do
+          subject { cancer_fimbriatus.root? }
+
+          it { is_expected.to be_nil }
+        end
+      end
+
       describe '#synonyms?' do
       	context 'when it has no synonyms attribute' do
       		subject { astacus.synonyms? }

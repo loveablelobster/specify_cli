@@ -59,7 +59,11 @@ module Specify
         it { is_expected.to eq '5ac1330933c62d7d617a8d4a80dcecf3' }
       end
 
-      describe '#create'
+      describe '#create' do
+
+      end
+
+      describe '#find'
 
       describe '#find_by_id' do
         context 'when the taxon with concept id exists' do
@@ -87,11 +91,22 @@ module Specify
       end
 
       describe '#find_by_values' do
-        context 'when no parameters are given' do
-          subject { asaphoidea_eq.find_by_values }
+        context 'when no parent is given and the taxon is found' do
+          subject(:find_asaphoidea) { asaphoidea_eq.find_by_values }
 
-          it { is_expected.to be_a Model::Taxon }
+          it do
+            expect(find_asaphoidea).to be_a(Model::Taxon) &
+              have_attributes(Name: 'Asaphoidea')
+          end
+
+          it 'is expected to change #taxon'
         end
+
+        context 'when parent is given and the taxon is found'
+
+        context 'when the taxon is not found'
+
+        context 'when multiple matches are found'
       end
 
       describe '#known_ancestor' do
@@ -165,6 +180,20 @@ module Specify
         context 'when below root and no ancestor is found'
       end
 
+      describe '#parent?' do
+        context 'when immediate ancestor is in the database' do
+          subject { asaphus_eq.parent? }
+
+          it { is_expected.to be_a described_class }
+        end
+
+        context 'when immediate ancestor is not in the database' do
+          subject { raymondaspis_eq.parent? }
+
+          it { is_expected.to be_falsey }
+        end
+      end
+
       describe '#reference!' do
         subject(:add_reference) { asaphoidea_eq.reference! }
 
@@ -186,6 +215,10 @@ module Specify
             .to('f3f01b65054a3e887d04554962e49097')
         end
       end
+
+      describe '#referenced?'
+
+      describe '#to_model_attributes'
     end
   end
 end
