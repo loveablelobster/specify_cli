@@ -60,7 +60,46 @@ module Specify
       end
 
       describe '#create' do
+        context 'if the immediate ancestor is known' do
+          subject(:create_a_expansus) { asaphus_expansus_eq.create }
 
+          let :s_source do
+            'http://webservice.catalogueoflife.org/col/webservice'
+          end
+
+          let :rank_id do
+            asaphus_expansus_eq.rank
+                               .equivalent(spec_taxonomy)
+                               .RankID
+          end
+
+          it do
+            expect { create_a_expansus }
+              .to change(asaphus_expansus_eq, :taxon)
+              .from(be_nil)
+              .to(an_instance_of(Model::Taxon) &
+                  have_attributes(Name: 'expansus',
+                                  Source: s_source,
+                                  RankID: rank_id))
+          end
+        end
+
+        context 'if the immediate ancestor is not known and '\
+                'fill-lineage is true' do
+          subject(:create_r) { raymondaspis_eq.create(fill_lineage: true) }
+
+          #
+        end
+
+        context 'if the immediate ancestor is not known and '\
+                'fill-lineage is false' do
+          subject(:create_r) { raymondaspis_eq.create }
+
+          it do
+            expect { create_r }.to raise_error RuntimeError,
+                                                   'Immidiate ancestor missing'
+          end
+        end
       end
 
       describe '#find'
@@ -113,24 +152,24 @@ module Specify
         context 'when root' do
           subject(:root) { animalia_eq.known_ancestor }
 
-          it { is_expected.to be_nil }
+          it { is_expected.to be_falsey }
         end
 
         context 'when below root and immediate ancestor is found by id' do
-          subject(:match) { asaphus_eq.known_ancestor }
+          subject(:match) { asaphus_expansus_eq.known_ancestor }
 
           it do
             expect(match).to be_a(described_class) &
-              have_attributes(name: 'Asaphidae')
+              have_attributes(name: 'Asaphus')
           end
 
           it do
             expect(match.taxon).to be_a(Model::Taxon) &
-              have_attributes(Name: 'Asaphidae',
+              have_attributes(Name: 'Asaphus',
                               Source: 'http://webservice.catalogueoflife.org/'\
                                       'col/webservice',
-                              TaxonomicSerialNumber: '65dabea41cd4470ce'\
-                                                     '498767d730f5c6f')
+                              TaxonomicSerialNumber: '67b8da25464f297cf'\
+                                                     '738a3712bc7eaa0')
           end
         end
 
@@ -182,7 +221,7 @@ module Specify
 
       describe '#parent?' do
         context 'when immediate ancestor is in the database' do
-          subject { asaphus_eq.parent? }
+          subject { asaphus_expansus_eq.parent? }
 
           it { is_expected.to be_a described_class }
         end

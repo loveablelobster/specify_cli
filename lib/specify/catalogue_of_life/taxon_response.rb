@@ -40,6 +40,7 @@ module Specify
       end
 
       # TODO: add Source: 'CatalogueOfLife' to criteria
+      # TODO: remove, should be handled by TaxonEquivalent
       def equivalent(taxonomy)
         taxonomy.names_dataset.first(TaxonomicSerialNumber: id) ||
           taxonomy.names_dataset.first(Name: name,

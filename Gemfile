@@ -8,6 +8,7 @@ git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
 gem 'pry'
 gem 'rspec'
 gem 'rubocop-rspec'
+gem 'rubocop-performance'
 gem 'pry-byebug'
 
 # documentation

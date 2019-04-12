@@ -54,12 +54,16 @@ module Specify
       end
 
       def create(fill_lineage: false)
-        raise 'Immidiate ancestor missing' unless parent? || fill_lineage
+        if parent?
+          @taxon = known_ancestor.taxon.add_child to_model_attributes
+        elsif fill_lineage
+          # fille the lineage
+        else
+          # TODO: consolidate into error constants
+          raise 'Immidiate ancestor missing'
+        end
 
-        vals[:Source] = service_url
-        vals[:TaxonomicSerialNumber] = concept_id
-        # TODO: find the parent
-        taxonomy.add_name(vals)
+        # taxonomy.add_name(vals)
       end
 
       # Finds a taxon in #taxonomy.
@@ -92,8 +96,9 @@ module Specify
       # Returns the closest ancestor known in #taxonomy.
       # Can be referenced if desired
       # Access Model::Taxon through TaxonEquivalent#taxon
+      # If TaxonResponse#root? for the TaxonResponse stored in #concept is
+      # +true+ this will also return +false+.
       def known_ancestor
-        # TODO: do something meaningful with @parent if self is root
         @parent = ancestors.find.with_index do |ancestor, i|
           match = ancestor.find(ancestors[i + 1])
           missing_ancestors << ancestor unless match
@@ -137,7 +142,10 @@ module Specify
           Author: concept.author,
           COLStatus: concept.name_status,
           IsAccepted: concept.accepted?, # TODO: should insert valid taxon
+          IsHybrid: false, # CatalogueOfLife does not yield hybrid information
           Name: concept.name,
+          rank: rank.equivalent(taxonomy),
+          RankID: rank.equivalent(taxonomy).RankID,
           Source: service_url,
           TaxonomicSerialNumber: concept_id
         }
