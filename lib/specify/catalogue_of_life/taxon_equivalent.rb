@@ -9,7 +9,7 @@ module Specify
       # The id for the taxon record used by the web service.
       attr_reader :concept
 
-      attr_accessor :missing_ancestors
+      attr_accessor :missing_ancestors # FIXME: moved to TaxonLineage
 
       attr_reader :name
 
@@ -42,6 +42,7 @@ module Specify
       # Returns an Array of TaxonEquivalent instances for all ancestors in the
       # TaxonResponse's classification.
       def ancestors
+        # FIXME: fill a TaxonLineage instead
         concept.classification
                .map { |t| TaxonEquivalent.new(taxonomy, t) }
                .sort_by(&:rank)
@@ -99,6 +100,7 @@ module Specify
       # If TaxonResponse#root? for the TaxonResponse stored in #concept is
       # +true+ this will also return +false+.
       def known_ancestor
+        # FIXME: delegate the parent finding to TaxonLineage
         @parent = ancestors.find.with_index do |ancestor, i|
           match = ancestor.find(ancestors[i + 1])
           missing_ancestors << ancestor unless match

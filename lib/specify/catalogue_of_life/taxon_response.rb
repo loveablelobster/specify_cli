@@ -22,6 +22,10 @@ module Specify
         full_response['name_status'] == 'accepted name'
       end
 
+      def author
+        full_response['author']
+      end
+
       def children
         return [] unless children?
 
