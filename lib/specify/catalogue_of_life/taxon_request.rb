@@ -2,11 +2,8 @@
 
 module Specify
   module CatalogueOfLife
-    #
+    # TaxonRequests represent a HTTP GET request to the service.
     class TaxonRequest
-      # The Faraday::Connection for the request.
-      attr_reader :conn
-
       # The format for the response, +:json+ or +:xml+.
       attr_accessor :content_type
 
@@ -43,10 +40,6 @@ module Specify
       # Returns a new TaxonRequest.
       def initialize(content_type = :json)
         @content_type = content_type
-        @conn = Faraday.new 'http://www.catalogueoflife.org/' do |conn|
-          conn.response @content_type, content_type: /\b#{@content_type.to_s}$/
-          conn.adapter Faraday.default_adapter
-        end
         @id = nil
         @name = nil
         @rank = nil
@@ -56,9 +49,18 @@ module Specify
         yield(self) if block_given?
       end
 
-      #
+      # The Faraday::Connection for the request.
+      def connection
+        Faraday.new 'http://www.catalogueoflife.org/' do |conn|
+          conn.response @content_type, content_type: /\b#{@content_type.to_s}$/
+          conn.adapter Faraday.default_adapter
+        end
+      end
+
+      # Sends a HTTP GET request to the service.
+      # Returns a Faraday::Response.
       def get
-        @conn.get do |req|
+        connection.get do |req|
           req.url 'col/webservice?'
           params.each { |key, value| req.params[key] = value }
         end
@@ -81,7 +83,9 @@ module Specify
 
       def response
         results = get.body['results']
+        # FIXME: refactor to Error const
         raise "Multiple matches for #{self}" if results.size > 1
+
         TaxonResponse.new results.first
       end
 

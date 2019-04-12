@@ -62,12 +62,12 @@ module Specify
                               rank: rank,
                               RankID: rank.RankID,
                               TaxonomicSerialNumber: child.id)
-            puts child.equivalent(taxonomy)
+            child.equivalent(taxonomy)
           end
         end
 
         it do
-          p subject
+#           p subject
         end
       end
 

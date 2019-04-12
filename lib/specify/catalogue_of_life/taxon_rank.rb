@@ -7,7 +7,7 @@ module Specify
                family order class phylum kingdom].freeze
     PREFIXES = [:sub, nil, :super].freeze
 
-    #
+    # TaxonRanks represent taxonomic ranks.
     class TaxonRank
       include Comparable
 
@@ -60,6 +60,7 @@ module Specify
 
       def to_s
         return 'subspecies' if name == :infraspecies # FIXME
+
         name.to_s
       end
 

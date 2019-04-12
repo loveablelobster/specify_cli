@@ -2,6 +2,8 @@
 
 module Specify
   module CatalogueOfLife
+    # TaxonLineages hold an Array of TaxonEquivalent instances for the
+    # classification of a TaxonResponse.
     class TaxonLineage
       # Returns an array of TaxonEquivalents ordered by #rank, starting with
       # the highest rank.
@@ -22,13 +24,11 @@ module Specify
 
       # Creates Model::Taxon instances for
       def create
-        if known_ancestor
-          missing_classification.map do |taxon|
-            missing_ancestors.delete taxon
-            taxon.create
-          end
-        else
-          raise 'Creation of unknown lineage not implemented' # FIXME: implement
+        raise 'Creation with unknown root not implemented' unless known_ancestor
+
+        missing_classification.map do |taxon|
+          missing_ancestors.delete taxon
+          taxon.create
         end
       end
 

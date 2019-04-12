@@ -4,17 +4,17 @@ module Specify
   module CatalogueOfLife
     GENUS = TaxonRank.new(:genus)
 
-    #
+    # A TaxonRepsonse wraps a Faraday::Response to provide an interface for
+    # work with the TaxonEquivalent class.
     class TaxonResponse
-      #
+      # Returns the full response body (Hash).
       attr_reader :full_response
 
-      #
+      # Returns the TaxonRank for +self+.
       attr_reader :rank
 
       def initialize(col_result_hash)
         @full_response = col_result_hash
-#         @parent = @full_response['classification']&.last
         @rank = TaxonRank.new col_result_hash['rank']
       end
 
@@ -37,10 +37,10 @@ module Specify
       end
 
       def classification
-        responses =  full_response['classification']&.map do |anc|
-          Thread.new(anc) { |id| TaxonRequest.by_id(anc['id']).response }
+        responses = full_response['classification']&.map do |anc|
+          Thread.new(anc) { TaxonRequest.by_id(anc['id']).response }
         end
-        responses.map { |t| t.value }
+        responses.map(&:value)
       end
 
       # TODO: add Source: 'CatalogueOfLife' to criteria
@@ -74,6 +74,7 @@ module Specify
       def parent
         parent_id = full_response['classification'].last&.fetch('id')
         return unless parent_id
+
         TaxonRequest.by_id(parent_id).response
       end
 

@@ -11,8 +11,6 @@ module Specify
 
       attr_reader :name
 
-      attr_accessor :parent_taxon
-
       attr_reader :rank
 
       # The URI of the web service used.
@@ -32,9 +30,7 @@ module Specify
         @service_url = CatalogueOfLife::URL
         @taxonomy = taxonomy
         @name = concept.name
-        @known_ancestor = nil
         @lineage = nil
-        @parent_taxon = nil # TODO: should be false if not persisted, taxoneq else
         @rank = concept.rank
         @taxon = nil
         @referenced = false
