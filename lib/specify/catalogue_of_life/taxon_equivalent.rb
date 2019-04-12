@@ -9,9 +9,9 @@ module Specify
       # The id for the taxon record used by the web service.
       attr_reader :concept
 
-      attr_accessor :missing_ancestors # FIXME: moved to TaxonLineage
-
       attr_reader :name
+
+      attr_accessor :parent_taxon
 
       attr_reader :rank
 
@@ -31,21 +31,17 @@ module Specify
         @concept = response
         @service_url = CatalogueOfLife::URL
         @taxonomy = taxonomy
-        @missing_ancestors = []
         @name = concept.name
-        @parent = nil # TODO: should be false if not persisted, taxoneq else
+        @known_ancestor = nil
+        @lineage = nil
+        @parent_taxon = nil # TODO: should be false if not persisted, taxoneq else
         @rank = concept.rank
         @taxon = nil
         @referenced = false
       end
 
-      # Returns an Array of TaxonEquivalent instances for all ancestors in the
-      # TaxonResponse's classification.
       def ancestors
-        # FIXME: fill a TaxonLineage instead
-        concept.classification
-               .map { |t| TaxonEquivalent.new(taxonomy, t) }
-               .sort_by(&:rank)
+        lineage.ancestors
       end
 
       # Returns the ID of the taxon concept in the external resource
@@ -54,11 +50,13 @@ module Specify
         concept.id
       end
 
-      def create(fill_lineage: false)
-        if parent?
-          @taxon = known_ancestor.taxon.add_child to_model_attributes
+      # If _parent_ is passes, will create in the parent
+      def create(parent = nil, fill_lineage: false)
+        parent ||= parent_taxon
+        if parent
+          @taxon = parent.taxon.add_child to_model_attributes
         elsif fill_lineage
-          # fille the lineage
+          # fill the lineage
         else
           # TODO: consolidate into error constants
           raise 'Immidiate ancestor missing'
@@ -100,19 +98,21 @@ module Specify
       # If TaxonResponse#root? for the TaxonResponse stored in #concept is
       # +true+ this will also return +false+.
       def known_ancestor
-        # FIXME: delegate the parent finding to TaxonLineage
-        @parent = ancestors.find.with_index do |ancestor, i|
-          match = ancestor.find(ancestors[i + 1])
-          missing_ancestors << ancestor unless match
-          match
-        end
-        @parent ||= false
+        lineage.known_ancestor
       end
 
-      # Returns +true+ if the immediate ancestor is known in the databse.
-      def parent?
-        ancestor = known_ancestor
-        return ancestor if ancestor && missing_ancestors.empty?
+      def lineage
+        @lineage || parse_lineage
+      end
+
+      def missing_ancestors
+        lineage.missing_ancestors
+      end
+
+      # Returns the TaxonEquivalent for the immediate ancestor if it is known
+      # in the database, otherwise returns +false+.
+      def parent_taxon
+        lineage.missing_ancestors.empty? ? lineage.known_ancestor : false
       end
 
       # Updates _@taxon_ (Specify::Model::Taxon), sets +TaxonomicSerialNumber+
@@ -151,6 +151,14 @@ module Specify
           Source: service_url,
           TaxonomicSerialNumber: concept_id
         }
+      end
+
+      private
+
+      # Returns an Array of TaxonEquivalent instances for all ancestors in the
+      # TaxonResponse's classification.
+      def parse_lineage
+        @lineage = TaxonLineage.new(concept.classification, taxonomy)
       end
     end
   end

@@ -5,17 +5,13 @@ module Specify
   module CatalogueOfLife
     RSpec.describe TaxonLineage do
       let :complete_lineage do
-         eqs = response(:asaphus_expansus)
-              .classification
-              .map { |t| TaxonEquivalent.new(spec_taxonomy, t) }
-        described_class.new(eqs)
+        described_class.new(response(:asaphus_expansus).classification,
+                            spec_taxonomy)
       end
 
       let :partial_lineage do
-        eqs = response(:raymondaspis)
-              .classification
-              .map { |t| TaxonEquivalent.new(spec_taxonomy, t) }
-        described_class.new(eqs)
+        described_class.new(response(:raymondaspis).classification,
+                            spec_taxonomy)
       end
 
       let :empty_lineage do

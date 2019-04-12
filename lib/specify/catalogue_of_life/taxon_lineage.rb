@@ -14,8 +14,8 @@ module Specify
       # Returns an array of TaxonEquivalents that are missing in the database.
       attr_accessor :missing_ancestors
 
-      def initialize(lineage_of_taxon_equivalents)
-        @ancestors = lineage_of_taxon_equivalents.sort_by(&:rank)
+      def initialize(taxon_classification, taxonomy)
+        @ancestors = fetch_ancestors taxon_classification, taxonomy
         @missing_ancestors = []
         @known_ancestor = find_known_ancestor
       end
@@ -41,6 +41,11 @@ module Specify
       end
 
       private
+
+      def fetch_ancestors(taxon_classification, taxonomy)
+        taxon_classification.map { |t| TaxonEquivalent.new(taxonomy, t) }
+                            .sort_by(&:rank)
+      end
 
       def find_known_ancestor
         ancestors.find.with_index do |ancestor, i|

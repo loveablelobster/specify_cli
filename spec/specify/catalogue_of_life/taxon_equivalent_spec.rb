@@ -33,6 +33,8 @@ module Specify
       end
 
       describe '#ancestors' do
+
+
         subject { asaphus_eq.ancestors }
 
         let :contain_ancestors do
@@ -204,30 +206,32 @@ module Specify
                               Source: nil,
                               TaxonomicSerialNumber: nil)
           end
-
-          it do
-            expect { match }
-              .to change(raymondaspis_eq, :missing_ancestors)
-              .from(be_empty)
-              .to include(an_instance_of(TaxonEquivalent) &
-                            have_attributes(name: 'Styginidae'),
-                          an_instance_of(TaxonEquivalent) &
-                            have_attributes(name: 'Corynexochida'))
-          end
         end
 
         context 'when below root and no ancestor is found'
       end
 
-      describe '#parent?' do
+      describe '#missing_ancestors' do
+        subject(:missing) { raymondaspis_eq.missing_ancestors }
+
+        it do
+          expect(missing)
+            .to include(an_instance_of(TaxonEquivalent) &
+                          have_attributes(name: 'Styginidae'),
+                        an_instance_of(TaxonEquivalent) &
+                          have_attributes(name: 'Corynexochida'))
+        end
+      end
+
+      describe '#parent_taxon' do
         context 'when immediate ancestor is in the database' do
-          subject { asaphus_expansus_eq.parent? }
+          subject { asaphus_expansus_eq.parent_taxon }
 
           it { is_expected.to be_a described_class }
         end
 
         context 'when immediate ancestor is not in the database' do
-          subject { raymondaspis_eq.parent? }
+          subject { raymondaspis_eq.parent_taxon }
 
           it { is_expected.to be_falsey }
         end
