@@ -5,31 +5,38 @@ module Specify
   module CatalogueOfLife
     RSpec.describe TaxonEquivalent do
       let :asaphida_eq do
-        described_class.new(spec_taxonomy, response(:asaphida))
+        described_class.new(Factories::Model::Taxonomy.for_tests,
+          Factories::CatalogueOfLife::TaxonResponse.with(:asaphida))
       end
 
       let :asaphoidea_eq do
-        described_class.new(spec_taxonomy, response(:asaphoidea))
+        described_class.new(Factories::Model::Taxonomy.for_tests,
+          Factories::CatalogueOfLife::TaxonResponse.with(:asaphoidea))
       end
 
       let :asaphidae_eq do
-        described_class.new(spec_taxonomy, response(:asaphidae))
+        described_class.new(Factories::Model::Taxonomy.for_tests,
+          Factories::CatalogueOfLife::TaxonResponse.with(:asaphidae))
       end
 
       let :asaphus_eq do
-        described_class.new(spec_taxonomy, response(:asaphus))
+        described_class.new(Factories::Model::Taxonomy.for_tests,
+          Factories::CatalogueOfLife::TaxonResponse.with(:asaphus))
       end
 
       let :asaphus_expansus_eq do
-        described_class.new(spec_taxonomy, response(:asaphus_expansus))
+        described_class.new(Factories::Model::Taxonomy.for_tests,
+          Factories::CatalogueOfLife::TaxonResponse.with(:asaphus_expansus))
       end
 
       let :raymondaspis_eq do
-        described_class.new(spec_taxonomy, response(:raymondaspis))
+        described_class.new(Factories::Model::Taxonomy.for_tests,
+          Factories::CatalogueOfLife::TaxonResponse.with(:raymondaspis))
       end
 
       let :animalia_eq do
-        described_class.new(spec_taxonomy, response(:root))
+        described_class.new(Factories::Model::Taxonomy.for_tests,
+          Factories::CatalogueOfLife::TaxonResponse.with(:root))
       end
 
       describe '#ancestors' do
@@ -71,7 +78,7 @@ module Specify
 
           let :rank_id do
             asaphus_expansus_eq.rank
-                               .equivalent(spec_taxonomy)
+                               .equivalent(Factories::Model::Taxonomy.for_tests)
                                .RankID
           end
 

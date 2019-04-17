@@ -5,13 +5,17 @@ module Specify
   module CatalogueOfLife
     RSpec.describe TaxonLineage do
       let :complete_lineage do
-        described_class.new(response(:asaphus_expansus).classification,
-                            spec_taxonomy)
+        response = Factories::CatalogueOfLife::TaxonResponse
+          .with :asaphus_expansus
+        described_class.new(response.classification,
+          Factories::Model::Taxonomy.for_tests)
       end
 
       let :partial_lineage do
-        described_class.new(response(:raymondaspis).classification,
-                            spec_taxonomy)
+        response = Factories::CatalogueOfLife::TaxonResponse
+          .with :raymondaspis
+        described_class.new(response.classification,
+          Factories::Model::Taxonomy.for_tests)
       end
 
       let :empty_lineage do

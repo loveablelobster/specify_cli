@@ -91,7 +91,10 @@ module Specify
       end
 
       describe '#equivalent' do
-        subject(:db_rank) { described_class.species.equivalent(spec_taxonomy) }
+        subject :db_rank do
+          described_class.species
+                         .equivalent(Factories::Model::Taxonomy.for_tests)
+        end
 
         it do
           expect(db_rank)

@@ -5,38 +5,31 @@ module Specify
   module CatalogueOfLife
     RSpec.describe TaxonResponse do
       let :astacidae do
-        described_class.new(Psych.load_file('spec/support/taxon_response.yaml')
-                                 .fetch :valid_family)
+        described_class.new(result :valid_family)
       end
 
       let :astacus do
-        described_class.new(Psych.load_file('spec/support/taxon_response.yaml')
-                                 .fetch :valid_genus)
+        described_class.new(result :valid_genus)
       end
 
       let :astacus_astacus do
-        described_class.new(Psych.load_file('spec/support/taxon_response.yaml')
-                                 .fetch :valid_species)
+        described_class.new(result :valid_species)
       end
 
       let :astacus_edwardsi do
-        described_class.new(Psych.load_file('spec/support/taxon_response.yaml')
-                                 .fetch :extinct_species)
+        described_class.new(result :extinct_species)
       end
 
       let :cancer_fimbriatus do
-        described_class.new(Psych.load_file('spec/support/taxon_response.yaml')
-                                 .fetch :synonym)
+        described_class.new(result :synonym)
       end
 
       let :cancer_pagurus do
-        described_class.new(Psych.load_file('spec/support/taxon_response.yaml')
-                                 .fetch :accepted_with_synonyms)
+        described_class.new(result :accepted_with_synonyms)
       end
 
       let :animalia do
-        described_class.new(Psych.load_file('spec/support/taxon_response.yaml')
-                                 .fetch :root)
+        described_class.new(result :root)
       end
 
       context 'when calling a method not represented in #full_response' do
@@ -80,6 +73,10 @@ module Specify
 
       		it { is_expected.to be_falsey }
       	end
+      end
+
+      describe '#author' do
+
       end
 
       describe '#children' do
@@ -214,6 +211,24 @@ module Specify
         end
       end
 
+      describe '#synonyms' do
+      	context 'when it has no synonyms' do
+      		subject { astacus_astacus.synonyms }
+
+      		it { is_expected.to be_empty }
+      	end
+
+      	context 'when it has synonyms' do
+      		subject(:synonyms) { cancer_pagurus.synonyms }
+
+      		it do
+      			expect(synonyms).to include 'd81941a10d07fcc621073de9cdefca96',
+      			                            '4a6de56affa3de0e027145d2d7136f2a',
+      			                            'cc57308ba2f409c765bbdaedcbaa1f78'
+      		end
+      	end
+      end
+
       describe '#synonyms?' do
       	context 'when it has no synonyms attribute' do
       		subject { astacus.synonyms? }
@@ -231,24 +246,6 @@ module Specify
       		subject { cancer_pagurus.synonyms? }
 
       		it { is_expected.to be_truthy }
-      	end
-      end
-
-      describe '#synonyms' do
-      	context 'when it has no synonyms' do
-      		subject { astacus_astacus.synonyms }
-
-      		it { is_expected.to be_empty }
-      	end
-
-      	context 'when it has synonyms' do
-      		subject(:synonyms) { cancer_pagurus.synonyms }
-
-      		it do
-      			expect(synonyms).to include 'd81941a10d07fcc621073de9cdefca96',
-      			                            '4a6de56affa3de0e027145d2d7136f2a',
-      			                            'cc57308ba2f409c765bbdaedcbaa1f78'
-      		end
       	end
       end
     end

@@ -3,6 +3,7 @@
 require 'pry'
 
 require_relative 'helpers'
+require_relative 'factories'
 require_relative '../lib/specify'
 
 SPSPEC = Specify::Database.new('SPSPEC',

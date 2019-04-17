@@ -13,13 +13,7 @@ module Helpers
     raise e unless $CHILD_STATUS == 0
   end
 
-  # TODO: make this more robust (find by Taxonomy by criteria)
-  def spec_taxonomy
-    Specify::Model::Taxonomy.first
-  end
-
-  def response(sym)
-    yaml = Psych.load_file('spec/support/taxon_response.yaml').fetch sym
-    Specify::CatalogueOfLife::TaxonResponse.new(yaml)
+  def result(sym)
+    Psych.load_file('spec/support/taxon_response.yaml').fetch sym
   end
 end
