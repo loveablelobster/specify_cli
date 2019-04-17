@@ -26,6 +26,10 @@ module Specify
       def name
         self[:Name]
       end
+
+      def inspect
+        "#<Specify::Model::Rank @name=#{name}"
+      end
     end
   end
 end

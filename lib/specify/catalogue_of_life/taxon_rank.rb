@@ -2,9 +2,12 @@
 
 module Specify
   module CatalogueOfLife
-    # + sub/super
+    # An ordered array of symbols for available rank stems.
     RANKS = %i[infraspecies species genus
                family order class phylum kingdom].freeze
+
+    # An ordered array of symbols and +nil+ for available rank prefixes, where
+    # +nil+ corresponds to no prefix.
     PREFIXES = [:sub, nil, :super].freeze
 
     # TaxonRanks represent taxonomic ranks.
@@ -27,28 +30,53 @@ module Specify
           @stem = m[:stem].to_sym
           @prefix = m[:prefix]&.to_sym
         end
-        raise "Invalid taxon rank #{name}" unless valid?
+        raise RankError::INVALID_RANK + ' ' + name unless valid?
       end
 
-      def self.method_missing(m, *args, &block)
-        super unless TaxonRank.respond_to?(m)
+      # Returns a list of symbols for all available ranks.
+      def self.available_ranks
+        spp = RANKS[0..1]
+        suprasp = RANKS[2..-1].map do |r|
+          PREFIXES.map do |px|
+            next if r == :genus && px == :super
 
-        TaxonRank.new m
+            px ? (px.to_s + r.to_s).to_sym : r
+          end
+        end
+        spp + suprasp.flatten.compact
       end
 
-      # FIXME: needs to be able to also deal with sub/super/etc
-      def self.respond_to?(method_name, include_private = false)
-        RANKS.include?(method_name) || super
+      # Returns a new instance for any symbol in #available_ranks.
+      def self.method_missing(method, *args, &block)
+        super unless TaxonRank.respond_to_missing?(method)
+
+        TaxonRank.new method
       end
 
-      def self.stem
-        RANKS
-      end
-
+      # Returns an ordered array of symbols and +nil+ for available rank
+      # prefixes, where +nil+ correspons to no prefix. This class method is
+      # required by the instance method #position, which uses the array to
+      # resolve the relative order of a prefixed rank.
       def self.prefix
         PREFIXES
       end
 
+      # Returns an ordered array of symbols for available rank stems. This
+      # class method is required by the instance method #position, which uses
+      # the array to resolve the relative order of a rank.
+      def self.stem
+        RANKS
+      end
+
+      # Returns true for any symbol in #available_ranks.
+      def self.respond_to_missing?(method_name, include_private = false)
+        available_ranks.include?(method_name) || super
+      end
+
+      # Compares +self+ to another instance based on the relatibe position of a
+      # rank (Kingdom > Phylum > Class > Order > Family > Genus > Species >
+      # Infraspecies). Considers ranks wirh modifiers (i.e. prefixes;
+      # Superfamily > Family > Subfamily).
       def <=>(other)
         if name == other.name
           0
@@ -59,21 +87,27 @@ module Specify
         end
       end
 
+      # Returns the Specify::Model::Rank instance that represents +self+ in
+      # _taxonomy_ (an instance of Specify::Model::Taxonomy).
       def equivalent(taxonomy)
         taxonomy.ranks_dataset.first(Name: to_s)
       end
 
-      # Returns the index of #stem or #prefix in RANKS and PREFIXES
+      # Returns the index (an Integer) of #stem or #prefix in RANKS and PREFIXES
       # respectively.
       def position(attr = :stem)
         TaxonRank.public_send(attr).index public_send(attr)
       end
 
+      # Returns a capitalized String for the #name of self. Will substitute
+      # +Subspecies+ for +Infraspecies+.
       def to_s
-        return 'subspecies' if name == :infraspecies # FIXME
+        return 'Subspecies' if name == :infraspecies # FIXME
 
-        name.to_s
+        name.to_s.capitalize
       end
+
+      private
 
       # Returns true if the rank is present in RANKS and PREFIXES.
       def valid?

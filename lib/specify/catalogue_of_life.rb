@@ -18,6 +18,10 @@ module Specify
     # The route for the api as a String.
     API_ROUTE = 'col/webservice'
 
+    module RankError
+      INVALID_RANK = 'Invalid taxon rank'
+    end
+
     module ResponseError
       AMBIGUOUS_RESULTS = 'Amibiguous response.'\
                           ' Request returned multiple matches'

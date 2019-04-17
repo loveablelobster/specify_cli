@@ -49,7 +49,7 @@ module Specify
           expect(params).to include 'format' => 'json',
                                     'response' => 'full',
                                     'name' => 'Astacus astacus',
-                                    'rank' => 'species'
+                                    'rank' => 'Species'
         end
       end
 
@@ -102,7 +102,7 @@ module Specify
           expect(req_string)
             .to eq 'http://www.catalogueoflife.org/col/webservice?'\
                    'format=json&response=full'\
-                   '&name=Astacus%20astacus&rank=species'
+                   '&name=Astacus%20astacus&rank=Species'
         end
       end
 
@@ -114,7 +114,7 @@ module Specify
             have_attributes(host: 'www.catalogueoflife.org',
                             path: '/col/webservice',
                             query: 'format=json&response=full&'\
-                                   'name=Astacus%20astacus&rank=species')
+                                   'name=Astacus%20astacus&rank=Species')
         end
       end
 
@@ -124,7 +124,7 @@ module Specify
         it do
           expect(query)
             .to eq '?format=json&response=full&'\
-                   'name=Astacus%20astacus&rank=species'
+                   'name=Astacus%20astacus&rank=Species'
         end
       end
     end
