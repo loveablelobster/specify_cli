@@ -886,7 +886,7 @@
             year:
             title: 'PESI (A Pan-European Species directories Infrastructure) focal points'
             source:
-:accepted_with_synonyms:
+:with_synonyms:
   id: 'f3183ce46e4cc2b2d00c3b4c026b9481'
   name: 'Cancer pagurus'
   rank: 'Species'
@@ -1205,6 +1205,209 @@
           year:
           title: 'PESI (A Pan-European Species directories Infrastructure) focal points'
           source:
+:subspecies:
+  id: 'fd13266b9711de9de2b03a90a2e74256'
+  name: 'Procambarus lucifugus lucifugus'
+  rank: 'Infraspecies'
+  name_status: 'accepted name'
+  genus: 'Procambarus'
+  subgenus: 'Ortmannicus'
+  species: 'lucifugus'
+  infraspecies_marker: ''
+  infraspecies: 'lucifugus'
+  author: '(Hobbs, 1940)'
+  record_scrutiny_date:
+    scrutiny: '12-Oct-2004'
+  online_resource: 'http:\/\/www.itis.gov\/servlet\/SingleRpt\/SingleRpt?search_topic=TSN&search_value=650440'
+  is_extinct: 'false'
+  source_database: 'ITIS Regional: The Integrated Taxonomic Information System'
+  source_database_url: 'http:\/\/www.itis.gov;\nhttp:\/\/www.cbif.gc.ca\/acp\/eng\/itis\/search (Canada)'
+  bibliographic_citation: 'Orrell T.(custodian) & Nicolson D. (ed). (2019). ITIS Regional: The Integrated Taxonomic Information System (version Jun 2017). In: Species 2000 & ITIS Catalogue of Life, 25th March 2019 (Roskov Y., Ower G., Orrell T., Nicolson D., Bailly N., Kirk P.M., Bourgoin T., DeWalt R.E., Decock W., Nieukerken E. van, Zarucchi J., Penev L., eds.). Digital resource at www.catalogueoflife.org\/col. Species 2000: Naturalis, Leiden, the Netherlands. ISSN 2405-8858.'
+  name_html: '<i>Procambarus (Ortmannicus) lucifugus lucifugus<\/i> (Hobbs, 1940)'
+  url: 'http:\/\/www.catalogueoflife.org\/col\/browse\/tree\/id\/fd13266b9711de9de2b03a90a2e74256'
+  distribution: 'North America 130 0'
+  references:
+    -
+      author: 'Hobbs, Jr., Horton H.'
+      year: '1989'
+      title: 'An Illustrated Checklist of the American Crayfishes (Decapoda: Astacidae, Cambaridae, and Parastacidae)'
+      source: 'Smithsonian Contributions to Zoology, no. 480'
+  classification:
+    -
+      id: '5ede24b0534ebd5e1f552d5b9f874a6a'
+      name: 'Animalia'
+      rank: 'Kingdom'
+      name_html: 'Animalia'
+      url: 'http:\/\/www.catalogueoflife.org\/col\/browse\/tree\/id\/5ede24b0534ebd5e1f552d5b9f874a6a'
+    -
+      id: '89ac18bfcf1654a9662a600ba06bb494'
+      name: 'Arthropoda'
+      rank: 'Phylum'
+      name_html: 'Arthropoda'
+      url: 'http:\/\/www.catalogueoflife.org\/col\/browse\/tree\/id\/89ac18bfcf1654a9662a600ba06bb494'
+    -
+      id: '86858bfbd5b0846611871d8eb3e25db1'
+      name: 'Malacostraca'
+      rank: 'Class'
+      name_html: 'Malacostraca'
+      url: 'http:\/\/www.catalogueoflife.org\/col\/browse\/tree\/id\/86858bfbd5b0846611871d8eb3e25db1'
+    -
+      id: '1008e23f49cf95fb6c80631ab5505d14'
+      name: 'Decapoda'
+      rank: 'Order'
+      name_html: 'Decapoda'
+      url: 'http:\/\/www.catalogueoflife.org\/col\/browse\/tree\/id\/1008e23f49cf95fb6c80631ab5505d14'
+    -
+      id: 'f7e33c38480f906dd432fd88b13fe73a'
+      name: 'Astacoidea'
+      rank: 'Superfamily'
+      name_html: 'Astacoidea'
+      url: 'http:\/\/www.catalogueoflife.org\/col\/browse\/tree\/id\/f7e33c38480f906dd432fd88b13fe73a'
+    -
+      id: 'f2b003e6af24ce61142edd7e82482929'
+      name: 'Cambaridae'
+      rank: 'Family'
+      name_html: 'Cambaridae'
+      url: 'http:\/\/www.catalogueoflife.org\/col\/browse\/tree\/id\/f2b003e6af24ce61142edd7e82482929'
+    -
+      id: 'b868cdd8bf54b789ee8bb8e7458e4137'
+      name: 'Procambarus'
+      rank: 'Genus'
+      name_html: '<i>Procambarus<\/i>'
+      url: 'http:\/\/www.catalogueoflife.org\/col\/browse\/tree\/id\/b868cdd8bf54b789ee8bb8e7458e4137'
+    -
+      id: 55014504,
+      name: 'Ortmannicus'
+      rank: 'Subgenus'
+      name_html: 'Ortmannicus'
+      url: 'http:\/\/www.catalogueoflife.org\/col\/browse\/tree\/id\/55014504'
+    -
+      id: 'a3396b3e5cf11eaed22f4e8842d066da'
+      name: 'lucifugus'
+      rank: 'Species'
+      name_html: '<i>Procambarus (Ortmannicus) lucifugus lucifugus<\/i> (Hobbs, 1940)'
+      url: 'http:\/\/www.catalogueoflife.org\/col\/details\/species\/id\/a3396b3e5cf11eaed22f4e8842d066da'
+  child_taxa: []
+  synonyms: []
+  common_names: []
+:species_in_subgenus:
+      id: 'a3396b3e5cf11eaed22f4e8842d066da'
+      name: 'Procambarus lucifugus'
+      rank: 'Species'
+      name_status: 'accepted name'
+      genus: 'Procambarus'
+      subgenus: 'Ortmannicus'
+      species: 'lucifugus'
+      infraspecies_marker: ''
+      infraspecies: ''
+      author: '(Hobbs, 1940)'
+      record_scrutiny_date:
+        scrutiny: '31-May-2005'
+      online_resource: 'http:\/\/www.itis.gov\/servlet\/SingleRpt\/SingleRpt?search_topic=TSN&search_value=97537'
+      is_extinct: 'false'
+      source_database: 'ITIS Regional: The Integrated Taxonomic Information System'
+      source_database_url: 'http:\/\/www.itis.gov;\nhttp:\/\/www.cbif.gc.ca\/acp\/eng\/itis\/search (Canada)'
+      bibliographic_citation: 'Orrell T.(custodian) & Nicolson D. (ed). (2019). ITIS Regional: The Integrated Taxonomic Information System (version Jun 2017). In: Species 2000 & ITIS Catalogue of Life, 25th March 2019 (Roskov Y., Ower G., Orrell T., Nicolson D., Bailly N., Kirk P.M., Bourgoin T., DeWalt R.E., Decock W., Nieukerken E. van, Zarucchi J., Penev L., eds.). Digital resource at www.catalogueoflife.org\/col. Species 2000: Naturalis, Leiden, the Netherlands. ISSN 2405-8858.'
+      name_html: '<i>Procambarus (Ortmannicus) lucifugus<\/i> (Hobbs, 1940)'
+      url: 'http:\/\/www.catalogueoflife.org\/col\/details\/species\/id\/a3396b3e5cf11eaed22f4e8842d066da'
+      distribution: 'North America 130 0'
+      references:
+        -
+          author:
+          year: '1996'
+          title:
+          source: 'database, NODC Taxonomic Code'
+        -
+          author: 'Williams, Austin B., Lawrence G. Abele, D. L. Felder, H. H. Hobbs, Jr., R. B. Manning, et al.'
+          year: '1989'
+          title: 'Common and Scientific Names of Aquatic Invertebrates from the United States and Canada: Decapod Crustaceans'
+          source: 'American Fisheries Society Special Publication 17'
+        -
+          author:
+          year: '2004'
+          title:
+          source: 'pre-press, American Fisheries Society Special Publication 31'
+        -
+          author: 'Hobbs, Jr., Horton H.'
+          year: '1989'
+          title: 'An Illustrated Checklist of the American Crayfishes (Decapoda: Astacidae, Cambaridae, and Parastacidae)'
+          source: 'Smithsonian Contributions to Zoology, no. 480'
+      classification:
+        -
+          id: '5ede24b0534ebd5e1f552d5b9f874a6a'
+          name: 'Animalia'
+          rank: 'Kingdom'
+          name_html: 'Animalia'
+          url: 'http:\/\/www.catalogueoflife.org\/col\/browse\/tree\/id\/5ede24b0534ebd5e1f552d5b9f874a6a'
+        -
+          id: '89ac18bfcf1654a9662a600ba06bb494'
+          name: 'Arthropoda'
+          rank: 'Phylum'
+          name_html: 'Arthropoda'
+          url: 'http:\/\/www.catalogueoflife.org\/col\/browse\/tree\/id\/89ac18bfcf1654a9662a600ba06bb494'
+        -
+          id: '86858bfbd5b0846611871d8eb3e25db1'
+          name: 'Malacostraca'
+          rank: 'Class'
+          name_html: 'Malacostraca'
+          url: 'http:\/\/www.catalogueoflife.org\/col\/browse\/tree\/id\/86858bfbd5b0846611871d8eb3e25db1'
+        -
+          id: '1008e23f49cf95fb6c80631ab5505d14'
+          name: 'Decapoda'
+          rank: 'Order'
+          name_html: 'Decapoda'
+          url: 'http:\/\/www.catalogueoflife.org\/col\/browse\/tree\/id\/1008e23f49cf95fb6c80631ab5505d14'
+        -
+          id: 'f7e33c38480f906dd432fd88b13fe73a'
+          name: 'Astacoidea'
+          rank: 'Superfamily'
+          name_html: 'Astacoidea'
+          url: 'http:\/\/www.catalogueoflife.org\/col\/browse\/tree\/id\/f7e33c38480f906dd432fd88b13fe73a'
+        -
+          id: 'f2b003e6af24ce61142edd7e82482929'
+          name: 'Cambaridae'
+          rank: 'Family'
+          name_html: 'Cambaridae'
+          url: 'http:\/\/www.catalogueoflife.org\/col\/browse\/tree\/id\/f2b003e6af24ce61142edd7e82482929'
+        -
+          id: 'b868cdd8bf54b789ee8bb8e7458e4137'
+          name: 'Procambarus'
+          rank: 'Genus'
+          name_html: '<i>Procambarus<\/i>'
+          url: 'http:\/\/www.catalogueoflife.org\/col\/browse\/tree\/id\/b868cdd8bf54b789ee8bb8e7458e4137'
+        -
+          id: 55014504
+          name: 'Ortmannicus'
+          rank: 'Subgenus'
+          name_html: 'Ortmannicus'
+          url: 'http:\/\/www.catalogueoflife.org\/col\/browse\/tree\/id\/55014504'
+      child_taxa:
+        -
+          id: 'ed99aef2a5ef664fd120b6865a6a0d01'
+          name: 'Procambarus (Ortmannicus) lucifugus alachua'
+          rank: 'Infraspecies'
+          name_html: '<i>Procambarus (Ortmannicus) lucifugus alachua<\/i> (Hobbs, 1940)'
+          url: 'http:\/\/www.catalogueoflife.org\/col\/details\/species\/id\/ed99aef2a5ef664fd120b6865a6a0d01'
+          is_extinct: 'false'
+        -
+          id: 'fd13266b9711de9de2b03a90a2e74256'
+          name: 'Procambarus (Ortmannicus) lucifugus lucifugus'
+          rank: 'Infraspecies'
+          name_html: '<i>Procambarus (Ortmannicus) lucifugus lucifugus<\/i> (Hobbs, 1940)'
+          url: 'http:\/\/www.catalogueoflife.org\/col\/details\/species\/id\/fd13266b9711de9de2b03a90a2e74256'
+          is_extinct: 'false'
+      synonyms: []
+      common_names:
+        -
+          name: 'Florida cave crayfish'
+          language: 'English'
+          country:
+          references:
+            -
+              author:
+              year: '2004'
+              title:
+              source': 'pre-press, American Fisheries Society Special Publication 31'
 :asaphida:
   id: '5ac1330933c62d7d617a8d4a80dcecf3'
   name: 'Asaphida'

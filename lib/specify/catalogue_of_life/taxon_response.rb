@@ -47,34 +47,56 @@ module Specify
       # Returns the TaxonRank for +self+.
       attr_reader :rank
 
+      # Returns a new instance. +col_result_hash+ is a hash from the array of
+      # _results_ in the response body from an HTTP request to the
+      # CatalogueOfLife service.
       def initialize(col_result_hash)
         @full_response = col_result_hash
         @rank = TaxonRank.new col_result_hash['rank']
       end
 
+      # Returns +true+ if the name is a valid taxonomic name according to
+      # CatalogueOfLife.
       def accepted?
         full_response['name_status'] == 'accepted name'
       end
 
+      # Returns the author name for the taxon according to CatalogueOfLife.
       def author
         full_response['author']
       end
 
+      # Returns an Array of CatalogueOfLife of life IDs for all direct child
+      # taxa of +self+. Returns an empty Array if there are no direct child
+      # taxa.
       def children
         return [] unless children?
 
         full_response['child_taxa'].map { |child| child['id'] }
       end
 
+      # Returns +true+ if +self+ has direct child taxa according to
+      # CatalogueOfLife, +false+ otherwise. Note that CatalogueOfLife of life
+      # responses for synonyms (where #accepted? is +false+) do not list
+      # child taxa.
       def children?
         full_response['child_taxa'] && !full_response['child_taxa'].empty?
       end
 
-      def classification
+      # Returns an orderd Array of TaxonResponse instances for each taxon in the
+      # ancestor chain (lineage) of self, starting with the highest rank (root
+      # of the CatalogueOfLife taxonomy; usually the kingdom). The immediate
+      # ancestor/parent taxon of +self+ will be the last element of the array.
+      # There is currently a bug in CatalogueOfLife where subgenera are listed
+      # in classifications but not searchable. The option <em>skip_subgenera<em>
+      # (+true+ by default) allows to skip subgenera in the classification.
+      def classification(skip_subgenera: true)
         responses = full_response['classification']&.map do |anc|
+          next if skip_subgenera && anc['rank'].downcase == 'subgenus'
+
           Thread.new(anc) { TaxonRequest.by_id(anc['id']).taxon_response }
         end
-        responses.map(&:value)
+        responses.compact.map(&:value)
       end
 
       # Returns +true+ if +self+ is extinct, +false+ otherwise.
@@ -88,6 +110,10 @@ module Specify
         ['true', 1].include? full_response['is_extinct']
       end
 
+      # Returns the taxonomic name for +self+, but only the part of the name
+      # designating the taxon, i.e. it will return the epithet only for ranks
+      # lower than _Genus_ (_Subgenus_, _Species_, any infraspecific taxon)
+      # rather than the binomen.
       def name
         if rank < GENUS
           infraspecies || species || subgenus
@@ -96,9 +122,18 @@ module Specify
         end
       end
 
-      def parent
-        parent_id = full_response['classification'].last&.fetch('id')
-        return unless parent_id
+      # Returns a TaxonResponse for the direct parent taxon of +self+.
+      # There is currently a bug in CatalogueOfLife where subgenera are listed
+      # in classifications but not searchable. The option <em>skip_subgenera<em>
+      # (+true+ by default) allows to skip subgenera in the classification.
+      def parent(skip_subgenera: true)
+        direct_ancestor = full_response['classification'].last
+        return unless direct_ancestor
+
+        if direct_ancestor['rank'].downcase == 'subgenus' && skip_subgenera
+          direct_ancestor = full_response[-2]
+        end
+        parent_id = direct_ancestor.fetch('id')
 
         TaxonRequest.by_id(parent_id).taxon_response
       end

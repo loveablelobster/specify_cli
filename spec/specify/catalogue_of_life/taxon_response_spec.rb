@@ -4,33 +4,14 @@
 module Specify
   module CatalogueOfLife
     RSpec.describe TaxonResponse do
-      let :astacidae do
-        described_class.new(result :valid_family)
-      end
-
-      let :astacus do
-        described_class.new(result :valid_genus)
-      end
-
-      let :astacus_astacus do
-        described_class.new(result :valid_species)
-      end
-
-      let :astacus_edwardsi do
-        described_class.new(result :extinct_species)
-      end
-
-      let :cancer_fimbriatus do
-        described_class.new(result :synonym)
-      end
-
-      let :cancer_pagurus do
-        described_class.new(result :accepted_with_synonyms)
-      end
-
-      let :animalia do
-        described_class.new(result :root)
-      end
+      let(:astacidae) { described_class.new(result :valid_family) }
+      let(:astacus) { described_class.new(result :valid_genus) }
+      let(:astacus_astacus) { described_class.new(result :valid_species) }
+      let(:astacus_edwardsi) { described_class.new(result :extinct_species) }
+      let(:cancer_fimbriatus) { described_class.new(result :synonym) }
+      let(:cancer_pagurus) { described_class.new(result :with_synonyms) }
+      let(:procambarus_l_l) { described_class.new(result :subspecies) }
+      let(:animalia) { described_class.new(result :root) }
 
       context 'when calling a method not represented in #full_response' do
         subject(:no_method) { cancer_pagurus.no_such_key }
@@ -43,9 +24,9 @@ module Specify
 
       context 'when calling a method represented by a key in #full_response' do
         context 'when the key has a value' do
-          subject { cancer_pagurus.author }
+          subject { cancer_pagurus.name_html }
 
-          it { is_expected.to eq 'Linnaeus, 1758' }
+          it { is_expected.to eq '<i>Cancer pagurus</i> Linnaeus, 1758' }
         end
 
         context 'when the key has no value' do
@@ -76,7 +57,17 @@ module Specify
       end
 
       describe '#author' do
+        context 'when the taxon response has an author' do
+          subject { cancer_pagurus.author }
 
+          it { is_expected.to eq 'Linnaeus, 1758' }
+        end
+
+        context 'when the taxon response has no author' do
+          subject { astacidae.author }
+
+          it { is_expected.to be_nil }
+        end
       end
 
       describe '#children' do
@@ -115,20 +106,61 @@ module Specify
       end
 
       describe '#classification' do
-        subject(:ancestors) { astacidae.classification }
+        context 'when there is no subgenus' do
+          subject(:ancestors) { astacidae.classification }
 
-        it do
-          expect(ancestors).to include(
-            an_instance_of(described_class) & have_attributes(name: 'Animalia'),
-            an_instance_of(described_class) &
-              have_attributes(name: 'Arthropoda'),
-            an_instance_of(described_class) &
-              have_attributes(name: 'Malacostraca'),
-            an_instance_of(described_class) &
-              have_attributes(name: 'Decapoda'),
-            an_instance_of(described_class) &
-              have_attributes(name: 'Astacoidea')
-          )
+          it do
+            expect(ancestors).to contain_exactly(
+              an_instance_of(described_class) &
+                have_attributes(name: 'Animalia'),
+              an_instance_of(described_class) &
+                have_attributes(name: 'Arthropoda'),
+              an_instance_of(described_class) &
+                have_attributes(name: 'Malacostraca'),
+              an_instance_of(described_class) &
+                have_attributes(name: 'Decapoda'),
+              an_instance_of(described_class) &
+                have_attributes(name: 'Astacoidea')
+            )
+          end
+        end
+
+        context 'when there is a subgenus and subgenera are not skipped' do
+          subject :ancestors do
+            procambarus_l_l.classification(skip_subgenera: false)
+          end
+
+          it do
+            expect { ancestors }.to raise_error NoMethodError,
+              'undefined method `size\' for nil:NilClass'
+          end
+        end
+
+        context 'when there is a subgenus and subgenera are skipped' do
+          subject :ancestors do
+            procambarus_l_l.classification(skip_subgenera: true)
+          end
+
+          it do
+            expect(ancestors).to contain_exactly(
+              an_instance_of(described_class) &
+                have_attributes(name: 'Animalia'),
+              an_instance_of(described_class) &
+                have_attributes(name: 'Arthropoda'),
+              an_instance_of(described_class) &
+                have_attributes(name: 'Malacostraca'),
+              an_instance_of(described_class) &
+                have_attributes(name: 'Decapoda'),
+              an_instance_of(described_class) &
+                have_attributes(name: 'Astacoidea'),
+              an_instance_of(described_class) &
+                have_attributes(name: 'Cambaridae'),
+              an_instance_of(described_class) &
+                have_attributes(name: 'Procambarus'),
+              an_instance_of(described_class) &
+                have_attributes(name: 'lucifugus')
+            )
+          end
         end
       end
 
@@ -154,7 +186,9 @@ module Specify
 
       describe '#name' do
         context 'when it is an infraspecies' do
-        	it 'should be the infraspecific epithet'
+          subject { procambarus_l_l.name }
+
+        	it { is_expected.to eq 'lucifugus' }
         end
 
         context 'when it is a species' do
@@ -164,7 +198,7 @@ module Specify
         end
 
         context 'when it is a subgenus' do
-        	it 'should be the subgenus name'
+        	pending 'Subgenera are broken in the CatalogueOfLife API'
         end
 
         context 'when it is a genus' do
@@ -189,7 +223,11 @@ module Specify
           	  have_attributes(name: 'Astacus')
           end
         end
+
+        context 'when the direct parent is a subgenus'
       end
+
+      describe '#rank'
 
       describe '#root?' do
         context 'when the resonse represent the root' do

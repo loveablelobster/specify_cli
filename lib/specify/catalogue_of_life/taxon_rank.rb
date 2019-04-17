@@ -24,6 +24,8 @@ module Specify
       # or super = 1, nil = 0, sub = -1
       attr_reader :prefix
 
+      # Returns a new instance from a String (+str+) with the name for the
+      # taxonomic rank (e.g. 'Species', 'Genus', 'Subfamily', etc.)
       def initialize(str)
         /^(?<prefix>super|sub)?(?<stem>\w+)$/.match(str.downcase) do |m|
           @name = m[0].to_sym
