@@ -4,6 +4,8 @@ module Specify
   module CatalogueOfLife
     # TaxonRequests represent a HTTP GET request to the service.
     class TaxonRequest
+      include ERB::Util
+
       # The format for the response, +:json+ or +:xml+.
       attr_accessor :content_type
 
@@ -16,6 +18,10 @@ module Specify
       # Rank of the taxon to search for (can be multiple).
       # if empty, all matches within any rank will be returned
       attr_reader :rank
+
+      # A Farday::Response from sending from the service. Gets automatically
+      # set when calling #get.
+      attr_accessor :response
 
       # :full (default) or :terse. :terse will ommit classification and child
       # taxa
@@ -46,12 +52,13 @@ module Specify
         @response_type = :full
         @status = nil
         @extinct = nil
+        @response = nil
         yield(self) if block_given?
       end
 
       # The Faraday::Connection for the request.
       def connection
-        Faraday.new 'http://www.catalogueoflife.org/' do |conn|
+        Faraday.new URL do |conn|
           conn.response @content_type, content_type: /\b#{@content_type.to_s}$/
           conn.adapter Faraday.default_adapter
         end
@@ -60,12 +67,13 @@ module Specify
       # Sends a HTTP GET request to the service.
       # Returns a Faraday::Response.
       def get
-        connection.get do |req|
-          req.url 'col/webservice?'
+        self.response = connection.get do |req|
+          req.url API_ROUTE
           params.each { |key, value| req.params[key] = value }
         end
       end
 
+      # Returns a Hash with the URL parameter.
       def params
         {
           'format' => content_type.to_s,
@@ -77,20 +85,37 @@ module Specify
         }.compact
       end
 
+      # Setter for the @rank attribute. Will assign a
+      # CatalogueOfLife::TaxonRank.
       def rank=(name)
         @rank = TaxonRank.new(name)
       end
 
-      def response
-        results = get.body['results']
-        # FIXME: refactor to Error const
-        raise "Multiple matches for #{self}" if results.size > 1
+      # Returns a CatalogueOfLife::TaxonResponse for the request.
+      # Will raise a MultipleResultsError
+      def taxon_response
+        results = response&.body&.fetch('results') || get.body['results']
+        raise ResponseError::AMBIGUOUS_RESULTS if results.size > 1
 
         TaxonResponse.new results.first
       end
 
+      # Returns a String representation of +self+.
       def to_s
-        'Catalogue Of Life'
+        URL + API_ROUTE + uri_query
+      end
+
+      # Returns a URI object for the request.
+      def to_uri
+        URI(to_s)
+      end
+
+      # Returns the query part of the URI for the HTTP request.
+      def uri_query
+        params.compact.reduce('?') do |memo, param|
+          memo += '&' unless memo == '?'
+          memo + param[0] + '=' + url_encode(param[1])
+        end
       end
     end
   end

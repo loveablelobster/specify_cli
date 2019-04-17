@@ -18,7 +18,7 @@ module Specify
                       req.rank = root[:rank]
                     end
                   end
-        @root = request.response
+        @root = request.taxon_response
         @stop_rank = nil
         yield(self) if block_given?
       end

@@ -6,6 +6,40 @@ module Specify
 
     # A TaxonRepsonse wraps a Faraday::Response to provide an interface for
     # work with the TaxonEquivalent class.
+    # The repsonses of the CatalogueOfLife of life service have different
+    # sets of properties for valid names, synonyms, and suprageneric taxa.
+    # Available properties in suprageneric taxa are:
+    # * :id
+    # * :name
+    # * :rank
+    # * :name_status
+    # * :name_html
+    # * :url
+    # * :is_extinct
+    # * :classification
+    # * :child_taxa
+    #
+    # Synonym have the above except :is_extinct, :classification, :child_taxa,
+    # and add:
+    # * :genus
+    # * :subgenus
+    # * :species
+    # * :infraspecies_marker
+    # * :infraspecies
+    # * :author
+    # * :record_scrutiny_date
+    # * :online_resource
+    # * :source_database
+    # * :source_database_url
+    # * :bibliographic_citation
+    # * :accepted_name
+    #
+    # Valid names have the shared properties of suprageneric taxa and synonyms,
+    # and except :accepted_name, and add:
+    # * :distribution
+    # * :references
+    # * :common_names
+    # * :synonyms
     class TaxonResponse
       # Returns the full response body (Hash).
       attr_reader :full_response
@@ -38,17 +72,9 @@ module Specify
 
       def classification
         responses = full_response['classification']&.map do |anc|
-          Thread.new(anc) { TaxonRequest.by_id(anc['id']).response }
+          Thread.new(anc) { TaxonRequest.by_id(anc['id']).taxon_response }
         end
         responses.map(&:value)
-      end
-
-      # TODO: add Source: 'CatalogueOfLife' to criteria
-      # TODO: remove, should be handled by TaxonEquivalent
-      def equivalent(taxonomy)
-        taxonomy.names_dataset.first(TaxonomicSerialNumber: id) ||
-          taxonomy.names_dataset.first(Name: name,
-                                       rank: rank.equivalent(taxonomy))
       end
 
       # Returns +true+ if +self+ is extinct, +false+ otherwise.
@@ -70,12 +96,11 @@ module Specify
         end
       end
 
-      # FIXME: necessary?
       def parent
         parent_id = full_response['classification'].last&.fetch('id')
         return unless parent_id
 
-        TaxonRequest.by_id(parent_id).response
+        TaxonRequest.by_id(parent_id).taxon_response
       end
 
       def root?
@@ -115,14 +140,3 @@ module Specify
     end
   end
 end
-
-# Keys in suprageneric taxa
-# :id
-# :name
-# :rank
-# :name_status
-# :name_html
-# :url
-# :is_extinct
-# :classification
-# :child_taxa

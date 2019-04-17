@@ -41,28 +41,7 @@ module Specify
       describe '#crawl' do
         subject(:crawl_crayfish) do
           crayfish_crawler.crawl() do |child| # pass in second arg if possible
-#             puts child.name
-            rank = child.rank.equivalent(taxonomy)
-
-#             taxon = child.parent.equivalent(taxonomy)
-            taxon = taxonomy.names_dataset.first(TaxonomicSerialNumber: child.parent)
-            puts "#{taxon}!!!!!!!!!!!" if taxon
-            unless taxon
-              prnt = child.full_response['classification'].last
-              puts "???????????#{prnt}"
-              raise 'No parent' unless prnt
-              rnk = TaxonRank.new(prnt['rank']).equivalent(taxonomy)
-              taxon = taxonomy.names_dataset.first(Name: prnt['name'])
-            end
-
-            tx = child.equivalent(taxonomy) ||
-              taxon.add_child(Name: child.name,
-                              IsAccepted: true,
-                              IsHybrid: false,
-                              rank: rank,
-                              RankID: rank.RankID,
-                              TaxonomicSerialNumber: child.id)
-            child.equivalent(taxonomy)
+            # iterate creating TaxonEquivalents
           end
         end
 

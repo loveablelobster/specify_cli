@@ -30,6 +30,17 @@ module Specify
         raise "Invalid taxon rank #{name}" unless valid?
       end
 
+      def self.method_missing(m, *args, &block)
+        super unless TaxonRank.respond_to?(m)
+
+        TaxonRank.new m
+      end
+
+      # FIXME: needs to be able to also deal with sub/super/etc
+      def self.respond_to?(method_name, include_private = false)
+        RANKS.include?(method_name) || super
+      end
+
       def self.stem
         RANKS
       end

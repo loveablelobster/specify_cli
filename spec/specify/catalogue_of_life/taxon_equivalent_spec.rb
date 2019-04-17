@@ -81,7 +81,7 @@ module Specify
               .from(be_nil)
               .to(an_instance_of(Model::Taxon) &
                   have_attributes(Name: 'expansus',
-                                  Source: s_source,
+                                  Source: URL + API_ROUTE,
                                   RankID: rank_id))
           end
         end
@@ -168,8 +168,7 @@ module Specify
           it do
             expect(match.taxon).to be_a(Model::Taxon) &
               have_attributes(Name: 'Asaphus',
-                              Source: 'http://webservice.catalogueoflife.org/'\
-                                      'col/webservice',
+                              Source: URL + API_ROUTE,
                               TaxonomicSerialNumber: '67b8da25464f297cf'\
                                                      '738a3712bc7eaa0')
           end
@@ -252,7 +251,7 @@ module Specify
           expect { add_reference }
             .to change { asaphoidea_eq.taxon.Source }
             .from(be_nil)
-            .to('http://webservice.catalogueoflife.org/col/webservice')
+            .to(URL + API_ROUTE)
             .and change { asaphoidea_eq.taxon.TaxonomicSerialNumber }
             .from(be_nil)
             .to('f3f01b65054a3e887d04554962e49097')

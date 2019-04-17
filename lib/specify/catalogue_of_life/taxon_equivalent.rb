@@ -13,10 +13,6 @@ module Specify
 
       attr_reader :rank
 
-      # The URI of the web service used.
-      # e.g. http://webservice.catalogueoflife.org/col/webservice
-      attr_reader :service_url
-
       attr_reader :taxon
 
       # The Specify::Model::Taxonomy.
@@ -27,7 +23,6 @@ module Specify
       # +response+ is a Specify::CatalogueOfLife::TaxonResponse
       def initialize(taxonomy, response = nil)
         @concept = response
-        @service_url = CatalogueOfLife::URL
         @taxonomy = taxonomy
         @name = concept.name
         @lineage = nil
@@ -66,10 +61,11 @@ module Specify
         find_by_id || find_by_values(parent)
       end
 
-      # Finds a taxon by the #service_url and +id+ attribute of #concept
+      # Finds a taxon by the service_url (URL + API_ROUTE) and +id+ attribute
+      # of #concept
       # (the Catalogue Of Life id).
       def find_by_id
-        @taxon = taxonomy.names_dataset.first(Source: service_url,
+        @taxon = taxonomy.names_dataset.first(Source: URL + API_ROUTE,
                                               TaxonomicSerialNumber: concept.id)
         @referenced = true if @taxon
         @taxon
@@ -119,7 +115,7 @@ module Specify
         return unless @taxon
 
         @taxon.TaxonomicSerialNumber = concept_id
-        @taxon.Source = service_url
+        @taxon.Source = URL + API_ROUTE
         @taxon.save
         @referenced = true
       end
@@ -144,7 +140,7 @@ module Specify
           Name: concept.name,
           rank: rank.equivalent(taxonomy),
           RankID: rank.equivalent(taxonomy).RankID,
-          Source: service_url,
+          Source: URL + API_ROUTE,
           TaxonomicSerialNumber: concept_id
         }
       end
