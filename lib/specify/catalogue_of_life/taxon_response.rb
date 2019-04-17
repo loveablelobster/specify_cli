@@ -92,7 +92,11 @@ module Specify
       # (+true+ by default) allows to skip subgenera in the classification.
       def classification(skip_subgenera: true)
         responses = full_response['classification']&.map do |anc|
-          next if skip_subgenera && anc['rank'].downcase == 'subgenus'
+          next if skip_subgenera && anc['rank'].casecmp('subgenus').zero?
+
+          if anc['rank'].casecmp('subgenus').zero? && !skip_subgenera
+            raise ResponseError::SERVICE_RELIABILITY
+          end
 
           Thread.new(anc) { TaxonRequest.by_id(anc['id']).taxon_response }
         end
@@ -130,9 +134,14 @@ module Specify
         direct_ancestor = full_response['classification'].last
         return unless direct_ancestor
 
-        if direct_ancestor['rank'].downcase == 'subgenus' && skip_subgenera
-          direct_ancestor = full_response[-2]
+        if skip_subgenera && direct_ancestor['rank'].casecmp('subgenus').zero?
+          direct_ancestor = full_response['classification'][-2]
+        elsif !skip_subgenera && direct_ancestor['rank'].casecmp('subgenus')
+                                                        .zero?
+          raise ResponseError::SERVICE_RELIABILITY
+
         end
+
         parent_id = direct_ancestor.fetch('id')
 
         TaxonRequest.by_id(parent_id).taxon_response

@@ -97,6 +97,8 @@ module Specify
         results = response&.body&.fetch('results') || get.body['results']
         raise ResponseError::AMBIGUOUS_RESULTS if results.size > 1
 
+        raise ResponseError::NOT_FOUND if results.empty?
+
         TaxonResponse.new results.first
       end
 

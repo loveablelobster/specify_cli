@@ -11,6 +11,7 @@ module Specify
       let(:cancer_fimbriatus) { described_class.new(result :synonym) }
       let(:cancer_pagurus) { described_class.new(result :with_synonyms) }
       let(:procambarus_l_l) { described_class.new(result :subspecies) }
+      let(:p_lucifugus) { described_class.new(result :species_in_subgenus)}
       let(:animalia) { described_class.new(result :root) }
 
       context 'when calling a method not represented in #full_response' do
@@ -131,8 +132,8 @@ module Specify
           end
 
           it do
-            expect { ancestors }.to raise_error NoMethodError,
-              'undefined method `size\' for nil:NilClass'
+            expect { ancestors }
+              .to raise_error RuntimeError, ResponseError::SERVICE_RELIABILITY
           end
         end
 
@@ -159,6 +160,13 @@ module Specify
                 have_attributes(name: 'Procambarus'),
               an_instance_of(described_class) &
                 have_attributes(name: 'lucifugus')
+            )
+          end
+
+          it do
+            expect(ancestors).not_to include(
+              an_instance_of(described_class) &
+                have_attributes(rank: TaxonRank.subgenus)
             )
           end
         end
@@ -224,10 +232,35 @@ module Specify
           end
         end
 
-        context 'when the direct parent is a subgenus'
+        context 'when the direct parent is a subgenus and skip_subgenera is'\
+                ' true' do
+          subject(:parent) { p_lucifugus.parent }
+
+          it do
+            expect(parent).to be_a(TaxonResponse) &
+          	  have_attributes(name: 'Procambarus')
+          end
+        end
+
+        context 'when the direct parent is a subgenus and skip_subgenera is'\
+                ' false' do
+          subject(:parent) { p_lucifugus.parent(skip_subgenera: false) }
+
+          it do
+            expect { parent }
+              .to raise_error RuntimeError, ResponseError::SERVICE_RELIABILITY
+          end
+        end
       end
 
-      describe '#rank'
+      describe '#rank' do
+        subject(:subsp_rank) { procambarus_l_l.rank }
+
+        it do
+          expect(subsp_rank).to be_a(TaxonRank) &
+            have_attributes(name: :infraspecies)
+        end
+      end
 
       describe '#root?' do
         context 'when the resonse represent the root' do

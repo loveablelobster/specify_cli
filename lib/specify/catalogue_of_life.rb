@@ -25,6 +25,10 @@ module Specify
     module ResponseError
       AMBIGUOUS_RESULTS = 'Amibiguous response.'\
                           ' Request returned multiple matches'
+      NOT_FOUND = 'Taxon not found in CatalogueOfLife'
+      SERVICE_RELIABILITY = 'Subgenus queries are broken in CatalogueOfLife'\
+                            ' and can lead to spurious results. They are not'\
+                            ' supported.'
     end
   end
 end
