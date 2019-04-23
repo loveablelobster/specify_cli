@@ -37,24 +37,24 @@ module Specify
         end
 
         context 'when the value is empty' do
-        	subject { cancer_pagurus.infraspecies }
+          subject { cancer_pagurus.infraspecies }
 
           it { is_expected.to be_nil }
         end
       end
 
       describe '#accepted?' do
-      	context 'when it is accepted' do
-      		subject { cancer_pagurus.accepted? }
+        context 'when it is accepted' do
+          subject { cancer_pagurus.accepted? }
 
-      		it { is_expected.to be_truthy }
-      	end
+          it { is_expected.to be_truthy }
+        end
 
-      	context 'when it is not accepted' do
-      		subject { cancer_fimbriatus.accepted? }
+        context 'when it is not accepted' do
+          subject { cancer_fimbriatus.accepted? }
 
-      		it { is_expected.to be_falsey }
-      	end
+          it { is_expected.to be_falsey }
+        end
       end
 
       describe '#author' do
@@ -72,38 +72,48 @@ module Specify
       end
 
       describe '#children' do
-      	context 'when it does not have children' do
-      		subject { astacus_astacus.children }
+        context 'when it does not have children' do
+          subject { astacus_astacus.children }
 
-      		it { is_expected.to be_empty }
-      	end
+          it { is_expected.to be_empty }
+        end
 
-      	context 'when it has children' do
-      		subject(:children) { astacus.children }
+        context 'when it has children' do
+          subject { astacus.children }
 
-      		it do
-      			expect(children).to include '526387756aa5574c4879c6cc114248fd',
-      			                            '8d133bcc525ea8e040d6858ed52625bd',
-      			                            '386243cced4e42f3a15453c8ffad5dc4',
-      			                            '54fe3bc380732201105cdde261a855d5',
-      			                            'ed2a9af088ea52cc1907f2b552602a48',
-      			                            '3d050be53ecfb6c9a33d8069532e43e4'
-      		end
-      	end
+          let :be_child_responses do
+            a_collection_including(
+              an_instance_of(described_class) &
+                have_attributes(id: '526387756aa5574c4879c6cc114248fd'),
+              an_instance_of(described_class) &
+                have_attributes(id: '8d133bcc525ea8e040d6858ed52625bd'),
+              an_instance_of(described_class) &
+                have_attributes(id: '386243cced4e42f3a15453c8ffad5dc4'),
+              an_instance_of(described_class) &
+                have_attributes(id: '54fe3bc380732201105cdde261a855d5'),
+              an_instance_of(described_class) &
+                have_attributes(id: 'ed2a9af088ea52cc1907f2b552602a48'),
+              an_instance_of(described_class) &
+                have_attributes(id: '3d050be53ecfb6c9a33d8069532e43e4')
+              )
+          end
+
+          it { is_expected.to be_child_responses }
+        end
       end
 
       describe '#children?' do
-      	context 'when it has children' do
+        context 'when it has children' do
           subject { astacus.children? }
 
           it { is_expected.to be_truthy }
-      	end
+        end
 
-      	context 'when it does not have children' do
+        context 'when it does not have children' do
           subject { astacus_astacus.children? }
 
           it { is_expected.to be_falsey }
-      	end
+        end
       end
 
       describe '#classification' do
@@ -173,40 +183,40 @@ module Specify
       end
 
       describe '#extinct?' do
-      	context 'when it is extant)' do
+        context 'when it is extant)' do
           subject { astacus_astacus.extinct? }
 
           it { is_expected.to be_falsey }
-      	end
-
-        context 'when it is extinct' do
-        	subject { astacus_edwardsi.extinct? }
-
-        	it { is_expected.to be_truthy }
         end
 
-      	context 'when it is a synonym' do
-      		subject { cancer_fimbriatus.extinct? }
+        context 'when it is extinct' do
+          subject { astacus_edwardsi.extinct? }
 
-      		it { is_expected.to be_nil }
-      	end
+          it { is_expected.to be_truthy }
+        end
+
+        context 'when it is a synonym' do
+          subject { cancer_fimbriatus.extinct? }
+
+          it { is_expected.to be_nil }
+        end
       end
 
       describe '#name' do
         context 'when it is an infraspecies' do
           subject { procambarus_l_l.name }
 
-        	it { is_expected.to eq 'lucifugus' }
+          it { is_expected.to eq 'lucifugus' }
         end
 
         context 'when it is a species' do
-        	subject { astacus_astacus.name }
+          subject { astacus_astacus.name }
 
-        	it { is_expected.to eq 'astacus' }
+          it { is_expected.to eq 'astacus' }
         end
 
         context 'when it is a subgenus' do
-        	pending 'Subgenera are broken in the CatalogueOfLife API'
+          pending 'Subgenera are broken in the CatalogueOfLife API'
         end
 
         context 'when it is a genus' do
@@ -218,17 +228,17 @@ module Specify
 
       describe '#parent' do
         context 'when it is the root' do
-        	subject { animalia.parent }
+          subject { animalia.parent }
 
-        	it { is_expected.to be_nil }
+          it { is_expected.to be_nil }
         end
 
         context 'when it is below the root' do
           subject(:parent) { astacus_astacus.parent }
 
           it do
-          	expect(parent).to be_a(TaxonResponse) &
-          	  have_attributes(name: 'Astacus')
+            expect(parent).to be_a(TaxonResponse) &
+              have_attributes(name: 'Astacus')
           end
         end
 
@@ -238,7 +248,7 @@ module Specify
 
           it do
             expect(parent).to be_a(TaxonResponse) &
-          	  have_attributes(name: 'Procambarus')
+              have_attributes(name: 'Procambarus')
           end
         end
 
@@ -283,41 +293,48 @@ module Specify
       end
 
       describe '#synonyms' do
-      	context 'when it has no synonyms' do
-      		subject { astacus_astacus.synonyms }
+        context 'when it has no synonyms' do
+          subject { astacus_astacus.synonyms }
 
-      		it { is_expected.to be_empty }
-      	end
+          it { is_expected.to be_empty }
+        end
 
-      	context 'when it has synonyms' do
-      		subject(:synonyms) { cancer_pagurus.synonyms }
+        context 'when it has synonyms' do
+          subject { cancer_pagurus.synonyms }
 
-      		it do
-      			expect(synonyms).to include 'd81941a10d07fcc621073de9cdefca96',
-      			                            '4a6de56affa3de0e027145d2d7136f2a',
-      			                            'cc57308ba2f409c765bbdaedcbaa1f78'
-      		end
-      	end
+          let :be_synonym_responses do
+            a_collection_including(
+              an_instance_of(described_class) &
+                have_attributes(id: 'd81941a10d07fcc621073de9cdefca96'),
+              an_instance_of(described_class) &
+                have_attributes(id: '4a6de56affa3de0e027145d2d7136f2a'),
+              an_instance_of(described_class) &
+                have_attributes(id: 'cc57308ba2f409c765bbdaedcbaa1f78')
+              )
+          end
+
+          it { is_expected.to be_synonym_responses }
+        end
       end
 
       describe '#synonyms?' do
-      	context 'when it has no synonyms attribute' do
-      		subject { astacus.synonyms? }
+        context 'when it has no synonyms attribute' do
+          subject { astacus.synonyms? }
 
-      		it { is_expected.to be_nil }
-      	end
+          it { is_expected.to be_nil }
+        end
 
-      	context 'when it has no synonyms' do
-      		subject { astacus_astacus.synonyms? }
+        context 'when it has no synonyms' do
+          subject { astacus_astacus.synonyms? }
 
-      		it { is_expected.to be_falsey }
-      	end
+          it { is_expected.to be_falsey }
+        end
 
-      	context 'when it has synonyms' do
-      		subject { cancer_pagurus.synonyms? }
+        context 'when it has synonyms' do
+          subject { cancer_pagurus.synonyms? }
 
-      		it { is_expected.to be_truthy }
-      	end
+          it { is_expected.to be_truthy }
+        end
       end
     end
   end

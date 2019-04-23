@@ -40,9 +40,26 @@ module Specify
         super
       end
 
+      def accepted?
+        self[:IsAccepted]
+      end
+
+      def author
+        self[:Author]
+      end
+
       # Returns +true+ if +self+ has _children_.
       def children?
         !children.empty?
+      end
+
+      def classification
+        # FIXME: Should return an ordered Array of Taxon instances starting with
+        #        the highest rank
+      end
+
+      def extinct?
+       # FIXME: Specify needs an IsExtinct flag
       end
 
       # Returns a String with the taxon name.
@@ -50,8 +67,17 @@ module Specify
         self[:Name]
       end
 
-      def taxon_rank
-        rank.rank
+      def root?
+        parent.nil?
+      end
+
+      def synonyms?
+        !synonyms.empty?
+      end
+
+      def to_s
+        "#{name} (#{rank.name}), has children: #{children?},"\
+        " accepted: #{accepted?}, extinct: #{extinct?}"
       end
     end
   end

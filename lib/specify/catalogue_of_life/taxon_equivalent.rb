@@ -18,7 +18,10 @@ module Specify
       # extarnal and internal).
       attr_reader :name
 
-      # Returns a Specify::CatalogueOfLife::TaxonRank
+      # Returns the rank for either the external or internal representation
+      # of the concept. This will be a Specify::CatalogueOfLife::TaxonRank for
+      # the external representation, a Specify::Model::Rank for the internal
+      # representation.
       attr_reader :rank
 
       # The internal representation of the comcept, i.e. the taxon in the
@@ -36,7 +39,7 @@ module Specify
         @external = external
         @internal = internal
         @name = internal&.name || external&.name
-        @rank = internal&.taxon_rank || external&.rank
+        @rank = internal&.rank || external&.rank
         @lineage = nil
         @referenced = false
       end
@@ -45,10 +48,11 @@ module Specify
         lineage.ancestors
       end
 
-      # Returns the ID of the taxon concept in the external resource
-      # (CatalogueOfLife)
-      def concept_id
-        external.id
+      # Returns an OpenStruct with the IDs for the external (the
+      # CatalogueOfLife ID) and internal (the database taxonomy) representations
+      # of the taxon concept.
+      def id
+        OpenStruct.new(internal: internal&.id, external: external&.id)
       end
 
       # If _parent_ is passes, will create in the parent
@@ -76,8 +80,8 @@ module Specify
       # (the Catalogue Of Life id).
       def find_by_id
         @internal = taxonomy.names_dataset
-                                 .first(Source: URL + API_ROUTE,
-                                        TaxonomicSerialNumber: external.id)
+                            .first(Source: URL + API_ROUTE,
+                                   TaxonomicSerialNumber: external.id)
         @referenced = true if @internal
         @internal
       end
@@ -125,7 +129,7 @@ module Specify
 
         return unless @internal
 
-        @internal.TaxonomicSerialNumber = concept_id
+        @internal.TaxonomicSerialNumber = external.id
         @internal.Source = URL + API_ROUTE
         @internal.save
         @referenced = true
@@ -152,7 +156,7 @@ module Specify
           rank: rank.equivalent(taxonomy),
           RankID: rank.equivalent(taxonomy).RankID,
           Source: URL + API_ROUTE,
-          TaxonomicSerialNumber: concept_id
+          TaxonomicSerialNumber: external.id
         }
       end
 

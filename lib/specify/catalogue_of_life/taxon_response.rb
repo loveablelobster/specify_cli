@@ -2,7 +2,7 @@
 
 module Specify
   module CatalogueOfLife
-    GENUS = Specify::TaxonRank.new(:genus)
+    GENUS = TaxonRank.new(:genus)
 
     # A TaxonRepsonse wraps a Faraday::Response to provide an interface for
     # work with the TaxonEquivalent class.
@@ -40,6 +40,7 @@ module Specify
     # * :references
     # * :common_names
     # * :synonyms
+    # FIXME: rename -> Taxon
     class TaxonResponse
       # Returns the full response body (Hash).
       attr_reader :full_response
@@ -66,13 +67,12 @@ module Specify
         full_response['author']
       end
 
-      # Returns an Array of CatalogueOfLife of life IDs for all direct child
-      # taxa of +self+. Returns an empty Array if there are no direct child
-      # taxa.
+      # Returns an Array of TaxonResponse instances for all direct child taxa of
+      # +self+. Returns an empty Array if there are no direct child taxa.
       def children
         return [] unless children?
 
-        full_response['child_taxa'].map { |child| child['id'] }
+        fetch 'child_taxa'
       end
 
       # Returns +true+ if +self+ has direct child taxa according to
@@ -157,12 +157,12 @@ module Specify
         full_response['classification'].empty?
       end
 
-      # Returns an array of CatalogueOfLife ids for synonyms listed in the
+      # Returns an array of TaxonResponse instances for synonyms listed in the
       # full response of +self+ (given that +self+ is an accepted name).
       def synonyms
         return [] unless synonyms?
 
-        full_response['synonyms'].map { |synonym| synonym['id'] }
+        fetch 'synonyms'
       end
 
       # Returms +true+ if +self+ has synonyms (given that +self+ is an accepted
@@ -189,6 +189,15 @@ module Specify
 
       def respond_to_missing?(method_name, include_private = false)
         full_response.key?(method_name.to_s) || super
+      end
+
+      private
+
+      def fetch(key)
+        responses = full_response[key].map do |req|
+          Thread.new(req) { TaxonRequest.by_id(req['id']).taxon_response }
+        end
+        responses.map(&:value)
       end
     end
   end

@@ -40,32 +40,45 @@ module Specify
       end
 
       describe '#ancestors' do
+        context 'when initialized with an external taxon' do
+          subject { asaphus_eq.ancestors }
 
+          let :contain_ancestors do
+            contain_exactly(an_instance_of(TaxonEquivalent) &
+                            have_attributes(name: 'Asaphidae'),
+                            an_instance_of(TaxonEquivalent) &
+                            have_attributes(name: 'Asaphoidea'),
+                            an_instance_of(TaxonEquivalent) &
+                            have_attributes(name: 'Asaphida'),
+                            an_instance_of(TaxonEquivalent) &
+                            have_attributes(name: 'Trilobita'),
+                            an_instance_of(TaxonEquivalent) &
+                            have_attributes(name: 'Arthropoda'),
+                            an_instance_of(TaxonEquivalent) &
+                            have_attributes(name: 'Animalia'))
+          end
 
-        subject { asaphus_eq.ancestors }
-
-        let :contain_ancestors do
-          contain_exactly(an_instance_of(TaxonEquivalent) &
-                          have_attributes(name: 'Asaphidae'),
-                          an_instance_of(TaxonEquivalent) &
-                          have_attributes(name: 'Asaphoidea'),
-                          an_instance_of(TaxonEquivalent) &
-                          have_attributes(name: 'Asaphida'),
-                          an_instance_of(TaxonEquivalent) &
-                          have_attributes(name: 'Trilobita'),
-                          an_instance_of(TaxonEquivalent) &
-                          have_attributes(name: 'Arthropoda'),
-                          an_instance_of(TaxonEquivalent) &
-                          have_attributes(name: 'Animalia'))
+          it { is_expected.to contain_ancestors }
         end
 
-        it { is_expected.to contain_ancestors }
+        context 'when initialized with an internal taxon' do
+          subject(:trilobita) do
+            described_class.new Factories::Model::Taxonomy.for_tests,
+                                internal: Specify::Model::Taxon.first(name: 'Trilobita')
+          end
+
+          it { p trilobita }
+        end
       end
 
-      describe '#concept_id' do
-        subject { asaphida_eq.concept_id }
+      describe '#id' do
+        subject(:ids) { asaphida_eq.id }
 
-        it { is_expected.to eq '5ac1330933c62d7d617a8d4a80dcecf3' }
+        it do
+          expect(ids)
+            .to have_attributes external: '5ac1330933c62d7d617a8d4a80dcecf3',
+                                internal: nil
+        end
       end
 
       describe '#create' do

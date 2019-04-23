@@ -16,7 +16,6 @@ require 'securerandom'
 require 'sequel'
 
 require_relative 'specify/branch_parser'
-require_relative 'specify/taxon_rank'
 require_relative 'specify/catalogue_of_life'
 require_relative 'specify/cli'
 require_relative 'specify/configuration'
@@ -45,10 +44,5 @@ module Specify
   # LoginError is a module that contains errors for User logins.
   module LoginError
     INCONSISTENT_LOGIN = 'User is already logged in to a different collection'
-  end
-
-  # RankError is a module that contains errors relating to taxonomic ranks.
-  module RankError
-    INVALID_RANK = 'Invalid taxon rank'
   end
 end

@@ -2,11 +2,13 @@
 
 require_relative 'catalogue_of_life/taxon_equivalent'
 require_relative 'catalogue_of_life/taxon_lineage'
+require_relative 'catalogue_of_life/taxon_rank'
 require_relative 'catalogue_of_life/taxon_request'
 require_relative 'catalogue_of_life/taxon_response'
 require_relative 'catalogue_of_life/tree_crawler'
 
-require "erb"
+require 'erb'
+require 'ostruct'
 
 module Specify
   #
@@ -16,6 +18,11 @@ module Specify
 
     # The route for the api as a String.
     API_ROUTE = 'col/webservice'
+
+    # RankError is a module that contains errors relating to taxonomic ranks.
+    module RankError
+      INVALID_RANK = 'Invalid taxon rank'
+    end
 
     module ResponseError
       AMBIGUOUS_RESULTS = 'Amibiguous response.'\
