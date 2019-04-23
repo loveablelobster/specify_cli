@@ -86,9 +86,9 @@ module Specify
       end
 
       # Setter for the @rank attribute. Will assign a
-      # CatalogueOfLife::TaxonRank.
+      # CatalogueOfLife::Rank.
       def rank=(name)
-        @rank = TaxonRank.new(name)
+        @rank = Rank.new(name)
       end
 
       # Returns a CatalogueOfLife::Taxon for the request.

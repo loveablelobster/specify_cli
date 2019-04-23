@@ -10,8 +10,8 @@ module Specify
     # +nil+ corresponds to no prefix.
     PREFIXES = [:sub, nil, :super].freeze
 
-    # TaxonRanks represent taxonomic ranks.
-    class TaxonRank
+    # Ranks represent taxonomic ranks.
+    class Rank
       include Comparable
 
       # The full name of the rank.
@@ -50,9 +50,9 @@ module Specify
 
       # Returns a new instance for any symbol in #available_ranks.
       def self.method_missing(method, *args, &block)
-        super unless TaxonRank.respond_to_missing?(method)
+        super unless Rank.respond_to_missing?(method)
 
-        TaxonRank.new method
+        Rank.new method
       end
 
       # Returns an ordered array of symbols and +nil+ for available rank
@@ -98,7 +98,7 @@ module Specify
       # Returns the index (an Integer) of #stem or #prefix in RANKS and PREFIXES
       # respectively.
       def position(attr = :stem)
-        TaxonRank.public_send(attr).index public_send(attr)
+        Rank.public_send(attr).index public_send(attr)
       end
 
       # Returns a capitalized String for the #name of self. Will substitute

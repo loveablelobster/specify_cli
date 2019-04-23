@@ -176,7 +176,7 @@ module Specify
           it do
             expect(ancestors).not_to include(
               an_instance_of(described_class) &
-                have_attributes(rank: TaxonRank.subgenus)
+                have_attributes(rank: Rank.subgenus)
             )
           end
         end
@@ -267,7 +267,7 @@ module Specify
         subject(:subsp_rank) { procambarus_l_l.rank }
 
         it do
-          expect(subsp_rank).to be_a(TaxonRank) &
+          expect(subsp_rank).to be_a(Rank) &
             have_attributes(name: :infraspecies)
         end
       end

@@ -59,8 +59,8 @@ module Specify
         it do
           expect { assign_subspecies }
             .to change(crayfish, :rank)
-            .from(TaxonRank.species)
-            .to TaxonRank.genus
+            .from(Rank.species)
+            .to Rank.genus
         end
       end
 

@@ -2,7 +2,7 @@
 
 require_relative 'catalogue_of_life/taxon_equivalent'
 require_relative 'catalogue_of_life/taxon_lineage'
-require_relative 'catalogue_of_life/taxon_rank'
+require_relative 'catalogue_of_life/rank'
 require_relative 'catalogue_of_life/taxon_request'
 require_relative 'catalogue_of_life/taxon'
 require_relative 'catalogue_of_life/tree_crawler'

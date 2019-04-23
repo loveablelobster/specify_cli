@@ -19,7 +19,7 @@ module Specify
       attr_reader :name
 
       # Returns the rank for either the external or internal representation
-      # of the concept. This will be a Specify::CatalogueOfLife::TaxonRank for
+      # of the concept. This will be a Specify::CatalogueOfLife::Rank for
       # the external representation, a Specify::Model::Rank for the internal
       # representation.
       attr_reader :rank

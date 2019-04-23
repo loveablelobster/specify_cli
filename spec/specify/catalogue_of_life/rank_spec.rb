@@ -3,7 +3,7 @@
 #
 module Specify
   module CatalogueOfLife
-    RSpec.describe TaxonRank do
+    RSpec.describe Rank do
       describe '.available_ranks' do
         subject(:available_ranks) { described_class.available_ranks }
 
@@ -36,7 +36,7 @@ module Specify
             expect { tribe }
               .to raise_error NoMethodError,
                               'undefined method `tribe\' for'\
-                              ' Specify::CatalogueOfLife::TaxonRank:Class'
+                              ' Specify::CatalogueOfLife::Rank:Class'
           end
         end
 

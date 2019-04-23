@@ -2,7 +2,7 @@
 
 module Specify
   module CatalogueOfLife
-    GENUS = TaxonRank.new(:genus)
+    GENUS = Rank.new(:genus)
 
     # A Taxon wraps a Faraday::Response to provide an interface for
     # work with the TaxonEquivalent class.
@@ -44,7 +44,7 @@ module Specify
       # Returns the full response body (Hash).
       attr_reader :full_response
 
-      # Returns the TaxonRank for +self+.
+      # Returns the CatalogueOfLife::Rank for +self+.
       attr_reader :rank
 
       # Returns a new instance. +col_result_hash+ is a hash from the array of
@@ -52,7 +52,7 @@ module Specify
       # CatalogueOfLife service.
       def initialize(col_result_hash)
         @full_response = col_result_hash
-        @rank = TaxonRank.new col_result_hash['rank']
+        @rank = Rank.new col_result_hash['rank']
       end
 
       # Returns +true+ if the name is a valid taxonomic name according to

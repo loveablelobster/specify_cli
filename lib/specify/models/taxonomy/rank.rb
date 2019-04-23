@@ -26,9 +26,9 @@ module Specify
         self[:RankID] <=> other[:RankID]
       end
 
-      # Where rank class could be Specify::CatalogueOfLife::TaxonRank
+      # Where rank class could be Specify::CatalogueOfLife::Rank
       def equivalent(rank_class)
-        # Specify::CatalogueOfLife::TaxonRank.new name
+        # Specify::CatalogueOfLife::Rank.new name
       end
 
       def inspect

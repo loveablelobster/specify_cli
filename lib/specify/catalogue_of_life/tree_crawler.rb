@@ -6,7 +6,7 @@ module Specify
       # A CatalogueOfLife::Taxon
       attr_reader :root
 
-      # A TaxonRank that is the last taxonomic level that will be crawled.
+      # A CatalogueOfLife::Rank that is the last taxonomic level that will be crawled.
       attr_reader :stop_rank
 
       def initialize(root = { id: nil, root_name: nil, root_rank: nil })
@@ -38,7 +38,7 @@ module Specify
       end
 
       def stop_rank=(name)
-        @stop_rank = TaxonRank.new name
+        @stop_rank = Rank.new name
       end
     end
   end
