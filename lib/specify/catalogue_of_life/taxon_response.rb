@@ -147,24 +147,33 @@ module Specify
         TaxonRequest.by_id(parent_id).taxon_response
       end
 
+      # Returns true if +self+ is the root of the CatalogueOfLife classification
+      # (typically where #rank is +kingdom+), +false+ if there are parent taxa
+      # in the classification. Will return +nil+ if the response has no
+      # classification.
       def root?
         return unless full_response['classification']
 
         full_response['classification'].empty?
       end
 
+      # Returns an array of CatalogueOfLife ids for synonyms listed in the
+      # full response of +self+ (given that +self+ is an accepted name).
       def synonyms
         return [] unless synonyms?
 
         full_response['synonyms'].map { |synonym| synonym['id'] }
       end
 
+      # Returms +true+ if +self+ has synonyms (given that +self+ is an accepted
+      # name).
       def synonyms?
         return unless full_response.key? 'synonyms'
 
         !full_response['synonyms'].empty?
       end
 
+      # Returns a String representation of +self+.
       def to_s
         "#{name} (#{rank}), has children: #{children?},"\
         " accepted: #{accepted?}, extinct: #{extinct?}"

@@ -84,7 +84,7 @@ module Specify
 
           it do
             expect { create_a_expansus }
-              .to change(asaphus_expansus_eq, :taxon)
+              .to change(asaphus_expansus_eq, :specify_taxon)
               .from(be_nil)
               .to(an_instance_of(Model::Taxon) &
                   have_attributes(Name: 'expansus',
@@ -111,7 +111,9 @@ module Specify
         end
       end
 
-      describe '#find'
+      describe '#find' do
+
+      end
 
       describe '#find_by_id' do
         context 'when the taxon with concept id exists' do
@@ -173,7 +175,7 @@ module Specify
           end
 
           it do
-            expect(match.taxon).to be_a(Model::Taxon) &
+            expect(match.specify_taxon).to be_a(Model::Taxon) &
               have_attributes(Name: 'Asaphus',
                               Source: URL + API_ROUTE,
                               TaxonomicSerialNumber: '67b8da25464f297cf'\
@@ -191,7 +193,7 @@ module Specify
           end
 
           it do
-            expect(match.taxon).to be_a(Model::Taxon) &
+            expect(match.specify_taxon).to be_a(Model::Taxon) &
               have_attributes(Name: 'Asaphoidea',
                               Source: nil,
                               TaxonomicSerialNumber: nil)
@@ -207,7 +209,7 @@ module Specify
           end
 
           it do
-            expect(match.taxon).to be_a(Model::Taxon) &
+            expect(match.specify_taxon).to be_a(Model::Taxon) &
               have_attributes(Name: 'Trilobita',
                               Source: nil,
                               TaxonomicSerialNumber: nil)
@@ -256,10 +258,10 @@ module Specify
 
         it  do
           expect { add_reference }
-            .to change { asaphoidea_eq.taxon.Source }
+            .to change { asaphoidea_eq.specify_taxon.Source }
             .from(be_nil)
             .to(URL + API_ROUTE)
-            .and change { asaphoidea_eq.taxon.TaxonomicSerialNumber }
+            .and change { asaphoidea_eq.specify_taxon.TaxonomicSerialNumber }
             .from(be_nil)
             .to('f3f01b65054a3e887d04554962e49097')
         end
