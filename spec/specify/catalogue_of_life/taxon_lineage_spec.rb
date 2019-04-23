@@ -5,14 +5,14 @@ module Specify
   module CatalogueOfLife
     RSpec.describe TaxonLineage do
       let :complete_lineage do
-        response = Factories::CatalogueOfLife::TaxonResponse
+        response = Factories::CatalogueOfLife::Taxon
           .with :asaphus_expansus
         described_class.new(response.classification,
           Factories::Model::Taxonomy.for_tests)
       end
 
       let :partial_lineage do
-        response = Factories::CatalogueOfLife::TaxonResponse
+        response = Factories::CatalogueOfLife::Taxon
           .with :raymondaspis
         described_class.new(response.classification,
           Factories::Model::Taxonomy.for_tests)

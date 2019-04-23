@@ -102,7 +102,7 @@ module Specify
       # Returns the closest ancestor known in #taxonomy.
       # Can be referenced if desired
       # Access Model::Taxon through TaxonEquivalent#taxon
-      # If TaxonResponse#root? for the TaxonResponse stored in #external is
+      # If Taxon#root? for the CatalogueOfLife::Taxon stored in #external is
       # +true+ this will also return +false+.
       def known_ancestor
         lineage.known_ancestor
@@ -163,7 +163,7 @@ module Specify
       private
 
       # Returns an Array of TaxonEquivalent instances for all ancestors in the
-      # TaxonResponse's classification.
+      # Taxon instances classification.
       def parse_lineage
         @lineage = TaxonLineage.new(external.classification, taxonomy)
       end

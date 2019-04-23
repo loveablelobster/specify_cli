@@ -55,7 +55,7 @@ module Specify
 
       	it do
       	  expect(crab_root)
-      	    .to be_a(TaxonResponse)
+      	    .to be_a(Taxon)
       	    .and have_attributes(name: 'Cancer', rank: GENUS)
       	end
       end

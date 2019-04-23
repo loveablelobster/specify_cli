@@ -3,7 +3,7 @@
 #
 module Specify
   module CatalogueOfLife
-    RSpec.describe TaxonResponse do
+    RSpec.describe Taxon do
       let(:astacidae) { described_class.new(result :valid_family) }
       let(:astacus) { described_class.new(result :valid_genus) }
       let(:astacus_astacus) { described_class.new(result :valid_species) }
@@ -237,7 +237,7 @@ module Specify
           subject(:parent) { astacus_astacus.parent }
 
           it do
-            expect(parent).to be_a(TaxonResponse) &
+            expect(parent).to be_a(Taxon) &
               have_attributes(name: 'Astacus')
           end
         end
@@ -247,7 +247,7 @@ module Specify
           subject(:parent) { p_lucifugus.parent }
 
           it do
-            expect(parent).to be_a(TaxonResponse) &
+            expect(parent).to be_a(Taxon) &
               have_attributes(name: 'Procambarus')
           end
         end

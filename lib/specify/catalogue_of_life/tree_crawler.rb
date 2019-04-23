@@ -3,7 +3,7 @@
 module Specify
   module CatalogueOfLife
     class TreeCrawler
-      # A TaxonResponse
+      # A CatalogueOfLife::Taxon
       attr_reader :root
 
       # A TaxonRank that is the last taxonomic level that will be crawled.

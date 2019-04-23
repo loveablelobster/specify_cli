@@ -4,7 +4,7 @@ module Specify
   module CatalogueOfLife
     GENUS = TaxonRank.new(:genus)
 
-    # A TaxonRepsonse wraps a Faraday::Response to provide an interface for
+    # A Taxon wraps a Faraday::Response to provide an interface for
     # work with the TaxonEquivalent class.
     # The repsonses of the CatalogueOfLife of life service have different
     # sets of properties for valid names, synonyms, and suprageneric taxa.
@@ -40,8 +40,7 @@ module Specify
     # * :references
     # * :common_names
     # * :synonyms
-    # FIXME: rename -> Taxon
-    class TaxonResponse
+    class Taxon
       # Returns the full response body (Hash).
       attr_reader :full_response
 
@@ -67,8 +66,9 @@ module Specify
         full_response['author']
       end
 
-      # Returns an Array of TaxonResponse instances for all direct child taxa of
-      # +self+. Returns an empty Array if there are no direct child taxa.
+      # Returns an Array of CatalogueOfLife::Taxon instances for all direct
+      # child taxa of +self+. Returns an empty Array if there are no direct
+      # child taxa.
       def children
         return [] unless children?
 
@@ -83,10 +83,11 @@ module Specify
         full_response['child_taxa'] && !full_response['child_taxa'].empty?
       end
 
-      # Returns an orderd Array of TaxonResponse instances for each taxon in the
-      # ancestor chain (lineage) of self, starting with the highest rank (root
-      # of the CatalogueOfLife taxonomy; usually the kingdom). The immediate
-      # ancestor/parent taxon of +self+ will be the last element of the array.
+      # Returns an orderd Array of CatalogueOfLife::Taxon instances for each
+      # taxon in the ancestor chain (lineage) of self, starting with the highest
+      # rank (root of the CatalogueOfLife taxonomy; usually the kingdom). The
+      # immediate ancestor/parent taxon of +self+ will be the last element of
+      # the array.
       # There is currently a bug in CatalogueOfLife where subgenera are listed
       # in classifications but not searchable. The option <em>skip_subgenera<em>
       # (+true+ by default) allows to skip subgenera in the classification.
@@ -126,7 +127,7 @@ module Specify
         end
       end
 
-      # Returns a TaxonResponse for the direct parent taxon of +self+.
+      # Returns a CatalogueOfLife::Taxon for the direct parent taxon of +self+.
       # There is currently a bug in CatalogueOfLife where subgenera are listed
       # in classifications but not searchable. The option <em>skip_subgenera<em>
       # (+true+ by default) allows to skip subgenera in the classification.
@@ -157,7 +158,7 @@ module Specify
         full_response['classification'].empty?
       end
 
-      # Returns an array of TaxonResponse instances for synonyms listed in the
+      # Returns an array of CatalogueOfLife::Taxon instances for synonyms listed in the
       # full response of +self+ (given that +self+ is an accepted name).
       def synonyms
         return [] unless synonyms?

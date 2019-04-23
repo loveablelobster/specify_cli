@@ -1,9 +1,9 @@
 module Factories
   module CatalogueOfLife
-    module TaxonResponse
+    module Taxon
       def self.with(sym)
         result = Psych.load_file('spec/support/taxon_response.yaml').fetch sym
-        ::Specify::CatalogueOfLife::TaxonResponse.new result
+        ::Specify::CatalogueOfLife::Taxon.new result
       end
     end
   end

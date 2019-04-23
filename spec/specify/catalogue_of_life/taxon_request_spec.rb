@@ -82,7 +82,7 @@ module Specify
         context 'when request returns unambigous results' do
           subject { crayfish.taxon_response }
 
-          it { is_expected.to be_a TaxonResponse }
+          it { is_expected.to be_a Taxon }
         end
 
         context 'when request returns multiple results' do

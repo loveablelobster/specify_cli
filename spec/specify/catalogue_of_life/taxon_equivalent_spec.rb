@@ -6,37 +6,37 @@ module Specify
     RSpec.describe TaxonEquivalent do
       let :asaphida_eq do
         described_class.new(Factories::Model::Taxonomy.for_tests,
-          external: Factories::CatalogueOfLife::TaxonResponse.with(:asaphida))
+          external: Factories::CatalogueOfLife::Taxon.with(:asaphida))
       end
 
       let :asaphoidea_eq do
         described_class.new(Factories::Model::Taxonomy.for_tests,
-          external: Factories::CatalogueOfLife::TaxonResponse.with(:asaphoidea))
+          external: Factories::CatalogueOfLife::Taxon.with(:asaphoidea))
       end
 
       let :asaphidae_eq do
         described_class.new(Factories::Model::Taxonomy.for_tests,
-          external: Factories::CatalogueOfLife::TaxonResponse.with(:asaphidae))
+          external: Factories::CatalogueOfLife::Taxon.with(:asaphidae))
       end
 
       let :asaphus_eq do
         described_class.new(Factories::Model::Taxonomy.for_tests,
-          external: Factories::CatalogueOfLife::TaxonResponse.with(:asaphus))
+          external: Factories::CatalogueOfLife::Taxon.with(:asaphus))
       end
 
       let :asaphus_expansus_eq do
         described_class.new(Factories::Model::Taxonomy.for_tests,
-          external: Factories::CatalogueOfLife::TaxonResponse.with(:asaphus_expansus))
+          external: Factories::CatalogueOfLife::Taxon.with(:asaphus_expansus))
       end
 
       let :raymondaspis_eq do
         described_class.new(Factories::Model::Taxonomy.for_tests,
-          external: Factories::CatalogueOfLife::TaxonResponse.with(:raymondaspis))
+          external: Factories::CatalogueOfLife::Taxon.with(:raymondaspis))
       end
 
       let :animalia_eq do
         described_class.new(Factories::Model::Taxonomy.for_tests,
-          external: Factories::CatalogueOfLife::TaxonResponse.with(:root))
+          external: Factories::CatalogueOfLife::Taxon.with(:root))
       end
 
       describe '#ancestors' do

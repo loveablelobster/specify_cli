@@ -3,7 +3,7 @@
 module Specify
   module CatalogueOfLife
     # TaxonLineages hold an Array of TaxonEquivalent instances for the
-    # classification of a TaxonResponse.
+    # classification of a Taxon.
     class TaxonLineage
       # Returns an array of TaxonEquivalents ordered by #rank, starting with
       # the highest rank.

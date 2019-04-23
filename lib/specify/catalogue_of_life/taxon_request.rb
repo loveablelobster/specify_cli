@@ -91,7 +91,7 @@ module Specify
         @rank = TaxonRank.new(name)
       end
 
-      # Returns a CatalogueOfLife::TaxonResponse for the request.
+      # Returns a CatalogueOfLife::Taxon for the request.
       # Will raise a MultipleResultsError
       def taxon_response
         results = response&.body&.fetch('results') || get.body['results']
@@ -99,7 +99,7 @@ module Specify
 
         raise ResponseError::NOT_FOUND if results.empty?
 
-        TaxonResponse.new results.first
+        Taxon.new results.first
       end
 
       # Returns a String representation of +self+.
