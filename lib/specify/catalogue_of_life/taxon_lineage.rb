@@ -2,18 +2,18 @@
 
 module Specify
   module CatalogueOfLife
-    # TaxonLineages hold an Array of TaxonEquivalent instances for the
+    # TaxonLineages hold an Array of Equivalent instances for the
     # classification of a Taxon.
     class TaxonLineage
-      # Returns an array of TaxonEquivalents ordered by #rank, starting with
+      # Returns an array of Equivalents ordered by #rank, starting with
       # the highest rank.
       attr_reader :ancestors
 
-      # Returns the TaxonEquivalent in lineage that is persisted in the
+      # Returns the Equivalent in lineage that is persisted in the
       # database.
       attr_reader :known_ancestor
 
-      # Returns an array of TaxonEquivalents that are missing in the database.
+      # Returns an array of Equivalents that are missing in the database.
       attr_accessor :missing_ancestors
 
       def initialize(taxon_classification, taxonomy)
@@ -43,7 +43,7 @@ module Specify
       private
 
       def fetch_ancestors(taxon_classification, taxonomy)
-        taxon_classification.map { |t| TaxonEquivalent.new(taxonomy, external: t) }
+        taxon_classification.map { |t| Equivalent.new(taxonomy, external: t) }
                             .sort_by(&:rank)
       end
 

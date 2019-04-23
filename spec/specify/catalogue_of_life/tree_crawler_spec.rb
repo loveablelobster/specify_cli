@@ -41,7 +41,7 @@ module Specify
       describe '#crawl' do
         subject(:crawl_crayfish) do
           crayfish_crawler.crawl() do |child| # pass in second arg if possible
-            # iterate creating TaxonEquivalents
+            # iterate creating Equivalents
           end
         end
 

@@ -2,14 +2,14 @@
 
 module Specify
   module CatalogueOfLife
-    # A TaxonEquivalents is a logical link between identical taxonbomic concepts
+    # A Equivalents is a logical link between identical taxonbomic concepts
     # as they exist in an internal resource (the taxonomy of a databade) and an
     # external resource (a taxon authority web service). As such, it will have
     # a pair of corresponding concepts, and #iternal ( Specify::Model::Taxon),
     # and and #external (a Specify::CatalogueOfLife:;TaxonResponse).
-    # TaxonEquivalents can act as finder objects, where, if initialized with one
+    # Equivalents can act as finder objects, where, if initialized with one
     # of the corresponding concepts, they can find the other).
-    class TaxonEquivalent
+    class Equivalent
       # The external representation of the concept, i.e. the taxon in the
       # authotiy service (a Specify::CatalogueOfLife::TaxonResponse).
       attr_reader :external
@@ -87,7 +87,7 @@ module Specify
       end
 
       # Finds the taxon for +self+ in #taxonomy by _name_, _rank_, and
-      # optionally _parent_, if a TaxonEquivalent as passed in as the +parent+
+      # optionally _parent_, if a Equivalent as passed in as the +parent+
       # argument.
       def find_by_values(parent = nil)
         vals = { Name: external.name,
@@ -101,7 +101,7 @@ module Specify
 
       # Returns the closest ancestor known in #taxonomy.
       # Can be referenced if desired
-      # Access Model::Taxon through TaxonEquivalent#taxon
+      # Access Model::Taxon through Equivalent#taxon
       # If Taxon#root? for the CatalogueOfLife::Taxon stored in #external is
       # +true+ this will also return +false+.
       def known_ancestor
@@ -116,7 +116,7 @@ module Specify
         lineage.missing_ancestors
       end
 
-      # Returns the TaxonEquivalent for the immediate ancestor if it is known
+      # Returns the Equivalent for the immediate ancestor if it is known
       # in the database, otherwise returns +false+.
       def parent_taxon
         lineage.missing_ancestors.empty? ? lineage.known_ancestor : false
@@ -162,7 +162,7 @@ module Specify
 
       private
 
-      # Returns an Array of TaxonEquivalent instances for all ancestors in the
+      # Returns an Array of Equivalent instances for all ancestors in the
       # Taxon instances classification.
       def parse_lineage
         @lineage = TaxonLineage.new(external.classification, taxonomy)

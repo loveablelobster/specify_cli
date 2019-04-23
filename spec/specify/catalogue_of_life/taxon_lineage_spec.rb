@@ -33,7 +33,7 @@ module Specify
            an_object_having_attributes(name: 'Styginidae')]
         end
 
-        it { is_expected.to include an_instance_of TaxonEquivalent }
+        it { is_expected.to include an_instance_of Equivalent }
         it { is_expected.to match_array expected_classification }
       end
 

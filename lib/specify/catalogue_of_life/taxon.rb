@@ -5,7 +5,7 @@ module Specify
     GENUS = Rank.new(:genus)
 
     # A Taxon wraps a Faraday::Response to provide an interface for
-    # work with the TaxonEquivalent class.
+    # work with the Equivalent class.
     # The repsonses of the CatalogueOfLife of life service have different
     # sets of properties for valid names, synonyms, and suprageneric taxa.
     # Available properties in suprageneric taxa are:

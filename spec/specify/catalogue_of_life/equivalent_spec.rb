@@ -3,7 +3,7 @@
 #
 module Specify
   module CatalogueOfLife
-    RSpec.describe TaxonEquivalent do
+    RSpec.describe Equivalent do
       let :asaphida_eq do
         described_class.new(Factories::Model::Taxonomy.for_tests,
           external: Factories::CatalogueOfLife::Taxon.with(:asaphida))
@@ -44,17 +44,17 @@ module Specify
           subject { asaphus_eq.ancestors }
 
           let :contain_ancestors do
-            contain_exactly(an_instance_of(TaxonEquivalent) &
+            contain_exactly(an_instance_of(Equivalent) &
                             have_attributes(name: 'Asaphidae'),
-                            an_instance_of(TaxonEquivalent) &
+                            an_instance_of(Equivalent) &
                             have_attributes(name: 'Asaphoidea'),
-                            an_instance_of(TaxonEquivalent) &
+                            an_instance_of(Equivalent) &
                             have_attributes(name: 'Asaphida'),
-                            an_instance_of(TaxonEquivalent) &
+                            an_instance_of(Equivalent) &
                             have_attributes(name: 'Trilobita'),
-                            an_instance_of(TaxonEquivalent) &
+                            an_instance_of(Equivalent) &
                             have_attributes(name: 'Arthropoda'),
-                            an_instance_of(TaxonEquivalent) &
+                            an_instance_of(Equivalent) &
                             have_attributes(name: 'Animalia'))
           end
 
@@ -241,9 +241,9 @@ module Specify
 
         it do
           expect(missing)
-            .to include(an_instance_of(TaxonEquivalent) &
+            .to include(an_instance_of(Equivalent) &
                           have_attributes(name: 'Styginidae'),
-                        an_instance_of(TaxonEquivalent) &
+                        an_instance_of(Equivalent) &
                           have_attributes(name: 'Corynexochida'))
         end
       end

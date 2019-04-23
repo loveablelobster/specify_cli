@@ -24,7 +24,7 @@ module Specify
       end
 
       # TODO: options
-      # TODO: parent should be able to accept a TaxonEquivalent
+      # TODO: parent should be able to accept a Equivalent
       def crawl(parent = nil,
                 options = { crawl_synonyms: false, include_extinct: false },
                 &block)
