@@ -165,7 +165,7 @@ module Specify
       # Returns an Array of Equivalent instances for all ancestors in the
       # Taxon instances classification.
       def parse_lineage
-        @lineage = TaxonLineage.new(external.classification, taxonomy)
+        @lineage = Lineage.new(external.classification, taxonomy)
       end
     end
   end

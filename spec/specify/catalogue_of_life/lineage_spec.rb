@@ -3,7 +3,7 @@
 #
 module Specify
   module CatalogueOfLife
-    RSpec.describe TaxonLineage do
+    RSpec.describe Lineage do
       let :complete_lineage do
         response = Factories::CatalogueOfLife::Taxon
           .with :asaphus_expansus

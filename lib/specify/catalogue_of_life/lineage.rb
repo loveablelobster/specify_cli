@@ -2,9 +2,9 @@
 
 module Specify
   module CatalogueOfLife
-    # TaxonLineages hold an Array of Equivalent instances for the
+    # Lineages hold an Array of Equivalent instances for the
     # classification of a Taxon.
-    class TaxonLineage
+    class Lineage
       # Returns an array of Equivalents ordered by #rank, starting with
       # the highest rank.
       attr_reader :ancestors
