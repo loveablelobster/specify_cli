@@ -99,7 +99,7 @@ module Specify
             raise ResponseError::SERVICE_RELIABILITY
           end
 
-          Thread.new(anc) { TaxonRequest.by_id(anc['id']).taxon_response }
+          Thread.new(anc) { Request.by_id(anc['id']).taxon }
         end
         responses.compact.map(&:value)
       end
@@ -145,7 +145,7 @@ module Specify
 
         parent_id = direct_ancestor.fetch('id')
 
-        TaxonRequest.by_id(parent_id).taxon_response
+        Request.by_id(parent_id).taxon
       end
 
       # Returns true if +self+ is the root of the CatalogueOfLife classification
@@ -196,7 +196,7 @@ module Specify
 
       def fetch(key)
         responses = full_response[key].map do |req|
-          Thread.new(req) { TaxonRequest.by_id(req['id']).taxon_response }
+          Thread.new(req) { Request.by_id(req['id']).taxon }
         end
         responses.map(&:value)
       end

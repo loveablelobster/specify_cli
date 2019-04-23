@@ -3,7 +3,7 @@
 #
 module Specify
   module CatalogueOfLife
-    RSpec.describe TaxonRequest do
+    RSpec.describe Request do
       let :crayfish do
         described_class.new(:json) do |req|
           req.name = 'Astacus astacus'
@@ -78,15 +78,15 @@ module Specify
         end
       end
 
-      describe '#taxon_response' do
+      describe '#taxon' do
         context 'when request returns unambigous results' do
-          subject { crayfish.taxon_response }
+          subject { crayfish.taxon }
 
           it { is_expected.to be_a Taxon }
         end
 
         context 'when request returns multiple results' do
-          subject(:ambiguous_results) { ambiguous_request.taxon_response }
+          subject(:ambiguous_results) { ambiguous_request.taxon }
 
           it do
             expect { ambiguous_results }

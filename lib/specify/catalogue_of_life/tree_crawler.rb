@@ -11,14 +11,14 @@ module Specify
 
       def initialize(root = { id: nil, root_name: nil, root_rank: nil })
         request = if root[:id]
-                    TaxonRequest.by_id root[:id]
+                    Request.by_id root[:id]
                   else
-                    TaxonRequest.new do |req|
+                    Request.new do |req|
                       req.name = root[:name]
                       req.rank = root[:rank]
                     end
                   end
-        @root = request.taxon_response
+        @root = request.taxon
         @stop_rank = nil
         yield(self) if block_given?
       end

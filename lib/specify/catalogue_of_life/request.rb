@@ -2,8 +2,8 @@
 
 module Specify
   module CatalogueOfLife
-    # TaxonRequests represent a HTTP GET request to the service.
-    class TaxonRequest
+    # Requests represent a HTTP GET request to the service.
+    class Request
       include ERB::Util
 
       # The format for the response, +:json+ or +:xml+.
@@ -43,7 +43,7 @@ module Specify
         end
       end
 
-      # Returns a new TaxonRequest.
+      # Returns a new Request.
       def initialize(content_type = :json)
         @content_type = content_type
         @id = nil
@@ -93,7 +93,7 @@ module Specify
 
       # Returns a CatalogueOfLife::Taxon for the request.
       # Will raise a MultipleResultsError
-      def taxon_response
+      def taxon
         results = response&.body&.fetch('results') || get.body['results']
         raise ResponseError::AMBIGUOUS_RESULTS if results.size > 1
 
