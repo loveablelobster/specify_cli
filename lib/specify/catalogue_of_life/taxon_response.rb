@@ -2,7 +2,7 @@
 
 module Specify
   module CatalogueOfLife
-    GENUS = TaxonRank.new(:genus)
+    GENUS = Specify::TaxonRank.new(:genus)
 
     # A TaxonRepsonse wraps a Faraday::Response to provide an interface for
     # work with the TaxonEquivalent class.

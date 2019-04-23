@@ -21,14 +21,18 @@ module Specify
       many_to_one :parent, class: self,
                   key: :ParentItemID
 
+      def inspect
+        "#<Specify::Model::Rank @name=#{name}"
+      end
+
       # Returns a String with the name of the formal Linnean classification
       # rank.
       def name
         self[:Name]
       end
 
-      def inspect
-        "#<Specify::Model::Rank @name=#{name}"
+      def rank
+        TaxonRank.new name
       end
     end
   end

@@ -49,6 +49,10 @@ module Specify
       def name
         self[:Name]
       end
+
+      def taxon_rank
+        rank.rank
+      end
     end
   end
 end

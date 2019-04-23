@@ -6,37 +6,37 @@ module Specify
     RSpec.describe TaxonEquivalent do
       let :asaphida_eq do
         described_class.new(Factories::Model::Taxonomy.for_tests,
-          Factories::CatalogueOfLife::TaxonResponse.with(:asaphida))
+          external: Factories::CatalogueOfLife::TaxonResponse.with(:asaphida))
       end
 
       let :asaphoidea_eq do
         described_class.new(Factories::Model::Taxonomy.for_tests,
-          Factories::CatalogueOfLife::TaxonResponse.with(:asaphoidea))
+          external: Factories::CatalogueOfLife::TaxonResponse.with(:asaphoidea))
       end
 
       let :asaphidae_eq do
         described_class.new(Factories::Model::Taxonomy.for_tests,
-          Factories::CatalogueOfLife::TaxonResponse.with(:asaphidae))
+          external: Factories::CatalogueOfLife::TaxonResponse.with(:asaphidae))
       end
 
       let :asaphus_eq do
         described_class.new(Factories::Model::Taxonomy.for_tests,
-          Factories::CatalogueOfLife::TaxonResponse.with(:asaphus))
+          external: Factories::CatalogueOfLife::TaxonResponse.with(:asaphus))
       end
 
       let :asaphus_expansus_eq do
         described_class.new(Factories::Model::Taxonomy.for_tests,
-          Factories::CatalogueOfLife::TaxonResponse.with(:asaphus_expansus))
+          external: Factories::CatalogueOfLife::TaxonResponse.with(:asaphus_expansus))
       end
 
       let :raymondaspis_eq do
         described_class.new(Factories::Model::Taxonomy.for_tests,
-          Factories::CatalogueOfLife::TaxonResponse.with(:raymondaspis))
+          external: Factories::CatalogueOfLife::TaxonResponse.with(:raymondaspis))
       end
 
       let :animalia_eq do
         described_class.new(Factories::Model::Taxonomy.for_tests,
-          Factories::CatalogueOfLife::TaxonResponse.with(:root))
+          external: Factories::CatalogueOfLife::TaxonResponse.with(:root))
       end
 
       describe '#ancestors' do
@@ -84,7 +84,7 @@ module Specify
 
           it do
             expect { create_a_expansus }
-              .to change(asaphus_expansus_eq, :specify_taxon)
+              .to change(asaphus_expansus_eq, :internal)
               .from(be_nil)
               .to(an_instance_of(Model::Taxon) &
                   have_attributes(Name: 'expansus',
@@ -110,6 +110,8 @@ module Specify
           end
         end
       end
+
+      describe '#external'
 
       describe '#find' do
 
@@ -159,6 +161,8 @@ module Specify
         context 'when multiple matches are found'
       end
 
+      describe '#internal'
+
       describe '#known_ancestor' do
         context 'when root' do
           subject(:root) { animalia_eq.known_ancestor }
@@ -175,7 +179,7 @@ module Specify
           end
 
           it do
-            expect(match.specify_taxon).to be_a(Model::Taxon) &
+            expect(match.internal).to be_a(Model::Taxon) &
               have_attributes(Name: 'Asaphus',
                               Source: URL + API_ROUTE,
                               TaxonomicSerialNumber: '67b8da25464f297cf'\
@@ -193,7 +197,7 @@ module Specify
           end
 
           it do
-            expect(match.specify_taxon).to be_a(Model::Taxon) &
+            expect(match.internal).to be_a(Model::Taxon) &
               have_attributes(Name: 'Asaphoidea',
                               Source: nil,
                               TaxonomicSerialNumber: nil)
@@ -209,7 +213,7 @@ module Specify
           end
 
           it do
-            expect(match.specify_taxon).to be_a(Model::Taxon) &
+            expect(match.internal).to be_a(Model::Taxon) &
               have_attributes(Name: 'Trilobita',
                               Source: nil,
                               TaxonomicSerialNumber: nil)
@@ -230,6 +234,8 @@ module Specify
                           have_attributes(name: 'Corynexochida'))
         end
       end
+
+      describe '#name'
 
       describe '#parent_taxon' do
         context 'when immediate ancestor is in the database' do
@@ -258,10 +264,10 @@ module Specify
 
         it  do
           expect { add_reference }
-            .to change { asaphoidea_eq.specify_taxon.Source }
+            .to change { asaphoidea_eq.internal.Source }
             .from(be_nil)
             .to(URL + API_ROUTE)
-            .and change { asaphoidea_eq.specify_taxon.TaxonomicSerialNumber }
+            .and change { asaphoidea_eq.internal.TaxonomicSerialNumber }
             .from(be_nil)
             .to('f3f01b65054a3e887d04554962e49097')
         end

@@ -43,7 +43,7 @@ module Specify
       private
 
       def fetch_ancestors(taxon_classification, taxonomy)
-        taxon_classification.map { |t| TaxonEquivalent.new(taxonomy, t) }
+        taxon_classification.map { |t| TaxonEquivalent.new(taxonomy, external: t) }
                             .sort_by(&:rank)
       end
 
