@@ -56,7 +56,16 @@ module Specify
         end
       end
 
-      describe '#classification'
+      describe '#classification' do
+        context 'when it is not the root' do
+          subject { taxon.classification }
+
+          it { subject.each { |t| p t.Name } }
+        end
+
+        context 'when is the root'
+      end
+
       describe '#extinct?'
       describe '#name'
       describe '#root?'

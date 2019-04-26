@@ -47,7 +47,7 @@ module Factories
 
       def self.family
         Taxon.order
-             .add_child Name: 'Agnostida',
+             .add_child Name: 'Agnostidae',
                         rank: Rank.family,
                         Author: 'McCoy, 1849',
                         IsAccepted: true,

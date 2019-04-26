@@ -53,9 +53,12 @@ module Specify
         !children.empty?
       end
 
+      # Returns an ordered Array of Taxon instances in the ancestor lineage of
+      # self starting with the highest rank.
       def classification
-        # FIXME: Should return an ordered Array of Taxon instances starting with
-        #        the highest rank
+        return [] unless parent
+
+        parent.classification << parent
       end
 
       def extinct?
