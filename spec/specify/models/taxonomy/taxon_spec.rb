@@ -14,6 +14,11 @@ module Specify
                                parent: Factories::Model::Taxon.family
       end
 
+      let :root_taxon do
+        described_class.first Name: 'Life',
+                              rank: Factories::Model::Rank.life
+      end
+
       describe '#accepted?' do
         subject { taxon.accepted? }
 
@@ -58,17 +63,66 @@ module Specify
 
       describe '#classification' do
         context 'when it is not the root' do
-          subject { taxon.classification }
+          subject(:classification) { taxon.classification }
 
-          it { subject.each { |t| p t.Name } }
+          let :be_lineage do
+            include(an_instance_of(described_class) &
+              have_attributes(Name: 'Life', Rank: 'Life'))
+          end
+
+          it do
+            expect(classification)
+              .to include(an_instance_of(described_class) &
+                          have_attributes(Name: 'Life',
+                                          rank: Factories::Model::Rank.life),
+                          an_instance_of(described_class) &
+                          have_attributes(Name: 'Animalia',
+                                          rank: Factories::Model::Rank.kingdom),
+                          an_instance_of(described_class) &
+                          have_attributes(Name: 'Arthropoda',
+                                          rank: Factories::Model::Rank.phylum),
+                          an_instance_of(described_class) &
+                          have_attributes(Name: 'Trilobita',
+                                          rank: Factories::Model::Rank.klass),
+                          an_instance_of(described_class) &
+                          have_attributes(Name: 'Agnostida',
+                                          rank: Factories::Model::Rank.order),
+                          an_instance_of(described_class) &
+                          have_attributes(Name: 'Agnostidae',
+                                          rank: Factories::Model::Rank.family))
+          end
         end
 
-        context 'when is the root'
+        context 'when it is the root' do
+          subject { root_taxon.classification }
+
+          it { is_expected.to be_empty }
+        end
       end
 
-      describe '#extinct?'
-      describe '#name'
-      describe '#root?'
+      describe '#extinct?' do
+        pending 'appropriate column missing in Specify schema'
+      end
+
+      describe '#name' do
+        subject { taxon.name }
+
+        it { is_expected.to eq 'Agnostus' }
+      end
+
+      describe '#root?' do
+        context 'when it is the root' do
+          subject { root_taxon.root? }
+
+          it { is_expected.to be_truthy }
+        end
+
+        context 'when it is not the root' do
+          subject { taxon.root? }
+
+          it { is_expected.to be_falsey }
+        end
+      end
 
       describe '#synonyms?'  do
         subject { taxon.synonyms? }
@@ -85,8 +139,6 @@ module Specify
           it { is_expected.to be_falsey }
         end
       end
-
-      describe '#to_s'
     end
   end
 end

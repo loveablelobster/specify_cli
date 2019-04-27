@@ -40,10 +40,12 @@ module Specify
         super
       end
 
+      # Returns true if +self+ is an accepted name.
       def accepted?
         self[:IsAccepted]
       end
 
+      # Returns the authorship information (as a String) for the taxon.
       def author
         self[:Author]
       end

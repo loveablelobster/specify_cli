@@ -15,6 +15,22 @@ module Factories
       end
     end
     module Rank
+      def self.life
+        ::Specify::Model::Rank.first Name: 'Life'
+      end
+
+      def self.kingdom
+        ::Specify::Model::Rank.first Name: 'Kingdom'
+      end
+
+      def self.phylum
+        ::Specify::Model::Rank.first Name: 'Phylum'
+      end
+
+      def self.klass
+        ::Specify::Model::Rank.first Name: 'Class'
+      end
+
       def self.order
         ::Specify::Model::Rank.first Name: 'Order'
       end

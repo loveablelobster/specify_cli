@@ -180,6 +180,12 @@ module Specify
             )
           end
         end
+
+        context 'when it is the root' do
+          subject { animalia.classification }
+
+          it { is_expected.to be_empty }
+        end
       end
 
       describe '#extinct?' do
