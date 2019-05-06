@@ -61,6 +61,8 @@ module Specify
         full_response['name_status'] == 'accepted name'
       end
 
+      def accepted_name; end
+
       # Returns the author name for the taxon according to CatalogueOfLife.
       def author
         full_response['author']
@@ -102,6 +104,18 @@ module Specify
           Thread.new(anc) { Request.by_id(anc['id']).taxon }
         end
         responses.compact.map(&:value)
+      end
+
+      # Returns an Array of Hashes with common names for the txaon. Each hash
+      # will have the keys +:name+, +:language+, +:country+, +:references+,
+      # where references will hold an array of hashes, each with the keys:
+      # +:author+, +:year+, +:title+, +source+.
+      def common_names
+        full_response.fetch('common_names', []).map do |entry|
+          entry['references'] = entry['references']
+            .map { |ref| ref.transform_keys(&:to_sym) }
+          entry.transform_keys(&:to_sym)
+        end
       end
 
       # Returns +true+ if +self+ is extinct, +false+ otherwise.

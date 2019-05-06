@@ -188,6 +188,30 @@ module Specify
         end
       end
 
+      describe '#common _name' do
+        context '#when it has common names' do
+          subject(:vernacular) { cancer_pagurus.common_names }
+
+          it do
+            expect(vernacular)
+              .to include a_hash_including(name: 'grote noordzeekrab',
+                                           language: 'Dutch',
+                                           country: nil,
+                                           references: an_instance_of(Array)),
+                          a_hash_including(name: 'taskekrabbe',
+                                           language: 'Danish',
+                                           country: nil,
+                                           references: an_instance_of(Array))
+          end
+        end
+
+        context '#when it does not have common names' do
+          subject { astacus_astacus.common_names }
+
+          it { is_expected.to be_empty }
+        end
+      end
+
       describe '#extinct?' do
         context 'when it is extant)' do
           subject { astacus_astacus.extinct? }
