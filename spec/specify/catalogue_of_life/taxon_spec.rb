@@ -57,6 +57,20 @@ module Specify
         end
       end
 
+      describe '#accepted_name' do
+        context 'when it is not accepted' do
+          subject { cancer_fimbriatus.accepted_name }
+
+          it { is_expected.to have_attributes name: 'pagurus' }
+        end
+
+        context 'when it is accepted' do
+          subject { cancer_pagurus.accepted_name }
+
+          it { is_expected.to be_nil }
+        end
+      end
+
       describe '#author' do
         context 'when the taxon response has an author' do
           subject { cancer_pagurus.author }

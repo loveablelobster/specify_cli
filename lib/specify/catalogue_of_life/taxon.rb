@@ -61,7 +61,14 @@ module Specify
         full_response['name_status'] == 'accepted name'
       end
 
-      def accepted_name; end
+      # Returns a CatalogueOfLife::Taxon for the accepted name if +self+ is a
+      # synonym (not accepted).
+      def accepted_name
+        accepted_id = full_response['accepted_name']&.fetch('id', nil)
+        return unless accepted_id
+
+        Request.by_id(accepted_id).taxon
+      end
 
       # Returns the author name for the taxon according to CatalogueOfLife.
       def author
