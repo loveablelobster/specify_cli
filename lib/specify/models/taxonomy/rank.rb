@@ -23,7 +23,7 @@ module Specify
                   key: :ParentItemID
 
       def <=>(other)
-        self[:RankID] <=> other[:RankID]
+        -(self[:RankID] <=> other[:RankID])
       end
 
       # Where rank class could be Specify::CatalogueOfLife::Rank
