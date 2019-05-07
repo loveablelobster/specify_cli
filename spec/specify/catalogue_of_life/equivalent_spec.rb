@@ -44,9 +44,19 @@ module Specify
           Factories::CatalogueOfLife::Taxon.with(:root))
       end
 
+      let :asaphoidea_int do
+        described_class.new(Factories::Model::Taxonomy.for_tests,
+                            Specify::Model::Taxon.first(name: 'Asaphoidea'))
+      end
+
       let :trilobita_int do
         described_class.new(Factories::Model::Taxonomy.for_tests,
                             Specify::Model::Taxon.first(name: 'Trilobita'))
+      end
+
+      let :life_int do
+        described_class.new(Factories::Model::Taxonomy.for_tests,
+                            Specify::Model::Taxon.first(name: 'Life'))
       end
 
       describe '#ancestors' do
@@ -86,20 +96,6 @@ module Specify
           end
 
           it { is_expected.to contain_ancestors }
-        end
-      end
-
-      describe '#can_mutate?' do
-        context 'when initialized with an external taxon' do
-          subject { asaphida_ext.can_mutate? }
-
-          it { is_expected.to be_truthy }
-        end
-
-        context 'when initialized with an internal taxon' do
-          subject { trilobita_int.can_mutate? }
-
-          it { is_expected.to be_falsey }
         end
       end
 
@@ -428,13 +424,14 @@ module Specify
       end
 
       describe '#known_ancestor' do
-        context 'when root' do
+        context 'when initialized with an external taxon which is root' do
           subject(:root) { animalia_ext.known_ancestor }
 
           it { is_expected.to be_falsey }
         end
 
-        context 'when below root and immediate ancestor is found by id' do
+        context 'when initialized with an external taxon which is below root'\
+                ' and immediate ancestor is found by id' do
           subject(:match) { asaphus_expansus_ext.known_ancestor }
 
           it do
@@ -451,8 +448,8 @@ module Specify
           end
         end
 
-        context 'when below root and immediate ancestor is found by'\
-                ' name, rank, parent' do
+        context 'when initialized with an external taxon which is below root'\
+                ' and immediate ancestor is found by name, rank, parent' do
           subject(:match) { asaphidae_ext.known_ancestor }
 
           it do
@@ -468,7 +465,8 @@ module Specify
           end
         end
 
-        context 'when below root and immediate ancestor is not found' do
+        context 'when initialized with an external taxon which is below root'\
+                'and immediate ancestor is not found' do
           subject(:match) { raymondaspis_ext.known_ancestor }
 
           it do
@@ -484,51 +482,133 @@ module Specify
           end
         end
 
-        context 'when below root and no ancestor is found'
+        context 'when initialized with an external taxon which is below root'\
+                'and no ancestor is found' do
+          it 'should raise error'
+                end
+
+        context 'when initialized with an internal taxon which is root' do
+          subject(:root) { life_int.known_ancestor }
+
+          it { is_expected.to be_falsey }
+        end
+
+        context 'when initialized with an internal taxon which is below root'\
+                ' and immediate ancestor is found by id' do
+          subject(:match) { asaphoidea_int.known_ancestor }
+
+          it do
+            expect(match).to be_a(described_class) &
+              have_attributes(name: 'Asaphida')
+          end
+
+          it do
+            expect(match.equivalent).to be_a(CatalogueOfLife::Taxon) &
+              have_attributes(name: 'Asaphida',
+                              id: '5ac1330933c62d7d617a8d4a80dcecf3')
+          end
+        end
+
+        context 'when initialized with an internal taxon which is below root'\
+                ' and immediate ancestor is found by name, rank, parent' do
+          subject(:match) { asaphida_int.known_ancestor }
+
+          it do
+            expect(match).to be_a(described_class) &
+              have_attributes(name: 'Trilobita')
+          end
+
+          it do
+            expect(match.equivalent).to be_a(CatalogueOfLife::Taxon) &
+              have_attributes(name: 'Trilobita')
+          end
+        end
+
+        context 'when initialized with an external taxon which is below root'\
+                'and immediate ancestor is not found' do
+          it 'should return the last knonw ancestor'
+        end
+
+        context 'when initialized with an internal taxon which is below root'\
+                'and no ancestor is found' do
+          it 'should raise error'
+        end
       end
 
       describe '#lineage' do
         context 'when initialized with an external taxon' do
           subject { asaphus_ext.lineage }
 
-          it { is_expected.to be_a Lineage}
+          it { is_expected.to be_a Lineage }
         end
 
         context 'when initialized with an internal taxon' do
-          subject(:trilobita) do
-            described_class.new Factories::Model::Taxonomy.for_tests,
-                                Specify::Model::Taxon.first(name: 'Trilobita')
-          end
+          subject { trilobita_int.lineage }
 
-          it { }
+          it { is_expected.to be_a Lineage }
         end
       end
 
       describe '#missing_ancestors' do
-        subject(:missing) { raymondaspis_ext.missing_ancestors }
+        context 'when initialized with an external taxon' do
+          subject(:missing) { raymondaspis_ext.missing_ancestors }
 
-        it do
-          expect(missing)
-            .to include(an_instance_of(Equivalent) &
-                          have_attributes(name: 'Styginidae'),
-                        an_instance_of(Equivalent) &
-                          have_attributes(name: 'Corynexochida'))
+          it do
+            expect(missing)
+              .to include(an_instance_of(Equivalent) &
+                            have_attributes(name: 'Styginidae'),
+                          an_instance_of(Equivalent) &
+                            have_attributes(name: 'Corynexochida'))
+          end
+        end
+
+        context 'when initialized with an internal taxon' do
+          it 'should be a list of missing ancestors'
+        end
+      end
+
+      describe '#mutable?' do
+        context 'when initialized with an external taxon' do
+          subject { asaphida_ext.mutable? }
+
+          it { is_expected.to be_truthy }
+        end
+
+        context 'when initialized with an internal taxon' do
+          subject { trilobita_int.mutable? }
+
+          it { is_expected.to be_falsey }
         end
       end
 
       describe '#name'
 
       describe '#parent_taxon' do
-        context 'when immediate ancestor is in the database' do
+        context 'when initialized with an external taxon and immediate'\
+                ' ancestor is known' do
           subject { asaphus_expansus_ext.parent_taxon }
 
           it { is_expected.to be_a described_class }
         end
 
-        context 'when immediate ancestor is not in the database' do
+        context 'when initialized with an external taxon and immediate'\
+                'ancestor is not known' do
           subject { raymondaspis_ext.parent_taxon }
 
           it { is_expected.to be_falsey }
+        end
+
+        context 'when initialized with an internal taxon and immediate'\
+                ' ancestor is known' do
+          subject { asaphoidea_int.parent_taxon }
+
+          it { is_expected.to be_a(described_class) & have_attributes(name: 'Asaphida')}
+        end
+
+        context 'when initialized with an internal taxon and immediate'\
+                'ancestor is not known' do
+
+          it 'should return false'
         end
       end
 

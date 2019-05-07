@@ -49,16 +49,10 @@ module Specify
         @referenced = false
       end
 
-      # Returns an ordered Array of Equivalent instances in the ancestor lineage
-      # from the highest available to the most specific rank.
+      # Returns an Array of Equivalent instances in the ancestor lineage
+      # ordered by #rank (descending).
       def ancestors
         lineage.ancestors
-      end
-
-      # Returns +true+ if there is write access to the #equivalent (it is an
-      # internal resource).
-      def can_mutate?
-        equivalent == internal
       end
 
       # Creates a Model::Taxon for #equivalent if #equivalent is mutable
@@ -67,7 +61,7 @@ module Specify
       # is set to +true+, any taxa in missing in the classification of #taxon in
       # the database taxonomy will be created.
       def create(parent = nil, fill_lineage: false)
-        raise 'can\'t mutate Catalogue of life' unless can_mutate?
+        raise 'can\'t mutate Catalogue of life' unless mutable?
 
         parent ||= parent_taxon
         if parent
@@ -116,29 +110,41 @@ module Specify
         OpenStruct.new(taxon: taxon.id, equivalent: equivalent&.id)
       end
 
+      # Returns the internal concept for the taxon, i.e. the Model::Taxon.
       def internal
         taxon.is_a?(Model::Taxon) ? taxon : equivalent
       end
 
-      # Returns the closest ancestor known in #taxonomy.
-      # Can be referenced if desired
-      # Access Model::Taxon through Equivalent#taxon
+      # Returns an Equivalent that is the closest ancestor of #taxon known in
+      # other of the match; if #taxon is a CatalogueOfLife::Taxon, it would be
+      # the closest known ancestor from the Model::Taxon instances in #taxonomy.
+      # Can be referenced if desired.
       # If Taxon#root? for the CatalogueOfLife::Taxon stored in #taxon is
       # +true+ this will also return +false+.
       def known_ancestor
         lineage.known_ancestor
       end
 
+      # Returns a CatalogueOfLife::Lineage with all Taxon instances in from
+      # the direct ancestor of +self+ to the root of the classification.
       def lineage
         @lineage || parse_lineage
       end
 
+      # Returns an Array of Equivalent instances, ordered by #rank (ascending),
+      # whose #equivalent attributes have not been found.
       def missing_ancestors
         lineage.missing_ancestors
       end
 
-      # Returns the Equivalent for the immediate ancestor if it is known
-      # in the database, otherwise returns +false+.
+      # Returns +true+ if there is write access to the #equivalent (it is an
+      # internal resource).
+      def mutable?
+        equivalent == internal
+      end
+
+      # Returns the Equivalent for the immediate ancestor if it is known,
+      # otherwise returns +false+.
       def parent_taxon
         lineage.missing_ancestors.empty? ? lineage.known_ancestor : false
       end
@@ -148,9 +154,9 @@ module Specify
       # FIXME: any methods that mutate data won't work if equivalent is the
       # taxon service.
       def reference!
-        return if referenced?
+        raise 'can\'t mutate Catalogue of life' unless mutable?
 
-        return unless @equivalent
+        return if referenced? || !@equivalent
 
         @equivalent.TaxonomicSerialNumber = taxon.id
         @equivalent.Source = URL + API_ROUTE
@@ -200,8 +206,8 @@ module Specify
                 .first(Source: URL + API_ROUTE, TaxonomicSerialNumber: taxon.id)
       end
 
-      def col_find_by_values(parent = nil)
-        col = Request.new() do |req|
+      def col_find_by_values(_ = nil)
+        col = Request.new do |req|
           req.name = name
           req.rank = rank.equivalent.name
           # FIXME: Does CoL support searching in taxon?
