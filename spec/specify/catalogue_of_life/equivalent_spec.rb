@@ -405,7 +405,27 @@ module Specify
         end
       end
 
-      describe '#internal'
+      describe '#internal' do
+        context 'when intitialized with an internal taxon' do
+          subject { asaphida_int.internal }
+
+          it { is_expected.to be_a Model::Taxon }
+        end
+
+        context 'when intitialized with an external taxon' do
+          subject { asaphida_ext.internal}
+
+          it { is_expected.to be_nil }
+        end
+
+        context 'when intitialized with an external taxon that is found' do
+          subject { asaphida_ext.internal}
+
+          before { asaphida_ext.find }
+
+          it { is_expected.to be_a Model::Taxon }
+        end
+      end
 
       describe '#known_ancestor' do
         context 'when root' do
