@@ -11,26 +11,33 @@ module Specify
     # Equivalents can act as finder objects, where, if initialized with one
     # of the corresponding concepts, they can find the other).
     class Equivalent
-      # Returns a String with the name of the taxon (common to both the
-      # extarnal and internal).
+      # The taxon that +self+ has found (or created); if +self+ has been
+      # initialized with a Model::Taxon representation, then this will be a
+      # CatalogueOfLife::Taxon. If +self+ has been initialized with a
+      # CatalogueOfLife::Taxon, this will be a Model::Taxon.
+      attr_reader :equivalent
+
+      # Tthe name (a String) of the taxon (common to both #taxon and
+      # #equivalent).
       attr_reader :name
 
-      # Returns the rank for either the external or internal representation
-      # of the concept. This will be a Specify::CatalogueOfLife::Rank for
-      # the external representation, a Specify::Model::Rank for the internal
-      # representation.
+      # The rank common to both #taxon and #equivalent. This will be a
+      # CatalogueOfLife::Rank for the external representation, a Model::Rank
+      # for the internal representation.
       attr_reader :rank
 
+      # The taxon with which +self+ has been initialized. If this is a
+      # Model::Taxon, then #equivalent will be a CatalogueOfLife::Taxon
+      # that +self+ will try to find. If it is CatalogueOfLife::Taxon, then
+      # +self+ can find, create, and update a Model::Taxon for #equivalent.
       attr_reader :taxon
-
-      attr_reader :equivalent
 
       # The Specify::Model::Taxonomy.
       attr_reader :taxonomy
 
       # Returns a new instance.
-      # +taxonomy+ is a Specify::Model::Taxonomy
-      # +response+ is a Specify::CatalogueOfLife::TaxonResponse
+      # +taxonomy+ is a Model::Taxonomy
+      # +taxon+ is a CatalogueOfLife::Taxon or Model::Taxon.
       def initialize(taxonomy, taxon)
         @taxonomy = taxonomy
         @taxon = taxon
@@ -41,12 +48,40 @@ module Specify
         @referenced = false
       end
 
+      # Returns an ordered Array of Equivalent instances in the ancestor lineage
+      # from the highest available to the most specific rank.
       def ancestors
         lineage.ancestors
       end
 
-      def external; end
-      def internal; end
+      # Returns +true+ if there is write access to the #equivalent (it is an
+      # internal resource).
+      def can_mutate?
+        equivalent == internal
+      end
+
+      # Creates a Model::Taxon for #equivalent if #equivalent is mutable
+      # (#taxon is external). If _parent_ is passed, #equivalent will be created
+      # as a child in it. If <em>fill_lineage</em> is set to +true+, any taxa
+      # in missing in the classification of #taxon in the database taxonomy
+      # will be created.
+      def create(parent = nil, fill_lineage: false)
+        raise 'can\'t mutate Catalogue of life' unless can_mutate?
+
+        parent ||= parent_taxon
+        if parent
+          @equivalent = parent.equivalent.add_child to_model_attributes
+        elsif fill_lineage
+          @equivalent = lineage.create.last.add_child to_model_attributes
+        else
+          # TODO: consolidate into error constants
+          raise 'Immidiate ancestor missing'
+        end
+      end
+
+      def external
+        taxon.is_a?(CatalogueOfLife::Taxon) ? equivalent : taxon
+      end
 
       # Returns an OpenStruct with the IDs for the #taxon +self+ has been
       # initialized with and the #equivalent.
@@ -54,19 +89,8 @@ module Specify
         OpenStruct.new(taxon: taxon.id, equivalent: equivalent&.id)
       end
 
-      # If _parent_ is passed, will create in the parent
-      def create(parent = nil, fill_lineage: false)
-        parent ||= parent_taxon
-        if parent
-          @equivalent = parent.equivalent.add_child to_model_attributes
-        elsif fill_lineage
-          # fill the lineage
-        else
-          # TODO: consolidate into error constants
-          raise 'Immidiate ancestor missing'
-        end
-
-        # taxonomy.add_name(vals)
+      def internal
+        taxon.is_a?(Model::Taxon) ? taxon : equivalent
       end
 
       # Finds a taxon in #taxonomy.

@@ -56,7 +56,7 @@ module Specify
       end
 
       # Returns an ordered Array of Taxon instances in the ancestor lineage of
-      # self starting with the highest rank.
+      # +self+ starting with the highest rank.
       def classification
         return [] unless parent
 

@@ -4,44 +4,49 @@
 module Specify
   module CatalogueOfLife
     RSpec.describe Equivalent do
-      let :asaphida_eq do
+      let :asaphida_ext do
         described_class.new(Factories::Model::Taxonomy.for_tests,
           Factories::CatalogueOfLife::Taxon.with(:asaphida))
       end
 
-      let :asaphoidea_eq do
+      let :asaphoidea_ext do
         described_class.new(Factories::Model::Taxonomy.for_tests,
           Factories::CatalogueOfLife::Taxon.with(:asaphoidea))
       end
 
-      let :asaphidae_eq do
+      let :asaphidae_ext do
         described_class.new(Factories::Model::Taxonomy.for_tests,
           Factories::CatalogueOfLife::Taxon.with(:asaphidae))
       end
 
-      let :asaphus_eq do
+      let :asaphus_ext do
         described_class.new(Factories::Model::Taxonomy.for_tests,
           Factories::CatalogueOfLife::Taxon.with(:asaphus))
       end
 
-      let :asaphus_expansus_eq do
+      let :asaphus_expansus_ext do
         described_class.new(Factories::Model::Taxonomy.for_tests,
           Factories::CatalogueOfLife::Taxon.with(:asaphus_expansus))
       end
 
-      let :raymondaspis_eq do
+      let :raymondaspis_ext do
         described_class.new(Factories::Model::Taxonomy.for_tests,
           Factories::CatalogueOfLife::Taxon.with(:raymondaspis))
       end
 
-      let :animalia_eq do
+      let :animalia_ext do
         described_class.new(Factories::Model::Taxonomy.for_tests,
           Factories::CatalogueOfLife::Taxon.with(:root))
       end
 
+      let :trilobita_int do
+        described_class.new(Factories::Model::Taxonomy.for_tests,
+                            Specify::Model::Taxon.first(name: 'Trilobita'))
+      end
+
       describe '#ancestors' do
         context 'when initialized with an external taxon' do
-          subject { asaphus_eq.ancestors }
+          subject { asaphus_ext.ancestors }
 
           let :contain_ancestors do
             contain_exactly(an_instance_of(Equivalent) &
@@ -63,86 +68,99 @@ module Specify
 
         context 'when initialized with an internal taxon' do
           subject(:trilobita) do
-            described_class.new(Factories::Model::Taxonomy.for_tests,
-                                Specify::Model::Taxon.first(name: 'Trilobita'))
-                           .ancestors
+            trilobita_int.ancestors
           end
 
           let :contain_ancestors do
             include(an_instance_of(Equivalent) &
-                            have_attributes(name: 'Asaphidae'),
-                            an_instance_of(Equivalent) &
-                            have_attributes(name: 'Asaphoidea'),
-                            an_instance_of(Equivalent) &
-                            have_attributes(name: 'Asaphida'),
-                            an_instance_of(Equivalent) &
-                            have_attributes(name: 'Trilobita'),
-                            an_instance_of(Equivalent) &
-                            have_attributes(name: 'Arthropoda'),
-                            an_instance_of(Equivalent) &
-                            have_attributes(name: 'Animalia'),
-                            an_instance_of(Equivalent) &
-                            have_attributes(name: 'Life'))
+                      have_attributes(name: 'Arthropoda'),
+                      an_instance_of(Equivalent) &
+                      have_attributes(name: 'Animalia'),
+                      an_instance_of(Equivalent) &
+                      have_attributes(name: 'Life'))
           end
 
           it { is_expected.to contain_ancestors }
         end
       end
 
-      describe '#id' do
-        subject(:ids) { asaphida_eq.id }
+      describe '#can_mutate?' do
+        context 'when initialized with an external taxon' do
+          subject { asaphida_ext.can_mutate? }
 
-        it do
-          expect(ids)
-            .to have_attributes taxon: '5ac1330933c62d7d617a8d4a80dcecf3',
-                                equivalent: nil
+          it { is_expected.to be_truthy }
+        end
+
+        context 'when initialized with an internal taxon' do
+          subject { trilobita_int.can_mutate? }
+
+          it { is_expected.to be_falsey }
         end
       end
 
       describe '#create' do
+        context 'if it is initialized with a database taxon' do
+          subject(:create_trilobita) { trilobita_int.create }
+
+          it do
+            expect { create_trilobita }
+              .to raise_error RuntimeError, 'can\'t mutate Catalogue of life'
+          end
+        end
+
         context 'if the immediate ancestor is known' do
-          subject(:create_a_expansus) { asaphus_expansus_eq.create }
+          subject(:create_a_expansus) { asaphus_expansus_ext.create }
 
-          let :s_source do
-            'http://webservice.catalogueoflife.org/col/webservice'
-          end
-
-          let :rank_id do
-            asaphus_expansus_eq.rank
-                               .equivalent(Factories::Model::Taxonomy.for_tests)
-                               .RankID
-          end
+          let(:species) { Factories::Model::Rank.species }
 
           it do
             expect { create_a_expansus }
-              .to change(asaphus_expansus_eq, :equivalent)
+              .to change(asaphus_expansus_ext, :equivalent)
               .from(be_nil)
               .to(an_instance_of(Model::Taxon) &
                   have_attributes(Name: 'expansus',
                                   Source: URL + API_ROUTE,
-                                  RankID: rank_id))
+                                  RankID: species.RankID))
           end
         end
 
         context 'if the immediate ancestor is not known and '\
                 'fill-lineage is true' do
-          subject(:create_r) { raymondaspis_eq.create(fill_lineage: true) }
+          subject(:create_r) { raymondaspis_ext.create(fill_lineage: true) }
 
-          #
+          let(:genus) { Factories::Model::Rank.genus }
+
+          it do
+            expect { create_r }
+              .to change(raymondaspis_ext, :equivalent)
+              .from(be_nil)
+              .to(an_instance_of(Model::Taxon) &
+                  have_attributes(Name: 'Raymondaspis',
+                                  Source: URL + API_ROUTE,
+                                  RankID: genus.RankID))
+          end
         end
 
         context 'if the immediate ancestor is not known and '\
                 'fill-lineage is false' do
-          subject(:create_r) { raymondaspis_eq.create }
+          subject(:create_r) { raymondaspis_ext.create }
 
           it do
             expect { create_r }.to raise_error RuntimeError,
-                                                   'Immidiate ancestor missing'
+                                               'Immidiate ancestor missing'
           end
         end
       end
 
-      describe '#external'
+      describe '#external' do
+        context 'when intitialized with an external taxon' do
+
+        end
+
+        context 'when intitialized with an internal taxon' do
+
+        end
+      end
 
       describe '#find' do
 
@@ -150,7 +168,7 @@ module Specify
 
       describe '#find_by_id' do
         context 'when the taxon with concept id exists' do
-          subject(:exact_match) { asaphida_eq.find_by_id }
+          subject(:exact_match) { asaphida_ext.find_by_id }
 
           let :be_asaphida do
             be_a(Model::Taxon) & have_attributes(Name: 'Asaphida')
@@ -160,14 +178,14 @@ module Specify
 
           it do
             expect {exact_match}
-              .to change(asaphida_eq, :referenced?)
+              .to change(asaphida_ext, :referenced?)
               .from(be_falsey)
               .to(be_truthy)
           end
         end
 
         context 'when the taxon with concept id does not exist' do
-          subject { asaphoidea_eq.find_by_id }
+          subject { asaphoidea_ext.find_by_id }
 
           it { is_expected.to be_nil }
         end
@@ -175,7 +193,7 @@ module Specify
 
       describe '#find_by_values' do
         context 'when no parent is given and the taxon is found' do
-          subject(:find_asaphoidea) { asaphoidea_eq.find_by_values }
+          subject(:find_asaphoidea) { asaphoidea_ext.find_by_values }
 
           it do
             expect(find_asaphoidea).to be_a(Model::Taxon) &
@@ -192,17 +210,27 @@ module Specify
         context 'when multiple matches are found'
       end
 
+      describe '#id' do
+        subject(:ids) { asaphida_ext.id }
+
+        it do
+          expect(ids)
+            .to have_attributes taxon: '5ac1330933c62d7d617a8d4a80dcecf3',
+                                equivalent: nil
+        end
+      end
+
       describe '#internal'
 
       describe '#known_ancestor' do
         context 'when root' do
-          subject(:root) { animalia_eq.known_ancestor }
+          subject(:root) { animalia_ext.known_ancestor }
 
           it { is_expected.to be_falsey }
         end
 
         context 'when below root and immediate ancestor is found by id' do
-          subject(:match) { asaphus_expansus_eq.known_ancestor }
+          subject(:match) { asaphus_expansus_ext.known_ancestor }
 
           it do
             expect(match).to be_a(described_class) &
@@ -220,7 +248,7 @@ module Specify
 
         context 'when below root and immediate ancestor is found by'\
                 ' name, rank, parent' do
-          subject(:match) { asaphidae_eq.known_ancestor }
+          subject(:match) { asaphidae_ext.known_ancestor }
 
           it do
             expect(match).to be_a(described_class) &
@@ -236,7 +264,7 @@ module Specify
         end
 
         context 'when below root and immediate ancestor is not found' do
-          subject(:match) { raymondaspis_eq.known_ancestor }
+          subject(:match) { raymondaspis_ext.known_ancestor }
 
           it do
             expect(match).to be_a(described_class) &
@@ -256,7 +284,7 @@ module Specify
 
       describe '#lineage' do
         context 'when initialized with an external taxon' do
-          subject { asaphus_eq.lineage }
+          subject { asaphus_ext.lineage }
 
           it { is_expected.to be_a Lineage}
         end
@@ -272,7 +300,7 @@ module Specify
       end
 
       describe '#missing_ancestors' do
-        subject(:missing) { raymondaspis_eq.missing_ancestors }
+        subject(:missing) { raymondaspis_ext.missing_ancestors }
 
         it do
           expect(missing)
@@ -287,35 +315,35 @@ module Specify
 
       describe '#parent_taxon' do
         context 'when immediate ancestor is in the database' do
-          subject { asaphus_expansus_eq.parent_taxon }
+          subject { asaphus_expansus_ext.parent_taxon }
 
           it { is_expected.to be_a described_class }
         end
 
         context 'when immediate ancestor is not in the database' do
-          subject { raymondaspis_eq.parent_taxon }
+          subject { raymondaspis_ext.parent_taxon }
 
           it { is_expected.to be_falsey }
         end
       end
 
       describe '#reference!' do
-        subject(:add_reference) { asaphoidea_eq.reference! }
+        subject(:add_reference) { asaphoidea_ext.reference! }
 
-        before { asaphoidea_eq.find }
+        before { asaphoidea_ext.find }
 
         it do
           expect { add_reference }
-            .to change(asaphoidea_eq, :referenced?)
+            .to change(asaphoidea_ext, :referenced?)
             .from(be_falsey).to(be_truthy)
         end
 
         it  do
           expect { add_reference }
-            .to change { asaphoidea_eq.equivalent.source }
+            .to change { asaphoidea_ext.equivalent.source }
             .from(be_nil)
             .to(URL + API_ROUTE)
-            .and change { asaphoidea_eq.equivalent.taxonomic_serial_number }
+            .and change { asaphoidea_ext.equivalent.taxonomic_serial_number }
             .from(be_nil)
             .to('f3f01b65054a3e887d04554962e49097')
         end
