@@ -24,6 +24,7 @@ module Specify
       # The rank common to both #taxon and #equivalent. This will be a
       # CatalogueOfLife::Rank for the external representation, a Model::Rank
       # for the internal representation.
+      # FIXME: should always be a CatalogueOfLife::Rank
       attr_reader :rank
 
       # The taxon with which +self+ has been initialized. If this is a
@@ -61,10 +62,10 @@ module Specify
       end
 
       # Creates a Model::Taxon for #equivalent if #equivalent is mutable
-      # (#taxon is external). If _parent_ is passed, #equivalent will be created
-      # as a child in it. If <em>fill_lineage</em> is set to +true+, any taxa
-      # in missing in the classification of #taxon in the database taxonomy
-      # will be created.
+      # (#taxon is external). If _parent_ (an iEquivalent) is passed,
+      # #equivalent will be created as a child in it. If <em>fill_lineage</em>
+      # is set to +true+, any taxa in missing in the classification of #taxon in
+      # the database taxonomy will be created.
       def create(parent = nil, fill_lineage: false)
         raise 'can\'t mutate Catalogue of life' unless can_mutate?
 
@@ -79,8 +80,34 @@ module Specify
         end
       end
 
+      # Returns the external concept for the taxon, i.e. the
+      # CatalogueOfLife::Taxon.
       def external
-        taxon.is_a?(CatalogueOfLife::Taxon) ? equivalent : taxon
+        taxon.is_a?(CatalogueOfLife::Taxon) ? taxon : equivalent
+      end
+
+      # Finds the #equivalent of #taxon.
+      def find(parent = nil)
+        find_by_id || find_by_values(parent)
+      end
+
+      # Finds the #equivalent of #taxon by the service_url (URL + API_ROUTE)
+      # and +id+ attribute (the Catalogue Of Life id).
+      def find_by_id
+        found = target == :internal ? db_find_by_id : col_find_by_id
+        @referenced = true if found
+        @equivalent = found
+      end
+
+      # Finds the taxon for +self+ in #taxonomy by _name_, _rank_, and
+      # optionally _parent_, if a Equivalent as passed in as the +parent+
+      # argument.
+      def find_by_values(parent = nil)
+        @equivalent = if target == :internal
+                        db_find_by_values(parent)
+                      else
+                        col_find_by_values
+                      end
       end
 
       # Returns an OpenStruct with the IDs for the #taxon +self+ has been
@@ -91,35 +118,6 @@ module Specify
 
       def internal
         taxon.is_a?(Model::Taxon) ? taxon : equivalent
-      end
-
-      # Finds a taxon in #taxonomy.
-      def find(parent = nil)
-        find_by_id || find_by_values(parent)
-      end
-
-      # Finds a taxon by the service_url (URL + API_ROUTE) and +id+ attribute
-      # of #taxon
-      # (the Catalogue Of Life id).
-      def find_by_id
-        @equivalent = taxonomy.names_dataset
-                            .first(Source: URL + API_ROUTE,
-                                   TaxonomicSerialNumber: taxon.id)
-        @referenced = true if @equivalent
-        @equivalent
-      end
-
-      # Finds the taxon for +self+ in #taxonomy by _name_, _rank_, and
-      # optionally _parent_, if a Equivalent as passed in as the +parent+
-      # argument.
-      def find_by_values(parent = nil)
-        vals = { Name: taxon.name,
-                 rank: taxon.rank.equivalent(taxonomy),
-                 parent: parent&.find }
-        results = taxonomy.names_dataset.where(vals.compact)
-        return results if results.count > 1
-
-        @equivalent = results.first
       end
 
       # Returns the closest ancestor known in #taxonomy.
@@ -169,6 +167,10 @@ module Specify
         @referenced
       end
 
+      def target
+        taxon == external ? :internal : :external
+      end
+
       # Returns a hash, mapping #taxon attributes to Specify::Model::Taxon
       # attributes
       def to_model_attributes
@@ -186,6 +188,36 @@ module Specify
       end
 
       private
+
+      def col_find_by_id
+        return unless taxon.taxonomic_serial_number
+
+        Request.by_id(taxon.taxonomic_serial_number).taxon
+      end
+
+      def db_find_by_id
+        taxonomy.names_dataset
+                .first(Source: URL + API_ROUTE, TaxonomicSerialNumber: taxon.id)
+      end
+
+      def col_find_by_values(parent = nil)
+        col = Request.new() do |req|
+          req.name = name
+          req.rank = rank.equivalent.name
+          # FIXME: Does CoL support searching in taxon?
+        end
+        col.taxon
+      end
+
+      def db_find_by_values(parent = nil)
+        vals = { Name: taxon.name,
+                 rank: taxon.rank.equivalent(taxonomy),
+                 parent: parent&.find }
+        results = taxonomy.names_dataset.where(vals.compact)
+        raise 'Ambiguous match' if results.count > 1
+
+        results.first
+      end
 
       # Returns an Array of Equivalent instances for all ancestors in the
       # Taxon instances classification.

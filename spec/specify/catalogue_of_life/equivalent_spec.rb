@@ -9,6 +9,11 @@ module Specify
           Factories::CatalogueOfLife::Taxon.with(:asaphida))
       end
 
+      let :asaphida_int do
+        described_class.new(Factories::Model::Taxonomy.for_tests,
+                            Specify::Model::Taxon.first(name: 'Asaphida'))
+      end
+
       let :asaphoidea_ext do
         described_class.new(Factories::Model::Taxonomy.for_tests,
           Factories::CatalogueOfLife::Taxon.with(:asaphoidea))
@@ -154,24 +159,73 @@ module Specify
 
       describe '#external' do
         context 'when intitialized with an external taxon' do
+          subject { asaphida_ext.external }
 
+          it { is_expected.to be_a CatalogueOfLife::Taxon }
         end
 
         context 'when intitialized with an internal taxon' do
+          subject { asaphida_int.external}
 
+          it { is_expected.to be_nil }
+        end
+
+        context 'when intitialized with an internal taxon that is found' do
+          subject { asaphida_int.external}
+
+          before { asaphida_int.find }
+
+          it { is_expected.to be_a CatalogueOfLife::Taxon }
         end
       end
 
       describe '#find' do
+        context 'when intitialized with an external taxon' do
+          subject(:found) { asaphida_ext.find }
 
+          it do
+            expect(found).to be_a(Model::Taxon) &
+              have_attributes(name: 'Asaphida')
+          end
+        end
+
+        context 'when intitialized with an internal taxon' do
+          subject(:found) { asaphida_int.find}
+
+          it do
+            expect(found).to be_a(CatalogueOfLife::Taxon) &
+              have_attributes(name: 'Asaphida')
+          end
+        end
+
+        context 'when intitialized with an external taxon whose internal is'\
+                ' not referenced (has no external id)' do
+          subject(:found) { asaphoidea_ext.find }
+
+          it do
+            expect(found).to be_a(Model::Taxon) &
+              have_attributes(name: 'Asaphoidea')
+          end
+        end
+
+        context 'when intitialized with an internal taxon that is not'\
+                ' referenced (has no external id)' do
+          subject(:found) { trilobita_int.find }
+
+          it do
+            expect(found).to be_a(CatalogueOfLife::Taxon) &
+              have_attributes(name: 'Trilobita')
+          end
+        end
       end
 
       describe '#find_by_id' do
-        context 'when the taxon with concept id exists' do
+        context 'when initialized with an external taxon and the equivalent'\
+                ' with taxonomic serial number exists' do
           subject(:exact_match) { asaphida_ext.find_by_id }
 
           let :be_asaphida do
-            be_a(Model::Taxon) & have_attributes(Name: 'Asaphida')
+            be_a(Model::Taxon) & have_attributes(name: 'Asaphida')
           end
 
           it { is_expected.to be_asaphida }
@@ -184,7 +238,33 @@ module Specify
           end
         end
 
-        context 'when the taxon with concept id does not exist' do
+        context 'when initialized with an external taxon and the equivalent'\
+                ' with taxonomic_serial_number does not exist' do
+          subject { asaphoidea_ext.find_by_id }
+
+          it { is_expected.to be_nil }
+        end
+
+        context 'when initialized with an internal taxon and the equivalent'\
+                ' with taxonomic serial number exists' do
+          subject(:exact_match) { asaphida_int.find_by_id }
+
+          let :be_asaphida do
+            be_a(CatalogueOfLife::Taxon) & have_attributes(name: 'Asaphida')
+          end
+
+          it { is_expected.to be_asaphida }
+
+          it do
+            expect {exact_match}
+              .to change(asaphida_int, :referenced?)
+              .from(be_falsey)
+              .to(be_truthy)
+          end
+        end
+
+        context 'when initialized with an internal taxon and the equivalent'\
+                ' with taxonomic_serial_number does not exist' do
           subject { asaphoidea_ext.find_by_id }
 
           it { is_expected.to be_nil }
@@ -192,22 +272,84 @@ module Specify
       end
 
       describe '#find_by_values' do
-        context 'when no parent is given and the taxon is found' do
-          subject(:find_asaphoidea) { asaphoidea_ext.find_by_values }
+        context 'when initialized with an external taxon, no parent is given,'\
+                ' and the equivalent is found' do
+          subject(:found) { asaphoidea_ext.find_by_values }
 
           it do
-            expect(find_asaphoidea).to be_a(Model::Taxon) &
-              have_attributes(Name: 'Asaphoidea')
+            expect(found).to be_a(Model::Taxon) &
+              have_attributes(name: 'Asaphoidea')
           end
 
-          it 'is expected to change #taxon'
+          it do
+            expect { found }.to change(asaphoidea_ext, :equivalent)
+                            .from(be_nil)
+                            .to an_instance_of(Model::Taxon) &
+                              have_attributes(name: 'Asaphoidea')
+          end
         end
 
-        context 'when parent is given and the taxon is found'
+        context 'when initialized with an external taxon, a parent is given,'\
+                ' and the equivalent is found' do
+          subject(:found) { asaphoidea_ext.find_by_values(asaphida_ext)}
 
-        context 'when the taxon is not found'
+          it do
+            expect(found).to be_a(Model::Taxon) &
+              have_attributes(name: 'Asaphoidea')
+          end
 
-        context 'when multiple matches are found'
+          it do
+            expect { found }.to change(asaphoidea_ext, :equivalent)
+                            .from(be_nil)
+                            .to an_instance_of(Model::Taxon) &
+                              have_attributes(name: 'Asaphoidea')
+          end
+        end
+
+        context 'when initialized with an external taxon and the equivalent'\
+                ' is not found' do
+          subject { raymondaspis_ext.find_by_values }
+
+          it { is_expected.to be_nil }
+        end
+
+        context 'when initialized with an external taxon and multiple matches'\
+                ' are found' do
+          subject(:found) { asaphida_ext.find_by_values }
+
+          before { Model::Taxon.first(Name: 'Malacostraca')
+                               .add_child  Name: 'Asaphida',
+                               rank: Factories::Model::Rank.order,
+                               IsAccepted: true,
+                               IsHybrid: false,
+                               RankID: Factories::Model::Rank.order.RankID,
+                               taxonomy: Factories::Model::Taxonomy.for_tests} # create 'Asaphida in Malacostraca'
+
+          it do
+            expect { found }
+              .to raise_error RuntimeError, 'Ambiguous match'
+          end
+        end
+
+        context 'when initialized with an internal taxon and the equivalent'\
+                ' is found' do
+          subject(:found) { asaphida_int.find_by_values }
+
+          it do
+            expect(found).to be_a(CatalogueOfLife::Taxon) &
+              have_attributes(name: 'Asaphida')
+          end
+        end
+
+        context 'when initialized with an internal taxon and the equivalent'\
+                ' is not found' do
+          it 'should return nil'
+        end
+
+        context 'when initialized with an internal taxan and multiple matches'\
+                ' are found' do
+          it 'should raise error'
+        end
       end
 
       describe '#id' do

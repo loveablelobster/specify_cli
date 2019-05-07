@@ -27,8 +27,8 @@ module Specify
       end
 
       # Where rank class could be Specify::CatalogueOfLife::Rank
-      def equivalent(rank_class)
-        # Specify::CatalogueOfLife::Rank.new name
+      def equivalent(_ = nil)
+        CatalogueOfLife::Rank.new name
       end
 
       def inspect
