@@ -6,37 +6,37 @@ module Specify
     RSpec.describe Equivalent do
       let :asaphida_eq do
         described_class.new(Factories::Model::Taxonomy.for_tests,
-          external: Factories::CatalogueOfLife::Taxon.with(:asaphida))
+          Factories::CatalogueOfLife::Taxon.with(:asaphida))
       end
 
       let :asaphoidea_eq do
         described_class.new(Factories::Model::Taxonomy.for_tests,
-          external: Factories::CatalogueOfLife::Taxon.with(:asaphoidea))
+          Factories::CatalogueOfLife::Taxon.with(:asaphoidea))
       end
 
       let :asaphidae_eq do
         described_class.new(Factories::Model::Taxonomy.for_tests,
-          external: Factories::CatalogueOfLife::Taxon.with(:asaphidae))
+          Factories::CatalogueOfLife::Taxon.with(:asaphidae))
       end
 
       let :asaphus_eq do
         described_class.new(Factories::Model::Taxonomy.for_tests,
-          external: Factories::CatalogueOfLife::Taxon.with(:asaphus))
+          Factories::CatalogueOfLife::Taxon.with(:asaphus))
       end
 
       let :asaphus_expansus_eq do
         described_class.new(Factories::Model::Taxonomy.for_tests,
-          external: Factories::CatalogueOfLife::Taxon.with(:asaphus_expansus))
+          Factories::CatalogueOfLife::Taxon.with(:asaphus_expansus))
       end
 
       let :raymondaspis_eq do
         described_class.new(Factories::Model::Taxonomy.for_tests,
-          external: Factories::CatalogueOfLife::Taxon.with(:raymondaspis))
+          Factories::CatalogueOfLife::Taxon.with(:raymondaspis))
       end
 
       let :animalia_eq do
         described_class.new(Factories::Model::Taxonomy.for_tests,
-          external: Factories::CatalogueOfLife::Taxon.with(:root))
+          Factories::CatalogueOfLife::Taxon.with(:root))
       end
 
       describe '#ancestors' do
@@ -63,11 +63,29 @@ module Specify
 
         context 'when initialized with an internal taxon' do
           subject(:trilobita) do
-            described_class.new Factories::Model::Taxonomy.for_tests,
-                                internal: Specify::Model::Taxon.first(name: 'Trilobita')
+            described_class.new(Factories::Model::Taxonomy.for_tests,
+                                Specify::Model::Taxon.first(name: 'Trilobita'))
+                           .ancestors
           end
 
-          it { p trilobita }
+          let :contain_ancestors do
+            include(an_instance_of(Equivalent) &
+                            have_attributes(name: 'Asaphidae'),
+                            an_instance_of(Equivalent) &
+                            have_attributes(name: 'Asaphoidea'),
+                            an_instance_of(Equivalent) &
+                            have_attributes(name: 'Asaphida'),
+                            an_instance_of(Equivalent) &
+                            have_attributes(name: 'Trilobita'),
+                            an_instance_of(Equivalent) &
+                            have_attributes(name: 'Arthropoda'),
+                            an_instance_of(Equivalent) &
+                            have_attributes(name: 'Animalia'),
+                            an_instance_of(Equivalent) &
+                            have_attributes(name: 'Life'))
+          end
+
+          it { is_expected.to contain_ancestors }
         end
       end
 
@@ -76,8 +94,8 @@ module Specify
 
         it do
           expect(ids)
-            .to have_attributes external: '5ac1330933c62d7d617a8d4a80dcecf3',
-                                internal: nil
+            .to have_attributes taxon: '5ac1330933c62d7d617a8d4a80dcecf3',
+                                equivalent: nil
         end
       end
 
@@ -97,7 +115,7 @@ module Specify
 
           it do
             expect { create_a_expansus }
-              .to change(asaphus_expansus_eq, :internal)
+              .to change(asaphus_expansus_eq, :equivalent)
               .from(be_nil)
               .to(an_instance_of(Model::Taxon) &
                   have_attributes(Name: 'expansus',
@@ -192,7 +210,7 @@ module Specify
           end
 
           it do
-            expect(match.internal).to be_a(Model::Taxon) &
+            expect(match.equivalent).to be_a(Model::Taxon) &
               have_attributes(Name: 'Asaphus',
                               Source: URL + API_ROUTE,
                               TaxonomicSerialNumber: '67b8da25464f297cf'\
@@ -210,7 +228,7 @@ module Specify
           end
 
           it do
-            expect(match.internal).to be_a(Model::Taxon) &
+            expect(match.equivalent).to be_a(Model::Taxon) &
               have_attributes(Name: 'Asaphoidea',
                               Source: nil,
                               TaxonomicSerialNumber: nil)
@@ -226,7 +244,7 @@ module Specify
           end
 
           it do
-            expect(match.internal).to be_a(Model::Taxon) &
+            expect(match.equivalent).to be_a(Model::Taxon) &
               have_attributes(Name: 'Trilobita',
                               Source: nil,
                               TaxonomicSerialNumber: nil)
@@ -234,6 +252,23 @@ module Specify
         end
 
         context 'when below root and no ancestor is found'
+      end
+
+      describe '#lineage' do
+        context 'when initialized with an external taxon' do
+          subject { asaphus_eq.lineage }
+
+          it { is_expected.to be_a Lineage}
+        end
+
+        context 'when initialized with an internal taxon' do
+          subject(:trilobita) do
+            described_class.new Factories::Model::Taxonomy.for_tests,
+                                Specify::Model::Taxon.first(name: 'Trilobita')
+          end
+
+          it { }
+        end
       end
 
       describe '#missing_ancestors' do
@@ -277,10 +312,10 @@ module Specify
 
         it  do
           expect { add_reference }
-            .to change { asaphoidea_eq.internal.Source }
+            .to change { asaphoidea_eq.equivalent.source }
             .from(be_nil)
             .to(URL + API_ROUTE)
-            .and change { asaphoidea_eq.internal.TaxonomicSerialNumber }
+            .and change { asaphoidea_eq.equivalent.taxonomic_serial_number }
             .from(be_nil)
             .to('f3f01b65054a3e887d04554962e49097')
         end

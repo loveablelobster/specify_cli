@@ -76,8 +76,16 @@ module Specify
         parent.nil?
       end
 
+      def source
+        self[:Source]
+      end
+
       def synonyms?
         !synonyms.empty?
+      end
+
+      def taxonomic_serial_number
+        self[:TaxonomicSerialNumber]
       end
 
       def to_s
