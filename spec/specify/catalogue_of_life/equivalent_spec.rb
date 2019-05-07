@@ -353,12 +353,55 @@ module Specify
       end
 
       describe '#id' do
-        subject(:ids) { asaphida_ext.id }
+        context 'when initialized with an external taxon and the equivalent'\
+                ' is not found' do
+          subject(:ids) { asaphida_ext.id }
 
-        it do
-          expect(ids)
-            .to have_attributes taxon: '5ac1330933c62d7d617a8d4a80dcecf3',
-                                equivalent: nil
+          it do
+            expect(ids)
+              .to have_attributes taxon: '5ac1330933c62d7d617a8d4a80dcecf3',
+                                  equivalent: nil
+          end
+        end
+
+        context 'when initialized with an external taxon and the equivalent'\
+                ' is found' do
+          subject(:ids) { asaphida_ext.id }
+
+          before { asaphida_ext.find }
+
+          it do
+            expect(ids)
+              .to have_attributes taxon: '5ac1330933c62d7d617a8d4a80dcecf3',
+                                  equivalent: '733387fb-dcee-44d6'\
+                                              '-a6e0-45166428390b'
+          end
+        end
+
+        context 'when initialized with an internal taxon and the equivalent'\
+                ' is not found' do
+          subject(:ids) { asaphida_int.id }
+
+          it do
+            expect(ids)
+              .to have_attributes taxon: '733387fb-dcee-44d6'\
+                                         '-a6e0-45166428390b',
+                                  equivalent: nil
+          end
+        end
+
+        context 'when initialized with an internal taxon and the equivalent'\
+                ' is found' do
+          subject(:ids) { asaphida_int.id }
+
+          before { asaphida_int.find }
+
+          it do
+            expect(ids)
+              .to have_attributes taxon: '733387fb-dcee-44d6'\
+                                         '-a6e0-45166428390b',
+                                  equivalent: '5ac1330933c62d7d617a8d4a80dcecf3'
+          end
         end
       end
 

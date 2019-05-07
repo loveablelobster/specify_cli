@@ -67,6 +67,10 @@ module Specify
        # FIXME: Specify needs an IsExtinct flag
       end
 
+      def id
+        self[:GUID] || self[:TaxonID]
+      end
+
       # Returns a String with the taxon name.
       def name
         self[:Name]
