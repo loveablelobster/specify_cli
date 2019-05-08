@@ -335,54 +335,18 @@ module Specify
       end
 
       describe '#id' do
-        context 'when initialized with an external taxon and the equivalent'\
-                ' is not found' do
-          subject(:ids) { asaphida_ext.id }
+        context 'when initialized with an external taxon' do
+          subject { asaphida_ext.id }
 
-          it do
-            expect(ids)
-              .to have_attributes taxon: '5ac1330933c62d7d617a8d4a80dcecf3',
-                                  equivalent: nil
-          end
+          it { is_expected.to eq '5ac1330933c62d7d617a8d4a80dcecf3' }
         end
 
-        context 'when initialized with an external taxon and the equivalent'\
-                ' is found' do
-          subject(:ids) { asaphida_ext.id }
-
-          before { asaphida_ext.find }
-
-          it do
-            expect(ids)
-              .to have_attributes taxon: '5ac1330933c62d7d617a8d4a80dcecf3',
-                                  equivalent: '733387fb-dcee-44d6'\
-                                              '-a6e0-45166428390b'
-          end
-        end
-
-        context 'when initialized with an internal taxon and the equivalent'\
-                ' is not found' do
+        context 'when initialized with an internal taxon' do
           subject(:ids) { asaphida_int.id }
 
           it do
             expect(ids)
-              .to have_attributes taxon: '733387fb-dcee-44d6'\
-                                         '-a6e0-45166428390b',
-                                  equivalent: nil
-          end
-        end
-
-        context 'when initialized with an internal taxon and the equivalent'\
-                ' is found' do
-          subject(:ids) { asaphida_int.id }
-
-          before { asaphida_int.find }
-
-          it do
-            expect(ids)
-              .to have_attributes taxon: '733387fb-dcee-44d6'\
-                                         '-a6e0-45166428390b',
-                                  equivalent: '5ac1330933c62d7d617a8d4a80dcecf3'
+              .to eq '5ac1330933c62d7d617a8d4a80dcecf3'
           end
         end
       end
@@ -614,7 +578,7 @@ module Specify
               .to change { asaphoidea_ext.equivalent&.source }
               .from(be_nil)
               .to(URL + API_ROUTE)
-              .and change { asaphoidea_ext.equivalent&.taxonomic_serial_number }
+              .and change { asaphoidea_ext.equivalent&.id }
               .from(be_nil)
               .to('f3f01b65054a3e887d04554962e49097')
           end
@@ -634,7 +598,7 @@ module Specify
               .to change { asaphoidea_int.taxon.source }
               .from(be_nil)
               .to(URL + API_ROUTE)
-              .and change { asaphoidea_int.taxon.taxonomic_serial_number }
+              .and change { asaphoidea_int.taxon.id }
               .from(be_nil)
               .to('f3f01b65054a3e887d04554962e49097')
           end
@@ -683,7 +647,35 @@ module Specify
         end
       end
 
-      describe '#to_model_attributes'
+      describe '#to_model_attributes' do
+        context 'when initialized with an external taxon' do
+          subject(:model_attrs)  { asaphus_expansus_ext.to_model_attributes }
+
+          it do
+            expect(model_attrs).to include(
+              author: '(Wahlenberg, 1821)',
+              name_status: 'accepted name',
+              rank: an_instance_of(Model::Rank),
+              source: 'http://www.catalogueoflife.org/col/webservice',
+              id: '73046eff1c22bdbd92f3609a3a23c660'
+            )
+          end
+        end
+
+        context 'when initialized with an external taxon' do
+          subject(:model_attrs) { asaphida_int.to_model_attributes }
+
+          it do
+            expect(model_attrs).to include(
+              author: nil,
+              name_status: 'accepted name',
+              rank: an_instance_of(Model::Rank),
+              source: 'http://www.catalogueoflife.org/col/webservice',
+              id: '5ac1330933c62d7d617a8d4a80dcecf3'
+            )
+          end
+        end
+      end
     end
   end
 end

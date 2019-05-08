@@ -32,7 +32,7 @@ module Specify
           @stem = m[:stem].to_sym
           @prefix = m[:prefix]&.to_sym
         end
-        raise RankError::INVALID_RANK + ' ' + name unless valid?
+        raise RankError::INVALID_RANK + ' ' + name.to_s unless valid?
       end
 
       # Returns a list of symbols for all available ranks.

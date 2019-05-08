@@ -85,9 +85,9 @@ module Specify
         self[:IsHybrid] = bool
       end
 
-      def id
-        self[:GUID] || self[:TaxonID]
-      end
+#       def id
+#         self[:GUID] || self[:TaxonID]
+#       end
 
       # Returns a String with the taxon name.
       def name
@@ -130,11 +130,11 @@ module Specify
         !synonyms.empty?
       end
 
-      def taxonomic_serial_number
+      def id
         self[:TaxonomicSerialNumber]
       end
 
-      def taxonomic_serial_number=(str)
+      def id=(str)
         self[:TaxonomicSerialNumber] = str
       end
 

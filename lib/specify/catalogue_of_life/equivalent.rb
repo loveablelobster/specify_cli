@@ -105,7 +105,8 @@ module Specify
       # Returns an OpenStruct with the IDs for the #taxon +self+ has been
       # initialized with and the #equivalent.
       def id
-        OpenStruct.new(taxon: taxon.id, equivalent: equivalent&.id)
+        taxon&.id || equivalent&.id
+        # OpenStruct.new(taxon: taxon[:TaxonID], equivalent: equivalent&.id)
       end
 
       # Returns the internal concept for the taxon, i.e. the Model::Taxon.
@@ -152,7 +153,7 @@ module Specify
       def reference!
         find unless equivalent
 
-        internal.taxonomic_serial_number = external.id
+        internal.id = external.id
         internal.source = URL + API_ROUTE
         internal.save
       end
@@ -162,7 +163,7 @@ module Specify
       # Returns +nil+ if #find has nor been  called
       def referenced?
         find unless equivalent
-        internal&.taxonomic_serial_number == external&.id
+        internal&.id == external&.id
       end
 
       # Determines the polarity of +self+; returns +:internal+ if +self+ has
@@ -174,27 +175,29 @@ module Specify
         taxon == external ? :internal : :external
       end
 
-      # Returns a hash, mapping #taxon attributes to Specify::Model::Taxon
-      # attributes
+      # Returns a hash, mapping #external attributes to Specify::Model::Taxon
+      # attributes.
       def to_model_attributes
+        find unless external
+        %w[author name_status accepted? hybrid? name source id]
         {
-          author: taxon.author,
-          name_status: taxon.name_status,
-          accepted: taxon.accepted?, # TODO: should insert valid taxon
-          hybrid: taxon.hybrid?,
-          name: taxon.name,
-          rank: rank.equivalent(taxonomy),
-          source: taxon.source,
-          taxonomic_serial_number: taxon.id
+          author: external.author,
+          name_status: external.name_status,
+          accepted: external.accepted?, # TODO: should insert valid taxon
+          hybrid: external.hybrid?,
+          name: external.name,
+          source: external.source,
+          id: external.id,
+          rank: external.rank.equivalent(taxonomy)
         }
       end
 
       private
 
       def col_find_by_id
-        return unless taxon.taxonomic_serial_number
+        return unless taxon.id
 
-        Request.by_id(taxon.taxonomic_serial_number).taxon
+        Request.by_id(taxon.id).taxon
       end
 
       def db_find_by_id
@@ -205,15 +208,15 @@ module Specify
       def col_find_by_values(_ = nil)
         col = Request.new do |req|
           req.name = name
-          req.rank = rank.equivalent.name
+          req.rank = rank.name
           # FIXME: Does CoL support searching in taxon?
         end
         col.taxon
       end
 
       def db_find_by_values(parent = nil)
-        vals = { Name: taxon.name,
-                 rank: taxon.rank.equivalent(taxonomy),
+        vals = { name: name,
+                 rank: rank.equivalent(taxonomy),
                  parent: parent&.find }
         results = taxonomy.names_dataset.where(vals.compact)
         raise 'Ambiguous match' if results.count > 1
