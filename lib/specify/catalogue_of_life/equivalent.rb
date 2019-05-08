@@ -2,6 +2,8 @@
 
 module Specify
   module CatalogueOfLife
+    MODEL_ATTRS = %w[author name_status accepted? hybrid? name source id].freeze
+
     # A Equivalents is a logical link between identical taxonbomic concepts
     # betweern two resources (a database taxonomy and an external authority
     # service).
@@ -114,6 +116,12 @@ module Specify
         taxon.is_a?(Model::Taxon) ? taxon : equivalent
       end
 
+      # Returns the internal (Model::Rank) representation for the #rank of
+      # +self+.
+      def internal_rank
+        internal&.rank || external.rank.equivalent(taxonomy)
+      end
+
       # Returns an Equivalent that is the closest ancestor of #taxon known in
       # other of the match; if #taxon is a CatalogueOfLife::Taxon, it would be
       # the closest known ancestor from the Model::Taxon instances in #taxonomy.
@@ -179,17 +187,10 @@ module Specify
       # attributes.
       def to_model_attributes
         find unless external
-        %w[author name_status accepted? hybrid? name source id]
-        {
-          author: external.author,
-          name_status: external.name_status,
-          accepted: external.accepted?, # TODO: should insert valid taxon
-          hybrid: external.hybrid?,
-          name: external.name,
-          source: external.source,
-          id: external.id,
-          rank: external.rank.equivalent(taxonomy)
-        }
+        MODEL_ATTRS
+          .each_with_object(rank: internal_rank) do |item, hsh|
+            hsh[item.tr('?', '').to_sym] = external.public_send item.to_sym
+          end
       end
 
       private

@@ -373,6 +373,25 @@ module Specify
         end
       end
 
+      describe '#internal_rank' do
+        let :be_rank do
+          an_instance_of(Model::Rank) &
+            have_attributes(name: 'Order')
+        end
+
+        context 'when initialized with an external taxon' do
+          subject { asaphida_ext.internal_rank }
+
+          it { is_expected.to be_rank }
+        end
+
+        context 'when initialized with an internal taxon' do
+          subject { asaphida_ext.internal_rank }
+
+          it { is_expected.to be_rank }
+        end
+      end
+
       describe '#known_ancestor' do
         context 'when initialized with an external taxon which is root' do
           subject(:root) { animalia_ext.known_ancestor }
