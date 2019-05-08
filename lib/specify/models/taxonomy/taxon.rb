@@ -37,6 +37,8 @@ module Specify
       def before_create
         self.taxonomy = rank&.taxonomy || parent.rank&.taxonomy
         self[:GUID] = SecureRandom.uuid
+        self[:IsHybrid] = false
+        self[:RankID] = rank&.RankID
         super
       end
 
@@ -45,9 +47,17 @@ module Specify
         self[:IsAccepted]
       end
 
+      def accepted=(bool)
+        self[:IsAccepted] = bool
+      end
+
       # Returns the authorship information (as a String) for the taxon.
       def author
         self[:Author]
+      end
+
+      def author=(str)
+        self[:Author] = str
       end
 
       # Returns +true+ if +self+ has _children_.
@@ -67,6 +77,14 @@ module Specify
        # FIXME: Specify needs an IsExtinct flag
       end
 
+      def hybrid?
+        self[:IsHybrid]
+      end
+
+      def hybrid=(bool)
+        self[:IsHybrid] = bool
+      end
+
       def id
         self[:GUID] || self[:TaxonID]
       end
@@ -74,6 +92,26 @@ module Specify
       # Returns a String with the taxon name.
       def name
         self[:Name]
+      end
+
+      def name=(str)
+        self[:Name] = str
+      end
+
+      def name_status
+        self[:COLStatus]
+      end
+
+      def name_status=(str)
+        self[:COLStatus] = str
+      end
+
+      def rank_id
+        self[:RankID]
+      end
+
+      def rank_id=(rnk)
+        self[:RankID] = rnk.RankID
       end
 
       def root?

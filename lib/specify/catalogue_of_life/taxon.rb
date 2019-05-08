@@ -136,6 +136,9 @@ module Specify
         ['true', 1].include? full_response['is_extinct']
       end
 
+      # CatalogueOfLife does not yield hybrid information.
+      def hybrid?; end
+
       # Returns the taxonomic name for +self+, but only the part of the name
       # designating the taxon, i.e. it will return the epithet only for ranks
       # lower than _Genus_ (_Subgenus_, _Species_, any infraspecific taxon)
@@ -177,6 +180,10 @@ module Specify
         return unless full_response['classification']
 
         full_response['classification'].empty?
+      end
+
+      def source
+        URL + API_ROUTE
       end
 
       # Returns an array of CatalogueOfLife::Taxon instances for synonyms listed in the

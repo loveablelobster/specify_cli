@@ -178,15 +178,14 @@ module Specify
       # attributes
       def to_model_attributes
         {
-          Author: taxon.author,
-          COLStatus: taxon.name_status,
-          IsAccepted: taxon.accepted?, # TODO: should insert valid taxon
-          IsHybrid: false, # CatalogueOfLife does not yield hybrid information
-          Name: taxon.name,
+          author: taxon.author,
+          name_status: taxon.name_status,
+          accepted: taxon.accepted?, # TODO: should insert valid taxon
+          hybrid: taxon.hybrid?,
+          name: taxon.name,
           rank: rank.equivalent(taxonomy),
-          RankID: rank.equivalent(taxonomy).RankID,
-          source: URL + API_ROUTE,
-          TaxonomicSerialNumber: taxon.id
+          source: taxon.source,
+          taxonomic_serial_number: taxon.id
         }
       end
 
