@@ -165,6 +165,11 @@ module Specify
         internal&.taxonomic_serial_number == external&.id
       end
 
+      # Determines the polarity of +self+; returns +:internal+ if +self+ has
+      # been initialized with an external #taxon and all actions (find, create,
+      # update) are targeted towards an internal #equivalent. Returns
+      # +:external+ if +self+ has been initialized with an internal #taxon and
+      # actions are targeted towards an external #equivalent.
       def target
         taxon == external ? :internal : :external
       end

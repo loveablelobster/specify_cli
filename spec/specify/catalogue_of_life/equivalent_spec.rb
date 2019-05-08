@@ -669,7 +669,19 @@ module Specify
         end
       end
 
-      describe '#target'
+      describe '#target' do
+        context 'when initialized with an external taxon' do
+          subject { asaphida_ext.target }
+
+          it { is_expected.to be :internal }
+        end
+
+        context 'when initialized with an internal taxon' do
+          subject { asaphida_int.target }
+
+          it { is_expected.to be :external }
+        end
+      end
 
       describe '#to_model_attributes'
     end
