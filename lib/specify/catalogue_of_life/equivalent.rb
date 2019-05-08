@@ -46,7 +46,6 @@ module Specify
         @name = taxon.name
         @rank = taxon.rank
         @lineage = nil
-        @referenced = false
       end
 
       # Returns an Array of Equivalent instances in the ancestor lineage
@@ -89,7 +88,6 @@ module Specify
       # and +id+ attribute (the Catalogue Of Life id).
       def find_by_id
         found = target == :internal ? db_find_by_id : col_find_by_id
-        @referenced = true if found
         @equivalent = found
       end
 
@@ -149,28 +147,22 @@ module Specify
         lineage.missing_ancestors.empty? ? lineage.known_ancestor : false
       end
 
-      # Updates _@taxon_ (Specify::Model::Taxon), sets +TaxonomicSerialNumber+
+      # Updates #internal (Specify::Model::Taxon), sets +TaxonomicSerialNumber+
       # to the CatalogueOfLife id.
-      # FIXME: any methods that mutate data won't work if equivalent is the
-      # taxon service.
       def reference!
-        raise 'can\'t mutate Catalogue of life' unless mutable?
+        find unless equivalent
 
-        return if referenced? || !@equivalent
-
-        @equivalent.TaxonomicSerialNumber = taxon.id
-        @equivalent.Source = URL + API_ROUTE
-        @equivalent.save
-        @referenced = true
+        internal.taxonomic_serial_number = external.id
+        internal.source = URL + API_ROUTE
+        internal.save
       end
 
-      # Returns true if #taxon is referenced in the database by id
+      # Returns true if #equivalent is referenced in the database by id
       # (+TaxonomicSerialNumber+).
       # Returns +nil+ if #find has nor been  called
       def referenced?
-        return unless @equivalent
-
-        @referenced
+        find unless equivalent
+        internal&.taxonomic_serial_number == external&.id
       end
 
       def target
@@ -188,7 +180,7 @@ module Specify
           Name: taxon.name,
           rank: rank.equivalent(taxonomy),
           RankID: rank.equivalent(taxonomy).RankID,
-          Source: URL + API_ROUTE,
+          source: URL + API_ROUTE,
           TaxonomicSerialNumber: taxon.id
         }
       end

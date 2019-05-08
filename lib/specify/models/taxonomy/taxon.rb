@@ -84,12 +84,20 @@ module Specify
         self[:Source]
       end
 
+      def source=(str)
+        self[:Source] = str
+      end
+
       def synonyms?
         !synonyms.empty?
       end
 
       def taxonomic_serial_number
         self[:TaxonomicSerialNumber]
+      end
+
+      def taxonomic_serial_number=(str)
+        self[:TaxonomicSerialNumber] = str
       end
 
       def to_s

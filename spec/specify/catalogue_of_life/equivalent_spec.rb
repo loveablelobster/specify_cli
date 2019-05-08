@@ -225,13 +225,6 @@ module Specify
           end
 
           it { is_expected.to be_asaphida }
-
-          it do
-            expect {exact_match}
-              .to change(asaphida_ext, :referenced?)
-              .from(be_falsey)
-              .to(be_truthy)
-          end
         end
 
         context 'when initialized with an external taxon and the equivalent'\
@@ -250,13 +243,6 @@ module Specify
           end
 
           it { is_expected.to be_asaphida }
-
-          it do
-            expect {exact_match}
-              .to change(asaphida_int, :referenced?)
-              .from(be_falsey)
-              .to(be_truthy)
-          end
         end
 
         context 'when initialized with an internal taxon and the equivalent'\
@@ -581,8 +567,6 @@ module Specify
         end
       end
 
-      describe '#name'
-
       describe '#parent_taxon' do
         context 'when initialized with an external taxon and immediate'\
                 ' ancestor is known' do
@@ -600,9 +584,12 @@ module Specify
 
         context 'when initialized with an internal taxon and immediate'\
                 ' ancestor is known' do
-          subject { asaphoidea_int.parent_taxon }
+          subject(:parent) { asaphoidea_int.parent_taxon }
 
-          it { is_expected.to be_a(described_class) & have_attributes(name: 'Asaphida')}
+          it do
+            expect(parent)
+              .to be_a(described_class) & have_attributes(name: 'Asaphida')
+          end
         end
 
         context 'when initialized with an internal taxon and immediate'\
@@ -613,28 +600,76 @@ module Specify
       end
 
       describe '#reference!' do
-        subject(:add_reference) { asaphoidea_ext.reference! }
+        context 'when initialized with an external taxon' do
+          subject(:add_reference) { asaphoidea_ext.reference! }
 
-        before { asaphoidea_ext.find }
+          it do
+            expect { add_reference }
+              .to change(asaphoidea_ext, :referenced?)
+              .from(be_falsey).to(be_truthy)
+          end
 
-        it do
-          expect { add_reference }
-            .to change(asaphoidea_ext, :referenced?)
-            .from(be_falsey).to(be_truthy)
+          it  do
+            expect { add_reference }
+              .to change { asaphoidea_ext.equivalent&.source }
+              .from(be_nil)
+              .to(URL + API_ROUTE)
+              .and change { asaphoidea_ext.equivalent&.taxonomic_serial_number }
+              .from(be_nil)
+              .to('f3f01b65054a3e887d04554962e49097')
+          end
         end
 
-        it  do
-          expect { add_reference }
-            .to change { asaphoidea_ext.equivalent.source }
-            .from(be_nil)
-            .to(URL + API_ROUTE)
-            .and change { asaphoidea_ext.equivalent.taxonomic_serial_number }
-            .from(be_nil)
-            .to('f3f01b65054a3e887d04554962e49097')
+        context 'when initialized with an internal taxon' do
+          subject(:add_reference) { asaphoidea_int.reference! }
+
+          it do
+            expect { add_reference }
+              .to change(asaphoidea_int, :referenced?)
+              .from(be_falsey).to(be_truthy)
+          end
+
+          it  do
+            expect { add_reference }
+              .to change { asaphoidea_int.taxon.source }
+              .from(be_nil)
+              .to(URL + API_ROUTE)
+              .and change { asaphoidea_int.taxon.taxonomic_serial_number }
+              .from(be_nil)
+              .to('f3f01b65054a3e887d04554962e49097')
+          end
         end
       end
 
-      describe '#referenced?'
+      describe '#referenced?' do
+        context 'when initialized with an external taxon that is referenced' do
+          subject { asaphida_ext.referenced? }
+
+          it { is_expected.to be_truthy }
+        end
+
+        context 'when initialized with an external taxon that is'\
+                ' not referenced' do
+          subject { asaphoidea_ext.referenced? }
+
+          it { is_expected.to be_falsey }
+        end
+
+        context 'when initialized with an internal taxon that is referenced' do
+          subject { asaphida_int.referenced? }
+
+          it { is_expected.to be_truthy }
+        end
+
+        context 'when initialized with an internal taxon that is'\
+                ' not referenced' do
+          subject { asaphoidea_int.referenced? }
+
+          it { is_expected.to be_falsey }
+        end
+      end
+
+      describe '#target'
 
       describe '#to_model_attributes'
     end
