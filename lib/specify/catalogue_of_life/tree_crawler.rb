@@ -23,7 +23,7 @@ module Specify
         yield(self) if block_given?
       end
 
-      # TODO: options
+      # TODO: options :skip_subgenera
       # TODO: parent should be able to accept a Equivalent
       def crawl(parent = nil,
                 options = { crawl_synonyms: false, include_extinct: false },

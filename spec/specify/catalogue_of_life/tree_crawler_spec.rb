@@ -40,13 +40,16 @@ module Specify
 
       describe '#crawl' do
         subject(:crawl_crayfish) do
-          crayfish_crawler.crawl() do |child| # pass in second arg if possible
+          crayfish_crawler.crawl() do |child|
             # iterate creating Equivalents
+            equivalent = Equivalent.new taxonomy, child
+            equivalent.create
+            p equivalent.internal
           end
         end
 
         it do
-#           p subject
+          subject
         end
       end
 
