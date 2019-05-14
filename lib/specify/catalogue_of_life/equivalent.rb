@@ -144,6 +144,12 @@ module Specify
         lineage.missing_ancestors
       end
 
+      # Returns an Array of Equivalent instances for #synonyms, whose
+      # #equivalent attributes have not been found.
+      def missing_synonyms
+        synonyms.reject { |synonym| synonym.find }
+      end
+
       # Returns +true+ if there is write access to the #equivalent (it is an
       # internal resource).
       def mutable?
@@ -152,6 +158,7 @@ module Specify
 
       # Returns the Equivalent for the immediate ancestor if it is known,
       # otherwise returns +false+.
+      # FIXME: Rename #parent
       def parent_taxon
         lineage.missing_ancestors.empty? ? lineage.known_ancestor : false
       end
@@ -172,6 +179,12 @@ module Specify
       def referenced?
         find unless equivalent
         internal&.id == external&.id
+      end
+
+      # Returns an Array of Equivalent instances, one for each synonym of
+      # #taxon.
+      def synonyms
+        taxon.synonyms.map { |synonym| Equivalent.new(taxonomy, synonym) }
       end
 
       # Determines the polarity of +self+; returns +:internal+ if +self+ has

@@ -77,6 +77,14 @@ module Specify
        # FIXME: Specify needs an IsExtinct flag
       end
 
+      def full_name
+        self[:FullName]
+      end
+
+      def full_name=(str)
+        self[:FullName] = str
+      end
+
       def hybrid?
         self[:IsHybrid]
       end

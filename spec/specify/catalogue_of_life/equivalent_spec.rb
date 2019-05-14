@@ -536,6 +536,20 @@ module Specify
         end
       end
 
+      describe '#missing_synonyms' do
+        context 'when it has synonyms and they are not found' do
+          subject { asaphus_expansus_ext.missing_synonyms }
+
+          let :be_synonym_responses do
+            a_collection_including(
+              an_instance_of(described_class) &
+                have_attributes(id: '5679b172c23262b212a39c24ef298e0a'))
+          end
+
+          it { is_expected.to be_synonym_responses }
+        end
+      end
+
       describe '#mutable?' do
         context 'when initialized with an external taxon' do
           subject { asaphida_ext.mutable? }
@@ -649,6 +663,26 @@ module Specify
           subject { asaphoidea_int.referenced? }
 
           it { is_expected.to be_falsey }
+        end
+      end
+
+      describe '#synonyms' do
+        context 'when it has no synonyms' do
+#           subject { asaphus_expansus_ext.synonyms }
+#
+#           it { is_expected.to be_empty }
+        end
+
+        context 'when it has synonyms' do
+          subject { asaphus_expansus_ext.synonyms }
+
+          let :be_synonym_responses do
+            a_collection_including(
+              an_instance_of(described_class) &
+                have_attributes(id: '5679b172c23262b212a39c24ef298e0a'))
+          end
+
+          it { is_expected.to be_synonym_responses }
         end
       end
 

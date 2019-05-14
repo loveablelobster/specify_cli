@@ -111,7 +111,7 @@ RSpec.configure do |config|
 
   config.warnings = false
 
-  config.around do |example|
-    DB.transaction(rollback: :always, auto_savepoint: true) { example.run }
-  end
+#   config.around do |example|
+#     DB.transaction(rollback: :always, auto_savepoint: true) { example.run }
+#   end
 end

@@ -43,7 +43,17 @@ module Specify
           crayfish_crawler.crawl() do |child|
             # iterate creating Equivalents
             equivalent = Equivalent.new taxonomy, child
-            equivalent.create
+            tx = equivalent.find || equivalent.create
+            equivalent.missing_synonyms.each do |s|
+              if s.rank >= equivalent.rank
+                ptx = equivalent.parent_taxon.parent_taxon
+              else
+                ptx = equivalent.parent_taxon
+              end
+              sn = s.create(ptx)
+              sn.accepted_name = tx
+              sn.save
+            end
             p equivalent.internal
           end
         end
