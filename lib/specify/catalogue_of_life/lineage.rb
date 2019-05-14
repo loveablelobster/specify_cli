@@ -16,13 +16,18 @@ module Specify
       # Returns an array of Equivalents that are missing in the database.
       attr_accessor :missing_ancestors
 
+      # Creates a new instance. <em>taxon_classification</em> is an Array of
+      # Equivalent instances, all linked in parent-child relationships, ordered
+      # by Rank. _taxonomy_ is the Model::Taxonomy instance for the
+      # Equivalent#internal taxa.
       def initialize(taxon_classification, taxonomy)
         @ancestors = fetch_ancestors taxon_classification, taxonomy
         @missing_ancestors = []
         @known_ancestor = find_known_ancestor
       end
 
-      # Creates Model::Taxon instances for
+      # Creates Model::Taxon instances for each taxon in
+      # #missing_classification.
       def create
         raise 'Creation with unknown root not implemented' unless known_ancestor
 
@@ -32,10 +37,14 @@ module Specify
         end
       end
 
+      # Retturns an Array of Equivalent instances in the lineage ordered by
+      # rank.
       def classification
         ancestors.reverse
       end
 
+      # Returns an Array of Equivalent instances for taxa in the lineage that
+      # are missing from taxonomy.
       def missing_classification
         missing_ancestors.reverse
       end

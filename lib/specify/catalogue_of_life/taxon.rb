@@ -182,6 +182,7 @@ module Specify
         full_response['classification'].empty?
       end
 
+      # Returns the CatalogueOfLife base URL.
       def source
         URL + API_ROUTE
       end
