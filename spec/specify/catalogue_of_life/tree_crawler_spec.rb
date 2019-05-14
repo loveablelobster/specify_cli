@@ -16,28 +16,6 @@ module Specify
         Model::Taxonomy.first
       end
 
-# how to fill ancestry
-# unless tx
-#   prnt = t.classification.pop
-#   tx = taxonomy.names_dataset.first Name: prnt['name']
-#   unless tx
-#     inv_ancestry << prnt
-#     prnt = t.classification.pop
-#     tx = taxonomy.names_dataset.first Name: prnt['name']
-#     unless tx
-#       inv_ancestry << prnt
-#       prnt = t.classification.pop
-#       tx = taxonomy.names_dataset.first Name: prnt['name']
-#       unless tx
-#         inv_ancestry << prnt
-#         prnt = t.classification.pop
-#         tx = taxonomy.names_dataset.first Name: prnt['name']
-#         puts tx
-#         puts inv_ancestry
-#       end
-#     end
-#   end
-
       describe '#crawl' do
         subject(:crawl_crayfish) do
           crayfish_crawler.crawl() do |child|
@@ -46,9 +24,9 @@ module Specify
             tx = equivalent.find || equivalent.create
             equivalent.missing_synonyms.each do |s|
               if s.rank >= equivalent.rank
-                ptx = equivalent.parent_taxon.parent_taxon
+                ptx = equivalent.parent.parent
               else
-                ptx = equivalent.parent_taxon
+                ptx = equivalent.parent
               end
               sn = s.create(ptx)
               sn.accepted_name = tx
@@ -58,9 +36,9 @@ module Specify
           end
         end
 
-#         it do
-#           subject
-#         end
+        it do
+          subject
+        end
       end
 
       describe '#root' do

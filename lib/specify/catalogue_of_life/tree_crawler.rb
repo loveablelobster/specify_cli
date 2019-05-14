@@ -25,6 +25,7 @@ module Specify
 
       # TODO: options :skip_subgenera
       # TODO: parent should be able to accept a Equivalent
+      # TODO: :crawl_synonyms may be handled in Equivalent ?
       def crawl(parent = nil,
                 options = { crawl_synonyms: false, include_extinct: false },
                 &block)
