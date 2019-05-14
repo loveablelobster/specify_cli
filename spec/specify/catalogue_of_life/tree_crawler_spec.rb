@@ -58,9 +58,9 @@ module Specify
           end
         end
 
-        it do
-          subject
-        end
+#         it do
+#           subject
+#         end
       end
 
       describe '#root' do

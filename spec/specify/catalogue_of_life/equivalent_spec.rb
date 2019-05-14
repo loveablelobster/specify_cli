@@ -567,21 +567,21 @@ module Specify
       describe '#parent_taxon' do
         context 'when initialized with an external taxon and immediate'\
                 ' ancestor is known' do
-          subject { asaphus_expansus_ext.parent_taxon }
+          subject { asaphus_expansus_ext.parent }
 
           it { is_expected.to be_a described_class }
         end
 
         context 'when initialized with an external taxon and immediate'\
                 'ancestor is not known' do
-          subject { raymondaspis_ext.parent_taxon }
+          subject { raymondaspis_ext.parent }
 
           it { is_expected.to be_falsey }
         end
 
         context 'when initialized with an internal taxon and immediate'\
                 ' ancestor is known' do
-          subject(:parent) { asaphoidea_int.parent_taxon }
+          subject(:parent) { asaphoidea_int.parent }
 
           it do
             expect(parent)

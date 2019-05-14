@@ -57,16 +57,16 @@ module Specify
       end
 
       # Creates a Model::Taxon for #equivalent if #equivalent is mutable
-      # (#taxon is external). If _parent_ (an iEquivalent) is passed,
+      # (#taxon is external). If <em>parent_taxon</em> (an Equivalent) is passed,
       # #equivalent will be created as a child in it. If <em>fill_lineage</em>
       # is set to +true+, any taxa in missing in the classification of #taxon in
       # the database taxonomy will be created.
-      def create(parent = nil, fill_lineage: false)
+      def create(parent_taxon = nil, fill_lineage: false)
         raise 'can\'t mutate Catalogue of life' unless mutable?
 
-        parent ||= parent_taxon
-        if parent
-          @equivalent = parent.equivalent.add_child to_model_attributes
+        parent_taxon ||= parent
+        if parent_taxon
+          @equivalent = parent_taxon.equivalent.add_child to_model_attributes
         elsif fill_lineage
           @equivalent = lineage.create.last.add_child to_model_attributes
         else
@@ -82,8 +82,8 @@ module Specify
       end
 
       # Finds the #equivalent of #taxon.
-      def find(parent = nil)
-        find_by_id || find_by_values(parent)
+      def find(parent_taxon = nil)
+        find_by_id || find_by_values(parent_taxon)
       end
 
       # Finds the #equivalent of #taxon by the service_url (URL + API_ROUTE)
@@ -96,9 +96,9 @@ module Specify
       # Finds the taxon for +self+ in #taxonomy by _name_, _rank_, and
       # optionally _parent_, if a Equivalent as passed in as the +parent+
       # argument.
-      def find_by_values(parent = nil)
+      def find_by_values(parent_taxon = nil)
         @equivalent = if target == :internal
-                        db_find_by_values(parent)
+                        db_find_by_values(parent_taxon)
                       else
                         col_find_by_values
                       end
@@ -159,7 +159,7 @@ module Specify
       # Returns the Equivalent for the immediate ancestor if it is known,
       # otherwise returns +false+.
       # FIXME: Rename #parent
-      def parent_taxon
+      def parent
         lineage.missing_ancestors.empty? ? lineage.known_ancestor : false
       end
 
@@ -228,10 +228,10 @@ module Specify
         col.taxon
       end
 
-      def db_find_by_values(parent = nil)
+      def db_find_by_values(parent_taxon = nil)
         vals = { name: name,
                  rank: rank.equivalent(taxonomy),
-                 parent: parent&.find }
+                 parent: parent_taxon&.find }
         results = taxonomy.names_dataset.where(vals.compact)
         raise 'Ambiguous match' if results.count > 1
 
