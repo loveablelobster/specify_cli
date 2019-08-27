@@ -58,11 +58,11 @@ module Specify
       end
 
       describe '#accepted_name' do
-        context 'when it is not accepted' do
-          subject { cancer_fimbriatus.accepted_name }
-
-          it { is_expected.to have_attributes name: 'pagurus' }
-        end
+#         context 'when it is not accepted' do
+#           subject { cancer_fimbriatus.accepted_name }
+#
+#           it { is_expected.to have_attributes name: 'pagurus' }
+#         end
 
         context 'when it is accepted' do
           subject { cancer_pagurus.accepted_name }
@@ -157,7 +157,7 @@ module Specify
 
           it do
             expect { ancestors }
-              .to raise_error RuntimeError, ResponseError::SERVICE_RELIABILITY
+              .to raise_error ServiceReliabilityError
           end
         end
 
@@ -302,7 +302,7 @@ module Specify
 
           it do
             expect { parent }
-              .to raise_error RuntimeError, ResponseError::SERVICE_RELIABILITY
+              .to raise_error ServiceReliabilityError
           end
         end
       end
@@ -348,11 +348,11 @@ module Specify
 
           let :be_synonym_responses do
             a_collection_including(
-              an_instance_of(described_class) &
+              an_instance_of(Synonym) &
                 have_attributes(id: 'd81941a10d07fcc621073de9cdefca96'),
-              an_instance_of(described_class) &
+              an_instance_of(Synonym) &
                 have_attributes(id: '4a6de56affa3de0e027145d2d7136f2a'),
-              an_instance_of(described_class) &
+              an_instance_of(Synonym) &
                 have_attributes(id: 'cc57308ba2f409c765bbdaedcbaa1f78')
               )
           end

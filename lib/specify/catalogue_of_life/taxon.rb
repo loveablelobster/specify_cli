@@ -3,6 +3,7 @@
 module Specify
   module CatalogueOfLife
     GENUS = Rank.new(:genus)
+    SPECIES = Rank.new(:species)
 
     # A Taxon wraps a Faraday::Response to provide an interface for
     # work with the Equivalent class.
@@ -19,7 +20,7 @@ module Specify
     # * :classification
     # * :child_taxa
     #
-    # Synonym have the above except :is_extinct, :classification, :child_taxa,
+    # Synonyms have the above except :is_extinct, :classification, :child_taxa,
     # and add:
     # * :genus
     # * :subgenus
@@ -61,13 +62,15 @@ module Specify
         full_response['name_status'] == 'accepted name'
       end
 
+      # FIXME: Should be in Synonym!
+      #
       # Returns a CatalogueOfLife::Taxon for the accepted name if +self+ is a
       # synonym (not accepted).
       def accepted_name
         accepted_id = full_response['accepted_name']&.fetch('id', nil)
         return unless accepted_id
 
-        Request.by_id(accepted_id).taxon
+        Request.by(id: accepted_id).taxon
       end
 
       # Returns the author name for the taxon according to CatalogueOfLife.
@@ -105,10 +108,10 @@ module Specify
           next if skip_subgenera && anc['rank'].casecmp('subgenus').zero?
 
           if anc['rank'].casecmp('subgenus').zero? && !skip_subgenera
-            raise ResponseError::SERVICE_RELIABILITY
+            raise ServiceReliabilityError
           end
 
-          Thread.new(anc) { Request.by_id(anc['id']).taxon }
+          Thread.new(anc) { Request.by(id: anc['id']).taxon }
         end
         responses.compact.map(&:value)
       end
@@ -119,8 +122,9 @@ module Specify
       # +:author+, +:year+, +:title+, +source+.
       def common_names
         full_response.fetch('common_names', []).map do |entry|
-          entry['references'] = entry['references']
-            .map { |ref| ref.transform_keys(&:to_sym) }
+          entry['references'] = entry['references'].map do |ref|
+            ref.transform_keys(&:to_sym)
+          end
           entry.transform_keys(&:to_sym)
         end
       end
@@ -163,13 +167,13 @@ module Specify
           direct_ancestor = full_response['classification'][-2]
         elsif !skip_subgenera && direct_ancestor['rank'].casecmp('subgenus')
                                                         .zero?
-          raise ResponseError::SERVICE_RELIABILITY
+          raise ServiceReliabilityError, request: self
 
         end
 
         parent_id = direct_ancestor.fetch('id')
 
-        Request.by_id(parent_id).taxon
+        Request.by(id: parent_id).taxon
       end
 
       # Returns true if +self+ is the root of the CatalogueOfLife classification
@@ -187,8 +191,8 @@ module Specify
         URL + API_ROUTE
       end
 
-      # Returns an array of CatalogueOfLife::Taxon instances for synonyms listed in the
-      # full response of +self+ (given that +self+ is an accepted name).
+      # Returns an array of CatalogueOfLife::Taxon instances for synonyms listed
+      # in the full response of +self+ (given that +self+ is an accepted name).
       def synonyms
         return [] unless synonyms?
 
@@ -225,7 +229,7 @@ module Specify
 
       def fetch(key)
         responses = full_response[key].map do |req|
-          Thread.new(req) { Request.by_id(req['id']).taxon }
+          Thread.new(req) { Request.by(id: req['id']).taxon }
         end
         responses.map(&:value)
       end

@@ -36,10 +36,14 @@ module Specify
       # parameters will be returned
       attr_accessor :extinct
 
-      # Returns a new CatalogueOfLifeRequest for the CatalogueOfLige +id+.
-      def self.by_id(id, content_type = :json)
-        new(content_type) do |req|
-          req.id = id
+      # Returns a new CatalogueOfLifeRequest with the search parameters given in
+      # +params+.
+      def self.by(**params)
+        new do |req|
+          params.each do |key, value|
+            msg = key.to_s + '='
+            req.public_send(msg.to_sym, value)
+          end
         end
       end
 
@@ -73,6 +77,19 @@ module Specify
         end
       end
 
+      # Returns the first result.
+      #
+      # Raises AmbiguousResultsError if multiple results are found. Raises
+      # NotFoundError if the requst did not return any matches
+      def match
+        first, *others = results
+        raise NotFoundError, request: self unless first
+
+        return first if others.empty?
+
+        raise AmbiguousResultsError, request: self, results: results
+      end
+
       # Returns a Hash with the URL parameter.
       def params
         {
@@ -91,15 +108,15 @@ module Specify
         @rank = Rank.new(name)
       end
 
+      # Returns the value for the +results+ key of the request response.
+      def results
+        response&.body&.fetch('results') || get.body['results']
+      end
+
       # Returns a CatalogueOfLife::Taxon for the request.
-      # Will raise a MultipleResultsError
       def taxon
-        results = response&.body&.fetch('results') || get.body['results']
-        raise ResponseError::AMBIGUOUS_RESULTS if results.size > 1
-
-        raise ResponseError::NOT_FOUND if results.empty?
-
-        Taxon.new results.first
+        name_class = match['name_status'] == 'accepted name' ? Taxon : Synonym
+        name_class.new match
       end
 
       # Returns a String representation of +self+.

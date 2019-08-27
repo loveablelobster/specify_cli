@@ -57,10 +57,10 @@ module Specify
       end
 
       # Creates a Model::Taxon for #equivalent if #equivalent is mutable
-      # (#taxon is external). If <em>parent_taxon</em> (an Equivalent) is passed,
-      # #equivalent will be created as a child in it. If <em>fill_lineage</em>
-      # is set to +true+, any taxa in missing in the classification of #taxon in
-      # the database taxonomy will be created.
+      # (#taxon is external). If <tt>parent_taxon</tt> (an Equivalent) is
+      # passed, #equivalent will be created as a child in it. If
+      # <tt>fill_lineage</tt> is set to +true+, any taxa in missing in the
+      # classification of #taxon in the database taxonomy will be created.
       def create(parent_taxon = nil, fill_lineage: false)
         raise 'can\'t mutate Catalogue of life' unless mutable?
 
@@ -147,7 +147,7 @@ module Specify
       # Returns an Array of Equivalent instances for #synonyms, whose
       # #equivalent attributes have not been found.
       def missing_synonyms
-        synonyms.reject { |synonym| synonym.find }
+        synonyms.reject(&:find)
       end
 
       # Returns +true+ if there is write access to the #equivalent (it is an
@@ -211,7 +211,7 @@ module Specify
       def col_find_by_id
         return unless taxon.id
 
-        Request.by_id(taxon.id).taxon
+        Request.by(id: taxon.id).taxon
       end
 
       def db_find_by_id

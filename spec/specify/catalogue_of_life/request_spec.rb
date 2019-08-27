@@ -17,9 +17,9 @@ module Specify
         end
       end
 
-      describe '.by_id' do
+      describe '.by' do
         subject :request do
-           described_class.by_id '67b8da25464f297cf738a3712bc7eaa0'
+           described_class.by id: '67b8da25464f297cf738a3712bc7eaa0'
         end
 
         it do
@@ -90,7 +90,7 @@ module Specify
 
           it do
             expect { ambiguous_results }
-              .to raise_error RuntimeError, ResponseError::AMBIGUOUS_RESULTS
+              .to raise_error AmbiguousResultsError
           end
         end
       end

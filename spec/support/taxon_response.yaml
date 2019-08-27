@@ -2339,7 +2339,7 @@
   rank: 'Species'
   name_status: 'accepted name'
   genus: 'Asaphus'
-  subgenus': ''
+  subgenus: ''
   species: 'expansus'
   infraspecies_marker: ''
   infraspecies: ''
@@ -2533,3 +2533,113 @@
       name_html: '<i>Raymondaspis vespertina<\/i> Ross and Barnes, 1967'
       url: 'http:\/\/www.catalogueoflife.org\/col\/details\/species\/id\/e80c5c2fd9c5db80edbb3c2b8925d5b8'
       is_extinct: 'true'
+:new_combination:
+  id: '5679b172c23262b212a39c24ef298e0a'
+  name: 'Entomostracites expansus'
+  rank: 'Species'
+  name_status: 'synonym'
+  genus: 'Entomostracites'
+  subgenus: ''
+  species: 'expansus'
+  infraspecies_marker: ''
+  infraspecies: ''
+  author: '(Wahlenberg, 1821)'
+  record_scrutiny_date: 'false'
+  online_resource: ''
+  source_database: 'PaleoBioDB: The Paleobiology Database'
+  source_database_url: 'https:\/\/paleobiodb.org'
+  bibliographic_citation: 'Paleobiology Database contributors (2019). PaleoBioDB: The Paleobiology Database (version Feb 2018). In: Species 2000 & ITIS Catalogue of Life, 2019 Annual Checklist (Roskov Y., Ower G., Orrell T., Nicolson D., Bailly N., Kirk P.M., Bourgoin T., DeWalt R.E., Decock W., Nieukerken E. van, Zarucchi J., Penev L., eds.). Digital resource at www.catalogueoflife.org\/annual-checklist\/2019. Species 2000: Naturalis, Leiden, the Netherlands. ISSN 2405-884X.'
+  name_html: '<i>Entomostracites expansus<\/i> (Wahlenberg, 1821)'
+  url: 'http:\/\/www.catalogueoflife.org\/col\/details\/species\/id\/73046eff1c22bdbd92f3609a3a23c660\/synonym\/5679b172c23262b212a39c24ef298e0a'
+  distribution: ''
+  references: []
+  accepted_name:
+    id: '73046eff1c22bdbd92f3609a3a23c660'
+    name: 'Asaphus expansus'
+    rank: 'Species'
+    name_status: 'accepted name'
+    genus: 'Asaphus'
+    subgenus: ''
+    species: 'expansus'
+    infraspecies_marker: ''
+    infraspecies: ''
+    author: '(Wahlenberg, 1821)'
+    record_scrutiny_date:
+      scrutiny: 'Feb-2018'
+    online_resource: 'https:\/\/paleobiodb.org\/classic\/basicTaxonInfo?taxon_no=329619'
+    is_extinct: true,
+    source_database: 'PaleoBioDB: The Paleobiology Database'
+    source_database_url: 'https:\/\/paleobiodb.org'
+    bibliographic_citation: 'Paleobiology Database contributors (2019). PaleoBioDB: The Paleobiology Database (version Feb 2018). In: Species 2000 & ITIS Catalogue of Life, 2019 Annual Checklist (Roskov Y., Ower G., Orrell T., Nicolson D., Bailly N., Kirk P.M., Bourgoin T., DeWalt R.E., Decock W., Nieukerken E. van, Zarucchi J., Penev L., eds.). Digital resource at www.catalogueoflife.org\/annual-checklist\/2019. Species 2000: Naturalis, Leiden, the Netherlands. ISSN 2405-884X.'
+    name_html: '<i>Asaphus expansus<\/i> (Wahlenberg, 1821)'
+    url: 'http:\/\/www.catalogueoflife.org\/col\/details\/species\/id\/73046eff1c22bdbd92f3609a3a23c660'
+    distribution: 'RU, SE 140090 0'
+    references:
+      -
+        author: 'A. T. Nielsen'
+        year: '1995'
+        title: 'Trilobite systematies, biostratigraphy and palaeoecology of the Lower Ordovician Komstad Limestone and Huk Forrnations, southern Scandinavia'
+        source: 'Fossils and Strata: 1--374'
+    classification:
+      -
+        id: '5ede24b0534ebd5e1f552d5b9f874a6a'
+        name: 'Animalia'
+        rank: 'Kingdom'
+        name_html: 'Animalia'
+        url: 'http:\/\/www.catalogueoflife.org\/col\/browse\/tree\/id\/5ede24b0534ebd5e1f552d5b9f874a6a'
+      -
+        id: '89ac18bfcf1654a9662a600ba06bb494'
+        name: "Arthropoda"
+        rank: 'Phylum'
+        name_html: 'Arthropoda'
+        url: 'http:\/\/www.catalogueoflife.org\/col\/browse\/tree\/id\/89ac18bfcf1654a9662a600ba06bb494'
+      -
+        id: '19eabb715f97e18e412536958f7cee08'
+        name: 'Trilobita'
+        rank: 'Class'
+        name_html: 'Trilobita'
+        url: 'http:\/\/www.catalogueoflife.org\/col\/browse\/tree\/id\/19eabb715f97e18e412536958f7cee08'
+      -
+        id: '5ac1330933c62d7d617a8d4a80dcecf3'
+        name: 'Asaphida'
+        rank: 'Order'
+        name_html: 'Asaphida'
+        url: 'http:\/\/www.catalogueoflife.org\/col\/browse\/tree\/id\/5ac1330933c62d7d617a8d4a80dcecf3'
+      -
+        id: 'f3f01b65054a3e887d04554962e49097'
+        name: 'Asaphoidea'
+        rank: 'Superfamily'
+        name_html: 'Asaphoidea'
+        url: 'http:\/\/www.catalogueoflife.org\/col\/browse\/tree\/id\/f3f01b65054a3e887d04554962e49097'
+      -
+        id: '65dabea41cd4470ce498767d730f5c6f'
+        name: 'Asaphidae'
+        rank: 'Family'
+        name_html: 'Asaphidae'
+        url: 'http:\/\/www.catalogueoflife.org\/col\/browse\/tree\/id\/65dabea41cd4470ce498767d730f5c6f'
+      -
+        id: '67b8da25464f297cf738a3712bc7eaa0'
+        name: 'Asaphus'
+        rank: 'Genus'
+        name_html: '<i>Asaphus<\/i>'
+        url: 'http:\/\/www.catalogueoflife.org\/col\/browse\/tree\/id\/67b8da25464f297cf738a3712bc7eaa0'
+    child_taxa: []
+    synonyms:
+      -
+        id: '5679b172c23262b212a39c24ef298e0a'
+        name: 'Entomostracites expansus'
+        rank: 'Species'
+        name_status: 'synonym'
+        genus: 'Entomostracites'
+        subgenus: ''
+        species: 'expansus'
+        infraspecies_marker: ''
+        infraspecies: ''
+        author: '(Wahlenberg, 1821)'
+        record_scrutiny_date: ''
+        online_resource: ''
+        is_extinct: 0
+        name_html: '<i>Entomostracites expansus<\/i> (Wahlenberg, 1821)'
+        url: 'http:\/\/www.catalogueoflife.org\/col\/details\/species\/id\/73046eff1c22bdbd92f3609a3a23c660\/synonym\/5679b172c23262b212a39c24ef298e0a'
+        references: []
+    common_names: []

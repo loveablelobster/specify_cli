@@ -6,12 +6,13 @@ module Specify
       # A CatalogueOfLife::Taxon
       attr_reader :root
 
-      # A CatalogueOfLife::Rank that is the last taxonomic level that will be crawled.
+      # CatalogueOfLife::Rank that is the last taxonomic level that will be
+      # crawled.
       attr_reader :stop_rank
 
       def initialize(root = { id: nil, root_name: nil, root_rank: nil })
         request = if root[:id]
-                    Request.by_id root[:id]
+                    Request.by id: root[:id]
                   else
                     Request.new do |req|
                       req.name = root[:name]
@@ -31,7 +32,8 @@ module Specify
                 &block)
         parent ||= root
         return unless parent.children?
-        children = parent.children.each do |child|
+
+        parent.children.each do |child|
 #           child.value.parent = parent
           yield(child) # FIXME: move up to parent before return again?
           crawl(child, options, &block)
