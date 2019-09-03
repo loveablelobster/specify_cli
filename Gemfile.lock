@@ -49,7 +49,7 @@ GEM
     ffi (1.11.1)
     gem-man (0.3.0)
     gherkin (5.1.0)
-    gli (2.18.2)
+    gli (2.19.0)
     hpricot (0.8.6)
     method_source (0.9.2)
     multi_json (1.13.1)
@@ -65,7 +65,7 @@ GEM
       pry (~> 0.10)
     rake (12.3.3)
     rdiscount (2.2.0.1)
-    rdoc (6.1.1)
+    rdoc (6.2.0)
     ronn (0.7.3)
       hpricot (>= 0.8.2)
       mustache (>= 0.7.0)
@@ -83,7 +83,7 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.8.0)
     rspec-support (3.8.2)
-    sequel (5.23.0)
+    sequel (5.24.0)
     thor (0.20.3)
 
 PLATFORMS
@@ -101,4 +101,4 @@ DEPENDENCIES
   specify_cli!
 
 BUNDLED WITH
-   1.17.2
+   1.17.3

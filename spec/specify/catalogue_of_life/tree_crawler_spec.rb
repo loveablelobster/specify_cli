@@ -9,7 +9,13 @@ module Specify
       end
 
       let :crayfish_crawler do
-      	described_class.new name: 'Astacidae', rank: 'Family'
+#       	described_class.new name: 'Astacidae', rank: 'Family'
+      	described_class.new crayfish_equivalent, fill_lineage: true
+      end
+
+      let :crayfish_equivalent do
+        Equivalent.new Factories::Model::Taxonomy.for_tests,
+                       Request.by(name: 'Astacidae', rank: 'Family').taxon
       end
 
       let :taxonomy do
@@ -19,20 +25,18 @@ module Specify
       describe '#crawl' do
         subject(:crawl_crayfish) do
           crayfish_crawler.crawl() do |child|
-            # iterate creating Equivalents
-            equivalent = Equivalent.new taxonomy, child
-            tx = equivalent.find || equivalent.create
-            equivalent.missing_synonyms.each do |s|
-              if s.rank >= equivalent.rank
-                ptx = equivalent.parent.parent
+            tx = child.find || child.create
+            child.missing_synonyms.each do |s|
+              if s.rank >= child.rank
+                ptx = child.parent.parent
               else
-                ptx = equivalent.parent
+                ptx = child.parent
               end
               sn = s.create(ptx)
               sn.accepted_name = tx
               sn.save
             end
-            p equivalent.internal
+             p child.internal
           end
         end
 
@@ -42,13 +46,13 @@ module Specify
       end
 
       describe '#root' do
-      	subject(:crab_root) { crab_crawler.root }
-
-      	it do
-      	  expect(crab_root)
-      	    .to be_a(Taxon)
-      	    .and have_attributes(name: 'Cancer', rank: GENUS)
-      	end
+#       	subject(:crab_root) { crab_crawler.root }
+#
+#       	it do
+#       	  expect(crab_root)
+#       	    .to be_a(Taxon)
+#       	    .and have_attributes(name: 'Cancer', rank: GENUS)
+#       	end
       end
     end
   end

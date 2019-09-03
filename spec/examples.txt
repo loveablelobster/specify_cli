@@ -160,8 +160,7 @@ example_id                                                     | status  | run_t
 ./spec/specify/catalogue_of_life/taxon_spec.rb[1:16:1:1]       | passed  | 0.01638 seconds |
 ./spec/specify/catalogue_of_life/taxon_spec.rb[1:16:2:1]       | passed  | 0.01493 seconds |
 ./spec/specify/catalogue_of_life/taxon_spec.rb[1:16:3:1]       | passed  | 0.01519 seconds |
-./spec/specify/catalogue_of_life/tree_crawler_spec.rb[1:1:1]   | passed  | 4.82 seconds    |
-./spec/specify/catalogue_of_life/tree_crawler_spec.rb[1:2:1]   | passed  | 0.14084 seconds |
+./spec/specify/catalogue_of_life/tree_crawler_spec.rb[1:1:1]   | passed  | 4.94 seconds    |
 ./spec/specify/cli/stubs_spec.rb[1:1:1]                        | passed  | 0.00077 seconds |
 ./spec/specify/configuration/config_spec.rb[1:1]               | passed  | 0.00191 seconds |
 ./spec/specify/configuration/config_spec.rb[1:2:1]             | passed  | 0.00172 seconds |

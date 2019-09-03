@@ -10,33 +10,23 @@ module Specify
       # crawled.
       attr_reader :stop_rank
 
-      def initialize(root = { id: nil, root_name: nil, root_rank: nil })
-        request = if root[:id]
-                    Request.by id: root[:id]
-                  else
-                    Request.new do |req|
-                      req.name = root[:name]
-                      req.rank = root[:rank]
-                    end
-                  end
-        @root = request.taxon
+      def initialize(root = nil, **opts)
+        @root = root
         @stop_rank = nil
         yield(self) if block_given?
+        @root.find || @root.create(opts)
       end
 
       # TODO: options :skip_subgenera
-      # TODO: parent should be able to accept a Equivalent
       # TODO: :crawl_synonyms may be handled in Equivalent ?
       def crawl(parent = nil,
                 options = { crawl_synonyms: false, include_extinct: false },
                 &block)
         parent ||= root
-        return unless parent.children?
-
-        parent.children.each do |child|
-#           child.value.parent = parent
-          yield(child) # FIXME: move up to parent before return again?
-          crawl(child, options, &block)
+        parent.taxon.children.each do |child|
+          child_equivalent = Equivalent.new parent.taxonomy, child
+          yield(child_equivalent)
+          crawl(child_equivalent, options, &block)
         end
       end
 
